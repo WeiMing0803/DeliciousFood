@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="..\build\AI.DeliciousFood.Web.Client.props" />
-</Project>
