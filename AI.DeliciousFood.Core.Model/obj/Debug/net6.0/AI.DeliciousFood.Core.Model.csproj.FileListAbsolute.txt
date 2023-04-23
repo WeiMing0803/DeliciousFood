@@ -1,0 +1,14 @@
+C:\PersonalProject\AI.DeliciousFood\AI.DeliciousFood.Core.Model\bin\Debug\net6.0\AI.DeliciousFood.Core.Model.deps.json
+C:\PersonalProject\AI.DeliciousFood\AI.DeliciousFood.Core.Model\bin\Debug\net6.0\AI.DeliciousFood.Core.Model.runtimeconfig.json
+C:\PersonalProject\AI.DeliciousFood\AI.DeliciousFood.Core.Model\bin\Debug\net6.0\AI.DeliciousFood.Core.Model.dll
+C:\PersonalProject\AI.DeliciousFood\AI.DeliciousFood.Core.Model\bin\Debug\net6.0\AI.DeliciousFood.Core.Model.pdb
+C:\PersonalProject\AI.DeliciousFood\AI.DeliciousFood.Core.Model\obj\Debug\net6.0\AI.DeliciousFood.Core.Model.csproj.AssemblyReference.cache
+C:\PersonalProject\AI.DeliciousFood\AI.DeliciousFood.Core.Model\obj\Debug\net6.0\AI.DeliciousFood.Core.Model.GeneratedMSBuildEditorConfig.editorconfig
+C:\PersonalProject\AI.DeliciousFood\AI.DeliciousFood.Core.Model\obj\Debug\net6.0\AI.DeliciousFood.Core.Model.AssemblyInfoInputs.cache
+C:\PersonalProject\AI.DeliciousFood\AI.DeliciousFood.Core.Model\obj\Debug\net6.0\AI.DeliciousFood.Core.Model.AssemblyInfo.cs
+C:\PersonalProject\AI.DeliciousFood\AI.DeliciousFood.Core.Model\obj\Debug\net6.0\AI.DeliciousFood.Core.Model.csproj.CoreCompileInputs.cache
+C:\PersonalProject\AI.DeliciousFood\AI.DeliciousFood.Core.Model\obj\Debug\net6.0\AI.DeliciousFood.Core.Model.dll
+C:\PersonalProject\AI.DeliciousFood\AI.DeliciousFood.Core.Model\obj\Debug\net6.0\refint\AI.DeliciousFood.Core.Model.dll
+C:\PersonalProject\AI.DeliciousFood\AI.DeliciousFood.Core.Model\obj\Debug\net6.0\AI.DeliciousFood.Core.Model.pdb
+C:\PersonalProject\AI.DeliciousFood\AI.DeliciousFood.Core.Model\obj\Debug\net6.0\AI.DeliciousFood.Core.Model.genruntimeconfig.cache
+C:\PersonalProject\AI.DeliciousFood\AI.DeliciousFood.Core.Model\obj\Debug\net6.0\ref\AI.DeliciousFood.Core.Model.dll

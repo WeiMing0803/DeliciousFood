@@ -1,0 +1,17 @@
+C:\PersonalProject\AI.DeliciousFood\AI.DeliciousFood.Core.Common\bin\Debug\net6.0\AI.DeliciousFood.Core.Common.deps.json
+C:\PersonalProject\AI.DeliciousFood\AI.DeliciousFood.Core.Common\bin\Debug\net6.0\AI.DeliciousFood.Core.Common.dll
+C:\PersonalProject\AI.DeliciousFood\AI.DeliciousFood.Core.Common\bin\Debug\net6.0\AI.DeliciousFood.Core.Common.pdb
+C:\PersonalProject\AI.DeliciousFood\AI.DeliciousFood.Core.Common\bin\Debug\net6.0\AI.DeliciousFood.Core.Data.dll
+C:\PersonalProject\AI.DeliciousFood\AI.DeliciousFood.Core.Common\bin\Debug\net6.0\AI.DeliciousFood.Core.Model.dll
+C:\PersonalProject\AI.DeliciousFood\AI.DeliciousFood.Core.Common\bin\Debug\net6.0\AI.DeliciousFood.Core.Data.pdb
+C:\PersonalProject\AI.DeliciousFood\AI.DeliciousFood.Core.Common\bin\Debug\net6.0\AI.DeliciousFood.Core.Model.pdb
+C:\PersonalProject\AI.DeliciousFood\AI.DeliciousFood.Core.Common\obj\Debug\net6.0\AI.DeliciousFood.Core.Common.csproj.AssemblyReference.cache
+C:\PersonalProject\AI.DeliciousFood\AI.DeliciousFood.Core.Common\obj\Debug\net6.0\AI.DeliciousFood.Core.Common.GeneratedMSBuildEditorConfig.editorconfig
+C:\PersonalProject\AI.DeliciousFood\AI.DeliciousFood.Core.Common\obj\Debug\net6.0\AI.DeliciousFood.Core.Common.AssemblyInfoInputs.cache
+C:\PersonalProject\AI.DeliciousFood\AI.DeliciousFood.Core.Common\obj\Debug\net6.0\AI.DeliciousFood.Core.Common.AssemblyInfo.cs
+C:\PersonalProject\AI.DeliciousFood\AI.DeliciousFood.Core.Common\obj\Debug\net6.0\AI.DeliciousFood.Core.Common.csproj.CoreCompileInputs.cache
+C:\PersonalProject\AI.DeliciousFood\AI.DeliciousFood.Core.Common\obj\Debug\net6.0\AI.DeliciousFood.Core.Common.csproj.CopyComplete
+C:\PersonalProject\AI.DeliciousFood\AI.DeliciousFood.Core.Common\obj\Debug\net6.0\AI.DeliciousFood.Core.Common.dll
+C:\PersonalProject\AI.DeliciousFood\AI.DeliciousFood.Core.Common\obj\Debug\net6.0\refint\AI.DeliciousFood.Core.Common.dll
+C:\PersonalProject\AI.DeliciousFood\AI.DeliciousFood.Core.Common\obj\Debug\net6.0\AI.DeliciousFood.Core.Common.pdb
+C:\PersonalProject\AI.DeliciousFood\AI.DeliciousFood.Core.Common\obj\Debug\net6.0\ref\AI.DeliciousFood.Core.Common.dll

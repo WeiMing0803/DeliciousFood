@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\buildMultiTargeting\AI.DeliciousFood.Web.Client.props" />
+</Project>

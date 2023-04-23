@@ -1,0 +1,5 @@
+.f-container {
+    margin-top: calc(50vh - 310px);
+    padding: 2% 0% 2% 0%;
+    box-shadow: 0px 0px 5px #888888;
+}
