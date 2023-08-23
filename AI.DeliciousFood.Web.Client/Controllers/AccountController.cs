@@ -7,14 +7,8 @@ namespace AI.DeliciousFood.Web.Client.Controllers
     {
         #region 注册
 
-        [HttpGet]
-        public IActionResult Register()
-        {
-            return View();
-        }
-
         [HttpPost]
-        public IActionResult Register(RegisterViewModel model)
+        public IActionResult Register(LoginViewModel model)
         {
             return View();
         }

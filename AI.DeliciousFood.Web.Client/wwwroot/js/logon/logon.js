@@ -17,7 +17,15 @@
 });
 
 $('#tab-register').click(function () {
-    var tabregister = $(this);
+    register();
+}); 
+
+$('#tab-register2').click(function () {
+    register();
+});
+
+function register() {
+    var tabregister = $('#tab-register');
     tabregister.addClass('active');
 
     var tabLogin = $('#tab-login');
@@ -32,4 +40,4 @@ $('#tab-register').click(function () {
 
     var pillsRegister = $('#pills-register');
     pillsRegister.addClass('show').addClass('active');
-}); 
+}

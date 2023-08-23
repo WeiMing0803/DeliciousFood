@@ -24,9 +24,18 @@ builder.Services.AddIdentityCore<FoodUser>(options =>
 });
 IdentityBuilder identityBuilder = new IdentityBuilder(typeof(FoodUser), typeof(FoodRole), builder.Services);
 identityBuilder.AddEntityFrameworkStores<FoodDbContext>()
-    .AddDefaultTokenProviders().AddUserManager<UserManager<FoodUser>>()
-    .AddRoleManager<RoleManager<FoodRole>>();
+    .AddDefaultTokenProviders()
+    .AddUserManager<UserManager<FoodUser>>()
+    .AddRoleManager<RoleManager<FoodRole>>()
+    .AddSignInManager<SignInManager<FoodUser>>();
 
+//添加cookie认证signInManager.PasswordSignInAsync方法需要使用到
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = IdentityConstants.ApplicationScheme;
+    options.DefaultChallengeScheme = IdentityConstants.ApplicationScheme;
+    options.DefaultSignInScheme = IdentityConstants.ApplicationScheme;
+}).AddCookie(IdentityConstants.ApplicationScheme);
 
 
 
