@@ -14,6 +14,7 @@ builder.Services.AddIdentityCore<FoodUser>(options =>
 {
     //options.Lockout.MaxFailedAccessAttempts = 10; //密码错误失败次数
     //options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromSeconds(10);    //密码错误锁定时间
+    options.User.AllowedUserNameCharacters = null; //跳过对用户名的验证
     options.Password.RequireDigit = false; //数字
     options.Password.RequiredLength = 6; //长度
     options.Password.RequireLowercase = false; //小写
@@ -37,8 +38,6 @@ builder.Services.AddAuthentication(options =>
     options.DefaultSignInScheme = IdentityConstants.ApplicationScheme;
 }).AddCookie(IdentityConstants.ApplicationScheme);
 
-
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -50,6 +49,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();    //不使用这个的话HttpContext就使用不了
 app.UseAuthorization();
 
 app.MapControllerRoute(
