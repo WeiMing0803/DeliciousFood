@@ -1,0 +1,13 @@
+.submit-box {
+    border: 1px solid #dbdcdd;
+    border-radius: 0px 3px 3px 0px;
+}
+
+    .submit-box :hover {
+        background-color: #f0f0f0;
+        border-radius: 0px 3px 3px 0px;
+    }
+
+.form-control:focus {
+    box-shadow: 0 0 0 1px rgba(13,110,253,.25);
+}
