@@ -1,0 +1,22 @@
+﻿@using AI.DeliciousFood.Core.Model;
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<FoodUser> SignInManager
+@inject UserManager<FoodUser> UserManager
+
+@if (SignInManager.IsSignedIn(User))
+{
+    <li class="nav-item dropdown ai-login">
+        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Hello @User.Identity?.Name!</a>
+        <ul class="dropdown-menu">            
+            <li><a class="dropdown-item" href="#">另一个链接</a></li>
+            <li><a class="dropdown-item" href="#">第三个链接</a></li>
+            <li><a class="dropdown-item" asp-controller="account" asp-action="logout">退出</a></li>
+        </ul>
+    </li>
+}
+else
+{
+    <li class="nav-item ai-login">
+        <a asp-area="" asp-controller="Account" asp-action="logon" class="nav-link item-text-right">登录 | 注册</a>
+    </li>
+}

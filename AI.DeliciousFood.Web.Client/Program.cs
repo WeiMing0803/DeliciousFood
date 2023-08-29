@@ -36,7 +36,10 @@ builder.Services.AddAuthentication(options =>
     options.DefaultAuthenticateScheme = IdentityConstants.ApplicationScheme;
     options.DefaultChallengeScheme = IdentityConstants.ApplicationScheme;
     options.DefaultSignInScheme = IdentityConstants.ApplicationScheme;
-}).AddCookie(IdentityConstants.ApplicationScheme);
+})
+.AddCookie(IdentityConstants.ApplicationScheme)
+.AddCookie(IdentityConstants.ExternalScheme)
+.AddCookie(IdentityConstants.TwoFactorUserIdScheme);
 
 var app = builder.Build();
 

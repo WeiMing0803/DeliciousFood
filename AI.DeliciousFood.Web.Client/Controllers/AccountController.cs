@@ -105,6 +105,12 @@ namespace AI.DeliciousFood.Web.Client.Controllers
             return View("LogOn", model);
         }
 
+        public async Task<IActionResult> LogOut()
+        {
+            await _signInManager.SignOutAsync();
+            return RedirectToAction("Index", "Home");
+        }
+
         #endregion
     }
 }
