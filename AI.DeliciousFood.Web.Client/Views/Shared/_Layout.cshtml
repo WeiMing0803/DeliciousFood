@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@using AI.DeliciousFood.Core.Model;
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<FoodUser> SignInManager
+@inject UserManager<FoodUser> UserManager
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -22,38 +27,64 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <nav class="navbar navbar-inverse ai-box">
-                        <ul class="nav navbar-nav  ai-box">
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">链接 1</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">链接 1</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">链接 1</a>
-                            </li>
-                            <form class="navbar-form navbar-left ai-search" action="/action_page.php">
-                                <div class="input-group">
-                                    <input type="text" class="form-control" placeholder="Search">
-                                    <div class="input-group-btn  submit-box">
-                                        <button class="btn btn-default" type="submit">
-                                            <i class="bi bi-search"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </form>
-                            <partial name="_LoginPartial" />
-                        </ul>
-                    </nav>
+                    <div class="container">
+                        <div class="row">
+                            <nav class="navbar navbar-inverse ai-box">
+                                <ul class="nav navbar-nav  ai-box">
+                                    <li class="nav-item col-1">
+                                        <a class="nav-link" href="#">链接 1</a>
+                                    </li>
+                                    <li class="nav-item col-1">
+                                        <a class="nav-link" href="#">链接 1</a>
+                                    </li>
+                                    <li class="nav-item col-1">
+                                        <a class="nav-link" href="#">链接 1</a>
+                                    </li>
+                                    <li class="nav-item col-3">
+                                    </li>
+                                    <li class="nav-item col-3 text-end">
+                                        <form class="navbar-form navbar-left ai-search" action="/action_page.php">
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" placeholder="Search">
+                                                <div class="input-group-btn  submit-box">
+                                                    <button class="btn btn-default" type="submit">
+                                                        <i class="bi bi-search"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </li>
+                                    <li class="nav-item col-2">
+                                    </li>
+                                    @if (SignInManager.IsSignedIn(User))
+                                    {
+                                        <li class="nav-item dropdown text-end col-1">
+                                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Hello @User.Identity?.Name!</a>
+                                            <ul class="dropdown-menu">
+                                                <li><a class="dropdown-item" href="#">另一个链接</a></li>
+                                                <li><a class="dropdown-item" href="#">第三个链接</a></li>
+                                                <li><a class="dropdown-item" asp-controller="account" asp-action="logout">退出</a></li>
+                                            </ul>
+                                        </li>
+                                    }
+                                    else
+                                    {
+                                        <li class="nav-item text-end col-1">
+                                            <a asp-area="" asp-controller="Account" asp-action="logon" class="nav-link">登录 | 注册</a>
+                                        </li>
+                                    }
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
                 </div>
             </div>
         </nav>
     </header>
     <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+    <main role="main" class="pb-3">
+        @RenderBody()
+    </main>
     </div>
 
     <footer class="border-top footer text-muted">
