@@ -9,5 +9,11 @@ namespace AI.DeliciousFood.Core.Model
         {
             
         }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+            builder.ApplyConfigurationsFromAssembly(this.GetType().Assembly);
+        }
     }
 }
