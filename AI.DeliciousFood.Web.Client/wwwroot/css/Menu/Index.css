@@ -1,0 +1,15 @@
+.ai-nav-menu ol{
+    list-style-type:none;
+    padding:0;
+    margin:0;
+    font-size:12px;
+}
+
+.ai-nav-menu ol li{
+    display:inline;
+    margin-right:8px;
+}
+
+.ai-nav-menu a {
+    text-decoration:none;
+}

@@ -1,0 +1,102 @@
+﻿@section Styles{
+    <link href="~/css/menu/index.css" rel="stylesheet" /> 
+    <link href="~/css/menu/fileinput.css" rel="stylesheet" />
+    <link href="~/css/radiogroup.css" rel="stylesheet" />
+}
+
+<nav class="ai-nav-menu">
+    <ol>
+        <li>
+            <span><a asp-controller="Home" asp-action="Index">首页</a></span>
+        </li>
+        <li>
+            <span> > </span>
+        </li>
+        <li>
+            <span>编辑菜单</span>
+        </li>
+    </ol>
+</nav>
+
+
+<hr />
+
+<form>
+    <div class="mb-3">
+        <label for="exampleFormControlInput1" class="form-label"></label>
+        <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com">
+    </div>
+    <div class="mb-3">
+        <label for="birthday">图片上传</label>
+        <input id="file-1" name="file" type="file" multiple class="form-control" data-overwrite-initial="false" data-min-file-count="1" />
+    </div>
+    <div>
+        <label for="exampleFormControlTextarea1" class="form-label">菜品描述</label>
+        <textarea class="form-control" rows="3"></textarea>
+    </div>
+    <div class="mb-3">
+        <label for="birthday" class="form-label">需要时间</label>
+        <fieldset tabindex="0" class='radioGroup'>
+            <input id='g1o11' name="group0" value="option1" checked type="radio">
+            <label for='g1o11'>简单</label>
+            <input id='g1o21' name="group0" value="option2" type="radio">
+            <label for='g1o21'>初级</label>
+            <input id='g1o31' name="group0" value="option3" type="radio">
+            <label for='g1o31'>中级</label>
+            <input id='g1o41' name="group0" value="option4" type="radio">
+            <label for='g1o41'>高级</label>
+        </fieldset>
+    </div>
+    <div class="mb-3">
+        <label for="birthday" class="form-label">需要时间</label>
+        <fieldset tabindex="0" class='radioGroup'>
+            <input id='g1o1' name="group1" value="option1" checked type="radio">
+            <label for='g1o1'>十分钟</label>
+            <input id='g1o2' name="group1" value="option2" type="radio">
+            <label for='g1o2'>二十分钟</label>
+            <input id='g1o3' name="group1" value="option3" type="radio">
+            <label for='g1o3'>半小时</label>
+            <input id='g1o4' name="group1" value="option4" type="radio">
+            <label for='g1o4'>三刻钟</label>
+            <input id='g1o5' name="group1" value="option5" type="radio">
+            <label for='g1o5'>一小时</label>
+            <input id='g1o6' name="group1" value="option6" type="radio">
+            <label for='g1o6'>数小时</label>
+            <input id='g1o7' name="group1" value="option7" type="radio">
+            <label for='g1o7'>一天</label>
+            <input id='g1o8' name="group1" value="option8" type="radio">
+            <label for='g1o8'>数天</label>
+        </fieldset>
+    </div>
+    <div class="mb-3">
+        <label for="birthday">口味</label>
+        <select class="form-select" aria-label="Default select example">
+            <option selected>Open this select menu</option>
+            <option value="1">One</option>
+            <option value="2">Two</option>
+            <option value="3">Three</option>
+        </select>
+    </div>
+    <div class="mb-3">
+        <label for="birthday">烹饪工艺</label>
+        <select class="form-select" aria-label="Default select example">
+            <option selected>Open this select menu</option>
+            <option value="1">One</option>
+            <option value="2">Two</option>
+            <option value="3">Three</option>
+        </select>
+    </div>
+    <div class="mb-3">
+        <label for="birthday">使用厨具</label>
+        <select id="type" name="type" class="selectpicker show-tick form-control" multiple data-live-search="true" data-disabled="false">
+            <option value="botany">植物</option>
+            <option value="animal">动物</option>
+        </select>
+    </div>
+</form>
+
+@section Scripts{
+    <script src="~/js/menu/fileinput.js"></script>
+    <script src="~/js/menu/fileinput_locale_zh.js"></script>
+    <script src="~/js/menu/menu.js"></script>
+}

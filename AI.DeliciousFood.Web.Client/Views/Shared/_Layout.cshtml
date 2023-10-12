@@ -32,13 +32,13 @@
                             <nav class="navbar navbar-inverse ai-box">
                                 <ul class="nav navbar-nav  ai-box">
                                     <li class="nav-item col-1">
-                                        <a class="nav-link" href="#">链接 1</a>
+                                        <a class="nav-link" href="/">首页</a>
                                     </li>
                                     <li class="nav-item col-1">
-                                        <a class="nav-link" href="#">链接 1</a>
+                                        <a class="nav-link" href="#">菜谱分类</a>
                                     </li>
                                     <li class="nav-item col-1">
-                                        <a class="nav-link" href="#">链接 1</a>
+                                        <a class="nav-link" asp-controller="Menu" asp-action="Index">发布菜谱</a>
                                     </li>
                                     <li class="nav-item col-3">
                                     </li>
@@ -61,8 +61,8 @@
                                         <li class="nav-item dropdown text-end col-1">
                                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Hello @User.Identity?.Name!</a>
                                             <ul class="dropdown-menu">
-                                                <li><a class="dropdown-item" href="#">另一个链接</a></li>
-                                                <li><a class="dropdown-item" href="#">第三个链接</a></li>
+                                                <li><a class="dropdown-item" href="#">个人信息</a></li>
+                                                <li><a class="dropdown-item" href="#">VIP信息</a></li>
                                                 <li><a class="dropdown-item" asp-controller="account" asp-action="logout">退出</a></li>
                                             </ul>
                                         </li>
@@ -93,7 +93,7 @@
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>    
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/js/layout.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
