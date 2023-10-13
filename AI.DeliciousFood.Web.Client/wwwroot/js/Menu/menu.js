@@ -1,3 +1,4 @@
+/*-----------------------图片上传------------------------------*/
 $("#file-1").fileinput({
     uploadUrl: '', // 这个是点击上传时候的上传接口
     allowedFileExtensions: ['jpg', 'png', 'gif', 'jpeg'],//允许的文件类型
@@ -23,3 +24,32 @@ $("#file-1").fileinput({
         console.log(event, data, previewId, index);
 
     });
+
+
+/*-----------------------富文本框------------------------------*/
+const { createEditor, createToolbar } = window.wangEditor
+
+const editorConfig = {
+    placeholder: 'Type here...',
+    onChange(editor) {
+        const html = editor.getHtml()
+        console.log('editor content', html)
+        // 也可以同步到 <textarea>
+    }
+}
+
+const editor = createEditor({
+    selector: '#editor-container',
+    html: '<p><br></p>',
+    config: editorConfig,
+    mode: 'default', // or 'simple'
+})
+
+const toolbarConfig = {}
+
+const toolbar = createToolbar({
+    editor,
+    selector: '#toolbar-container',
+    config: toolbarConfig,
+    mode: 'default', // or 'simple'
+})
