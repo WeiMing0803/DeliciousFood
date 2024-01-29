@@ -2,15 +2,13 @@
 
 namespace AI.DeliciousFood.Web.Client.Controllers
 {
-    public class MenuController : Controller
+    public class MenuController(GlobalConfig globalConfig) : Controller
     {
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
-        }
-
-        public IActionResult a()
-        {
+            ViewBag.CookingTechniques = globalConfig.CookingTechniquesList;
+            ViewBag.FlavorsList = globalConfig.FlavorsList;
+            ViewBag.KitchenToolsList = globalConfig.KitchenToolsList;
             return View();
         }
     }

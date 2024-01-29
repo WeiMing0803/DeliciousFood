@@ -1,4 +1,5 @@
 using AI.DeliciousFood.Core.Model;
+using AI.DeliciousFood.Web.Client;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -40,6 +41,8 @@ builder.Services.AddAuthentication(options =>
 .AddCookie(IdentityConstants.ApplicationScheme)
 .AddCookie(IdentityConstants.ExternalScheme)
 .AddCookie(IdentityConstants.TwoFactorUserIdScheme);
+
+builder.Services.AddSingleton<GlobalConfig>();
 
 var app = builder.Build();
 
