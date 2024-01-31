@@ -12,14 +12,13 @@ namespace AI.DeliciousFood.Web.Client.Controllers
             return View();
         }
 
-        public IActionResult UploadImage()
+        public async Task<IActionResult> UploadImage()
         {
-            var data = new
-            {
-                Message = "处理成功",
-                Data = "good" 
-            };
-            return Ok(data);
+            IFormFile imgFile = HttpContext.Request.Form.Files[0];
+            using MemoryStream memoryStream = new();
+            await imgFile.CopyToAsync(memoryStream);
+            byte[] fileBytes = memoryStream.ToArray();
+            return Ok(new { FileName = imgFile.FileName, FileBytes = fileBytes });
         }
     }
 }

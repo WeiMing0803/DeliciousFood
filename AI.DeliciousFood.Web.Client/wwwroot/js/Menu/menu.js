@@ -1,11 +1,13 @@
 var currentValue = 2;
+var uploadedFiles = [];
 var html;
 
-/*-----------------------图片上次------------------------------*/
+/*-----------------------图片上传------------------------------*/
 $("#input-ke-2").fileinput({
     language: 'zh',                                          // 多语言设置，需要引入local中相应的js，例如locales/zh.js
     theme: "explorer-fa",                               // 主题
     uploadUrl: '/menu/UploadImage',         // 上传地址
+    allowedFileExtensions: ['jpg', 'png', 'gif', 'jpeg'],//允许的文件类型
     minFileCount: 1,                                        // 最小上传数量
     maxFileCount: 5,                                        // 最大上传数量
     overwriteInitial: false,                        // 覆盖初始预览内容和标题设置
@@ -31,18 +33,44 @@ $("#input-ke-2").fileinput({
         //uploadRetryIcon: '<i class="fa fa-repeat"></i>'  // 重试图标
     },
 });
-// 上传成功回调
-$("#input-ke-2").on("filebatchuploadcomplete", function () {
-    //layer.msg("上传附件成功");
-    //setTimeout("closeUpladLayer()", 2000)
+//每上传一个文件成功，触发一次此事件
+$("#input-ke-2").on("fileuploaded", function (event, data, previewId, index) {
+    var response = data.response;
+    if (response) {
+        console.log('上传成功: ' + response.fileName);
+        console.log('数据: ' + response.fileBytes);
+        console.log('数据: ' + previewId);
+
+        // 保存文件信息到数组
+        uploadedFiles.push({
+            fileName: response.fileName,
+            fileBytes: response.fileBytes,
+            previewId: previewId // 将 previewId 也保存起来，以便将来删除
+        });
+    } else {
+        console.log('上传完成，但没有返回数据');
+    }
 });
+// 上传成功回调,当所有文件上传成功，此事件触发一次
+//$("#input-ke-2").on("filebatchuploadcomplete", function (event, files, extra) {
+//    var data = extra.response; // 获取上传成功之后返回的数据
+//    if (data) {
+//        alert('上传成功: ' + data.Message); // 显示返回的消息
+//        // 如果您想对数据做进一步的处理，可以在这里添加代码
+//    }
+//});
 // 上传失败回调
 $('#input-ke-2').on('fileerror', function (event, data, msg) {
-    //layer.msg(data.msg);
-    //tokenTimeOut(data);
+
 });
 
-
+$('#input-ke-2').on('filesuccessremove', function (event, previewId) {
+    var fileIndex = uploadedFiles.findIndex(file => file.previewId === previewId);
+    if (fileIndex !== -1) {
+        uploadedFiles.splice(fileIndex, 1);
+        console.log('文件已从列表中删除: ' + previewId);
+    }
+});
 
 /*-----------------------富文本框------------------------------*/
 const { createEditor, createToolbar } = window.wangEditor
