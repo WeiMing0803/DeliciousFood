@@ -4,12 +4,18 @@ namespace AI.DeliciousFood.Web.Client.Controllers
 {
     public class MenuController(GlobalConfig globalConfig) : Controller
     {
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             ViewBag.CookingTechniques = globalConfig.CookingTechniquesList;
             ViewBag.FlavorsList = globalConfig.FlavorsList;
             ViewBag.KitchenToolsList = globalConfig.KitchenToolsList;
             return View();
+        }
+
+        public IActionResult b(dynamic a)
+        {
+            
+            return Ok();
         }
     }
 }
