@@ -12,10 +12,14 @@ namespace AI.DeliciousFood.Web.Client.Controllers
             return View();
         }
 
-        public IActionResult b(dynamic a)
+        public IActionResult UploadImage()
         {
-            
-            return Ok();
+            var data = new
+            {
+                Message = "处理成功",
+                Data = "good" 
+            };
+            return Ok(data);
         }
     }
 }

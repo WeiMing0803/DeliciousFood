@@ -5,7 +5,10 @@
 }
 
 @section Styles {
-    <link href="~/css/menu/fileinput.css" rel="stylesheet" />
+    @* 图片上传 *@
+    <link href="~/lib/bootstrap-fileinput/css/fileinput.min.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap-fileinput/themes/explorer-fa6/theme.min.css" rel="stylesheet" />
+
     <link href="~/css/radiogroup.css" rel="stylesheet" />
     <link href="~/lib/multiple-select/dist/multiple-select.min.css" rel="stylesheet" />
     <link href="~/lib/wangeditor/editor/dist/css/style.css" rel="stylesheet" />
@@ -37,7 +40,10 @@
     </div>
     <div class="mb-3">
         <label for="picture" class="mb-2">图片上传</label>
-        <input id="file-1" name="file" type="file" multiple class="form-control" data-overwrite-initial="false" data-min-file-count="1" />
+        @* <input id="file-1" name="file" type="file" multiple class="form-control" data-overwrite-initial="false" data-min-file-count="1" /> *@
+        <div class="file-loading">
+            <input id="input-ke-2" name="file" type="file" multiple>
+        </div>
     </div>
     <div>
         <label for="description" class="form-label">菜品描述</label>
@@ -142,8 +148,13 @@
 </form>
 
 @section Scripts {
-    <script src="~/js/menu/fileinput.js"></script>
-    <script src="~/js/menu/fileinput_locale_zh.js"></script>
+    @* 图片上传 *@
+    <script src="~/lib/bootstrap-fileinput/js/plugins/sortable.min.js"></script>
+    <script src="~/lib/bootstrap-fileinput/js/fileinput.min.js"></script>
+    <script src="~/lib/bootstrap-fileinput/js/locales/zh.min.js"></script>
+    <script src="~/lib/bootstrap-fileinput/themes/explorer-fa6/theme.min.js"></script>
+    <script src="~/lib/bootstrap-fileinput/themes/fa6/theme.min.js"></script>
+
     <script src="~/lib/multiple-select/dist/multiple-select.min.js"></script>
     <script src="~/lib/wangeditor/editor/dist/index.js"></script>
     <script src="~/js/menu/menu.js"></script>

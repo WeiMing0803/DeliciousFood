@@ -19,6 +19,21 @@
         "dist/index.js",
         "dist/css/style.css"
       ]
+    },
+    {
+      "library": "bootstrap-fileinput@5.5.2",
+      "destination": "wwwroot/lib/bootstrap-fileinput/",
+      "files": [
+        "js/fileinput.min.js",
+        "img/loading-sm.gif",
+        "img/loading.gif",
+        "js/plugins/sortable.min.js",
+        "js/locales/zh.min.js",
+        "themes/explorer-fa6/theme.min.js",
+        "css/fileinput.min.css",
+        "themes/explorer-fa6/theme.min.css",
+        "themes/fa6/theme.min.js"
+      ]
     }
   ]
 }
