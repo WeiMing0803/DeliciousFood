@@ -13,7 +13,7 @@
     <link href="~/lib/multiple-select/dist/multiple-select.min.css" rel="stylesheet" />
     <link href="~/lib/wangeditor/editor/dist/css/style.css" rel="stylesheet" />
 
-    <link href="~/css/menu/index.css" rel="stylesheet" />
+    <link href="~/css/menu/index.css" rel="stylesheet" asp-append-version="true" />
 }
 
 <nav class="ai-nav-menu">
@@ -29,7 +29,6 @@
         </li>
     </ol>
 </nav>
-
 
 <hr />
 
@@ -157,11 +156,10 @@
 
     <script src="~/lib/multiple-select/dist/multiple-select.min.js"></script>
     <script src="~/lib/wangeditor/editor/dist/index.js"></script>
-    <script src="~/js/menu/menu.js"></script>
+    <script src="~/js/menu/menu.js" asp-append-version="true"></script>
     <script>
         $(function () {
             $('select').multipleSelect();
-            
         });
     </script>
 }

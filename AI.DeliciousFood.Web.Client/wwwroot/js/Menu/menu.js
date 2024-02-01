@@ -26,7 +26,7 @@ $("#input-ke-2").fileinput({
         showRemove: true,                                   // 显示删除按钮
         showUpload: true,                                   // 显示上传按钮
         showDownload: false,                            // 显示下载按钮
-        showZoom: false,                                    // 显示预览按钮
+        showZoom: true,                                    // 显示预览按钮
         showDrag: false,                                        // 显示拖拽
         //removeIcon: '<i class="fa fa-trash"></i>',   // 删除图标 
         //uploadIcon: '<i class="fa fa-upload"></i>',     // 上传图标
@@ -37,9 +37,9 @@ $("#input-ke-2").fileinput({
 $("#input-ke-2").on("fileuploaded", function (event, data, previewId, index) {
     var response = data.response;
     if (response) {
-        console.log('上传成功: ' + response.fileName);
-        console.log('数据: ' + response.fileBytes);
-        console.log('数据: ' + previewId);
+        //console.log('上传成功: ' + response.fileName);
+        //console.log('数据: ' + response.fileBytes);
+        //console.log('数据: ' + previewId);
 
         // 保存文件信息到数组
         uploadedFiles.push({
@@ -79,7 +79,7 @@ const editorConfig = {
     placeholder: 'Type here...',
     onChange(editor) {
         html = editor.getHtml()
-        console.log('editor content', html)
+        //console.log('editor content', html)
         // 也可以同步到 <textarea>
     }
 }
@@ -119,22 +119,39 @@ $(document).on('click', '.icon', function (e) {
 
 /*-----------------------提交食谱------------------------------*/
 $('#submitReview').on('click', function (event) {
-    //var recipeName = $('#recipeName').val();
-    //var description = $('#description').val();
-    //var productionDifficulty = getSelectedRadioValue('productionDifficulty');
-    //var needsTime = getSelectedRadioValue('needsTime');
-    //var taste = $('#taste').val();
-    //var cookingCraft = $('#cookingCraft').val();
-    //var kitchenUtensils = $('#kitchenUtensils').val();
-    //var tips = $('#tips').val();
-    //var steps = html;
-    //var ingredientsDetails = getIngredients();
+    event.preventDefault();// 阻止表单默认提交行为
 
-    var fileStack = $('#file-1').fileinput('getFileStack');
-    var formData = new FormData();
-    $.each(fileStack, function (index, file) {
-        if (file instanceof Blob) {  // 确保是 Blob 类型
-            formData.append('images[]', file, file.name); // 现在`file`就是File对象
+    var menuData = {
+        RecipeName: $('#recipeName').val(),
+        Description: $('#description').val(),
+        ProductionDifficulty: getSelectedRadioValue('productionDifficulty'),
+        NeedsTime: getSelectedRadioValue('needsTime'),
+        Taste: $('#taste').val(),
+        CookingCraft: $('#cookingCraft').val(),
+        KitchenUtensils: $('#kitchenUtensils').val(),
+        Tips: $('#tips').val(),
+        Steps: html,
+        IngredientsDetails: getIngredients(),
+        Files: uploadedFiles,
+    }
+
+
+    console.log(menuData);
+
+    $.ajax({
+        url: '/Menu/SaveMenu',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(menuData),
+        success: function (response) {
+
+            saveToastMessage('操作成功！');
+            showToastShown();
+            // 转到其他页面
+            //window.location.href = '/home/index';
+        },
+        error: function (error) {
+            console.error(error);
         }
     });
 });
@@ -153,10 +170,10 @@ function getSelectedRadioValue(name) {
 
 // 获取所有食材的名称和用量
 function getIngredients() {
-    var ingredients = [];    
+    var ingredients = [];
     $('.row.mb-1.ai-ingredientsDetails').each(function () {
         var name = $(this).find('.col-md-6 input').val();
-        var quantity = $(this).find('.col-md-2 input').val();        
+        var quantity = $(this).find('.col-md-2 input').val();
         ingredients.push({ name: name, quantity: quantity });
     });
     return ingredients;

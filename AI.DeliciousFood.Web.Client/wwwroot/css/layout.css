@@ -1,3 +1,12 @@
+/*µ¯³ö¿ò*/
+.toast-container {
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+    z-index: 1050;
+}
+
+
 .submit-box {
     border: 1px solid #dbdcdd;
     border-radius: 0px 3px 3px 0px;

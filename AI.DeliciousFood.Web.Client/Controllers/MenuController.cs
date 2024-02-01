@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AI.DeliciousFood.Web.Client.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace AI.DeliciousFood.Web.Client.Controllers
 {
@@ -10,6 +11,12 @@ namespace AI.DeliciousFood.Web.Client.Controllers
             ViewBag.FlavorsList = globalConfig.FlavorsList;
             ViewBag.KitchenToolsList = globalConfig.KitchenToolsList;
             return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SaveMenu([FromBody] MenuDataModel menuData)
+        {
+            return Ok();
         }
 
         public async Task<IActionResult> UploadImage()
