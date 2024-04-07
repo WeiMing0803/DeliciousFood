@@ -8,6 +8,8 @@ AI.DeliciousFood.Core.Server/bin
 AI.DeliciousFood.Core.Server/obj
 AI.DeliciousFood.Web.Client/bin
 AI.DeliciousFood.Web.Client/obj
+AI.DeliciousFood.Web.Client/Logs/*
+AI.DeliciousFood.Web.Client/Logs/.gitkeep
 AI.DeliciousFood.Web.Manage/bin
 AI.DeliciousFood.Web.Manage/obj
 .vs
