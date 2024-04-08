@@ -2,6 +2,7 @@ using AI.DeliciousFood.Core.Model;
 using AI.DeliciousFood.Web.Client;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -44,6 +45,10 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddSingleton<GlobalConfig>();
 
+builder.Host.UseSerilog((ctx, lc) => lc
+    .WriteTo.Console()
+    .ReadFrom.Configuration(ctx.Configuration));
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -51,6 +56,8 @@ if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
 }
+app.UseSerilogRequestLogging();
+
 app.UseStaticFiles();
 
 app.UseRouting();
