@@ -68,7 +68,7 @@ $('#input-ke-2').on('filesuccessremove', function (event, previewId) {
     var fileIndex = uploadedFiles.findIndex(file => file.previewId === previewId);
     if (fileIndex !== -1) {
         uploadedFiles.splice(fileIndex, 1);
-        console.log('文件已从列表中删除: ' + previewId);
+        //console.log('文件已从列表中删除: ' + previewId);
     }
 });
 

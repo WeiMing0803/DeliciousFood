@@ -24,9 +24,9 @@ namespace AI.DeliciousFood.Core.Model
         public string RecipeName { get; set; }
 
         /// <summary>
-        /// 成品图片
+        /// 图片名称
         /// </summary>
-        public string FinishedPicture { get; set; }
+        public string FileNames { get; set; }
 
         /// <summary>
         /// 菜谱描述
@@ -59,6 +59,11 @@ namespace AI.DeliciousFood.Core.Model
         public string UseKitchenUtensils { get; set; }
 
         /// <summary>
+        /// 食材
+        /// </summary>
+        public string Ingredients { get; set; } 
+
+        /// <summary>
         /// 做法
         /// </summary>
         public string Practice { get; set; }
@@ -87,8 +92,9 @@ namespace AI.DeliciousFood.Core.Model
         /// 是否批准
         /// </summary>
         public bool IsApproval { get; set; }
-        
-        public ICollection<Material> Materials { get; set; }
+
+        //public ICollection<Material> Materials { get; set; }
+
         public FoodUser User { get; set; }
     }
 }
