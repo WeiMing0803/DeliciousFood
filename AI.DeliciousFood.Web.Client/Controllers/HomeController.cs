@@ -22,7 +22,7 @@ namespace AI.DeliciousFood.Web.Client.Controllers
 
         public IActionResult Index()
         {
-            Log.Error("Hello World");
+            //Log.Error("Hello World");
             return View();
         }
 
