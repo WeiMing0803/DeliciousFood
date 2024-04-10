@@ -32,6 +32,10 @@
     <ProjectReference Include="..\AI.DeliciousFood.Core.Server\AI.DeliciousFood.Core.Server.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Images\" />
+  </ItemGroup>
+
   <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
 
 </Project>

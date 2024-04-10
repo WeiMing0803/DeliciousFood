@@ -3,6 +3,7 @@ using AI.DeliciousFood.Core.Data;
 using AI.DeliciousFood.Core.Model;
 using AI.DeliciousFood.Web.Client.Models;
 using Newtonsoft.Json;
+using System.Text;
 
 namespace AI.DeliciousFood.Core.Server
 {
@@ -15,11 +16,16 @@ namespace AI.DeliciousFood.Core.Server
     {
         public async Task SaveRecipeAsync(MenuDataModel menuData, UserInfo user, CancellationToken cancellationToken)
         {
+            string folderPath = Path.Combine("Images",
+                                 DateTime.Now.ToString("yyyyMM"),
+                                 DateTime.Now.Day.ToString(),
+                                 menuData.RecipeName + "_" + DateTime.Now.ToString("HHmmssff"));
+
             Recipe recipe = new Recipe()
             {
                 UserId = user.UserId,
                 RecipeName = menuData.RecipeName,
-                FileNames = "asdfdsfds",
+                FileNames = folderPath,
                 RecipeDescription = menuData.Description,
                 RoductionDifficulty = menuData.ProductionDifficulty,
                 TasksTime = menuData.NeedsTime,
@@ -31,6 +37,13 @@ namespace AI.DeliciousFood.Core.Server
                 Tips = menuData.Tips
             };
             await repository.AddAsync(recipe);
+            
+
+            Directory.CreateDirectory(folderPath);
+            foreach (FileUpload file in menuData.Files)
+            {
+                await File.WriteAllBytesAsync(Path.Combine(folderPath, file.FileName), file.FileBytes);
+            }
         }
     }
 }

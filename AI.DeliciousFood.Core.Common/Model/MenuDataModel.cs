@@ -33,7 +33,7 @@ namespace AI.DeliciousFood.Web.Client.Models
 
         [JsonProperty("fileBytes")]
 
-        public string FileBytes { get; set; }
+        public byte[] FileBytes { get; set; }
 
         [JsonProperty("previewId")]
 
