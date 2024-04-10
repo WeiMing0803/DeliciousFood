@@ -93,8 +93,6 @@ namespace AI.DeliciousFood.Core.Model
         /// </summary>
         public bool IsApproval { get; set; }
 
-        //public ICollection<Material> Materials { get; set; }
-
         public FoodUser User { get; set; }
     }
 }

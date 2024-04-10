@@ -1,4 +1,6 @@
+using AI.DeliciousFood.Core.Data;
 using AI.DeliciousFood.Core.Model;
+using AI.DeliciousFood.Core.Server;
 using AI.DeliciousFood.Web.Client;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -44,6 +46,8 @@ builder.Services.AddAuthentication(options =>
 .AddCookie(IdentityConstants.TwoFactorUserIdScheme);
 
 builder.Services.AddSingleton<GlobalConfig>();
+builder.Services.AddScoped(typeof(GenericRepository<>));
+builder.Services.AddScoped<IMenuRepository, MenuRepository>();
 
 builder.Host.UseSerilog((ctx, lc) => lc
     .WriteTo.Console()

@@ -1,9 +1,10 @@
-﻿using AI.DeliciousFood.Web.Client.Models;
+﻿using AI.DeliciousFood.Core.Server;
+using AI.DeliciousFood.Web.Client.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AI.DeliciousFood.Web.Client.Controllers
 {
-    public class MenuController(GlobalConfig globalConfig) : Controller
+    public class MenuController(GlobalConfig globalConfig, IMenuRepository menuRepository) : CommonControllerBase
     {
         public IActionResult Index()
         {
@@ -16,6 +17,7 @@ namespace AI.DeliciousFood.Web.Client.Controllers
         [HttpPost]
         public async Task<IActionResult> SaveMenu([FromBody] MenuDataModel menuData)
         {
+            await menuRepository.SaveRecipeAsync(menuData, UserInfo);
             return Ok();
         }
 

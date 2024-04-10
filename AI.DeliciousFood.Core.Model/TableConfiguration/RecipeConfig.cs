@@ -9,7 +9,7 @@ namespace AI.DeliciousFood.Core.Model.TableConfiguration
         {
             builder.ToTable("T_Recipe");
             builder.HasKey(b => b.Guid).IsClustered(false);
-            builder.Property(b => b.Guid).HasColumnType("uniqueidentifier");
+            builder.Property(b => b.Guid).HasColumnType("uniqueidentifier").HasDefaultValueSql("NEWID()");
             builder.Property(b => b.UserId).HasColumnType("bigint");
             builder.Property(b => b.RecipeName).HasColumnType("nvarchar(50)").IsRequired();
             builder.Property(b => b.FileNames).HasColumnType("nvarchar(max)").IsRequired();
@@ -22,8 +22,8 @@ namespace AI.DeliciousFood.Core.Model.TableConfiguration
             builder.Property(b => b.Ingredients).HasColumnType("nvarchar(max)").IsRequired();
             builder.Property(b => b.Practice).HasColumnType("nvarchar(max)").IsRequired();
             builder.Property(b => b.Tips).HasColumnType("nvarchar(500)").IsRequired();
-            builder.Property(b => b.CreateTime).HasColumnType("datetime").IsRequired();
-            builder.Property(b => b.UpdateTime).HasColumnType("datetime").IsRequired();
+            builder.Property(b => b.CreateTime).HasColumnType("datetime").IsRequired().HasDefaultValueSql("GETDATE()");
+            builder.Property(b => b.UpdateTime).HasColumnType("datetime").IsRequired().HasDefaultValueSql("GETDATE()");
             builder.Property(b => b.IsDelete).HasColumnType("bit").IsRequired();
             builder.Property(b => b.IsApproval).HasColumnType("bit").IsRequired();
 

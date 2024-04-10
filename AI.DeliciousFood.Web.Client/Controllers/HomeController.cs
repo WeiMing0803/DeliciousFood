@@ -7,7 +7,7 @@ using System.Diagnostics;
 
 namespace AI.DeliciousFood.Web.Client.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : CommonControllerBase
     {
         private readonly SignInManager<FoodUser> _signInManager;
         private readonly UserManager<FoodUser> _userManager;
