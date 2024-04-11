@@ -17,8 +17,12 @@ namespace AI.DeliciousFood.Web.Client.Controllers
         [HttpPost]
         public async Task<IActionResult> SaveMenu([FromBody] MenuDataModel menuData)
         {
-            await menuRepository.SaveRecipeAsync(menuData, UserInfo);
-            return Ok();
+            //await menuRepository.SaveRecipeAsync(menuData, UserInfo);
+            return Ok(new
+            {
+                success = true,
+                redirectUrl = Url.Action("Index", "Home")
+            });
         }
 
         public async Task<IActionResult> UploadImage()

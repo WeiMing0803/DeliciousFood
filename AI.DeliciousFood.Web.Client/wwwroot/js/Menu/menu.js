@@ -135,9 +135,6 @@ $('#submitReview').on('click', function (event) {
         Files: uploadedFiles,
     }
 
-
-    console.log(menuData);
-
     $.ajax({
         url: '/Menu/SaveMenu',
         type: 'POST',
@@ -148,7 +145,7 @@ $('#submitReview').on('click', function (event) {
             saveToastMessage('操作成功！');
             showToastShown();
             // 转到其他页面
-            //window.location.href = '/home/index';
+            window.location.href = response.redirectUrl;
         },
         error: function (error) {
             console.error(error);
