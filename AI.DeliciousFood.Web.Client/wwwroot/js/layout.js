@@ -63,4 +63,11 @@ function initializeToastMessage() {
 // 页面加载时初始化toast消息
 initializeToastMessage();
 
+//显示自定义提示框
+function showAlert(message) {
+    var modalMessage = document.getElementById('modalMessage');
+    modalMessage.innerHTML = message;
+    var myModal = new bootstrap.Modal(document.getElementById('customAlertModal'));
+    myModal.show();
+}
 

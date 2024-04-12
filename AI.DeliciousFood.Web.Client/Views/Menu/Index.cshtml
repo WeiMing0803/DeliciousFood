@@ -38,18 +38,18 @@
         <input type="text" class="form-control" id="recipeName" placeholder="菜谱名称">
     </div>
     <div class="mb-3">
-        <label for="picture" class="mb-2">图片上传</label>
+        <label for="picture" class="mb-2 ai-textbold">图片上传</label>
         @* <input id="file-1" name="file" type="file" multiple class="form-control" data-overwrite-initial="false" data-min-file-count="1" /> *@
         <div class="file-loading">
             <input id="input-ke-2" name="file" type="file" multiple>
         </div>
     </div>
     <div>
-        <label for="description" class="form-label">菜品描述</label>
+        <label for="description" class="form-label ai-textbold">菜品描述</label>
         <textarea class="form-control" rows="3" id="description"></textarea>
     </div>
     <div class="mb-3">
-        <label for="productionDifficulty" class="form-label">制作难度</label>
+        <label for="productionDifficulty" class="form-label ai-textbold">制作难度</label>
         <fieldset tabindex="0" class='radioGroup'>
             <input id='g1o11' name="productionDifficulty" value="简单" checked type="radio">
             <label for='g1o11'>简单</label>
@@ -62,7 +62,7 @@
         </fieldset>
     </div>
     <div class="mb-3">
-        <label for="needsTime" class="form-label">需要时间</label>
+        <label for="needsTime" class="form-label ai-textbold">需要时间</label>
         <fieldset tabindex="0" class='radioGroup'>
             <input id='g1o1' name="needsTime" value="十分钟" checked type="radio">
             <label for='g1o1'>十分钟</label>
@@ -84,7 +84,7 @@
     </div>
     <div class="col-md-4">
         <div class="form-group">
-            <label for="taste" class="form-label">口味</label>
+            <label for="taste" class="form-label ai-textbold">口味</label>
         </div>
         <div class="form-group">
             @Html.DropDownList("CookingTechniques", new SelectList(cookingTechniques), "--请选择--", new { id = "taste" })
@@ -92,7 +92,7 @@
     </div>
     <div class="col-md-4">
         <div class="form-group">
-            <label for="cookingCraft" class="form-label">烹饪工艺</label>
+            <label for="cookingCraft" class="form-label ai-textbold">烹饪工艺</label>
         </div>
         <div class="form-group">
             @Html.DropDownList("CookingTechniques", new SelectList(flavorsList), "--请选择--", new { id = "cookingCraft" })
@@ -100,14 +100,14 @@
     </div>
     <div class="col-md-4">
         <div class="form-group">
-            <label for="kitchenUtensils" class="form-label">使用厨具</label>
+            <label for="kitchenUtensils" class="form-label ai-textbold">使用厨具</label>
         </div>
         <div class="form-group">
             @Html.ListBox("CookingTechniques", new SelectList(kitchenToolsList), new { multiple = "multiple", id = "kitchenUtensils" })
         </div>
     </div>
     <div class="mb-3">
-        <label for="ingredientsDetails" class="mb-2">食材明细</label>
+        <label for="ingredientsDetails" class="mb-2 ai-textbold">食材明细</label>
         <div class="row mb-1 ai-ingredientsDetails" id="box_1">
             <div class="col-md-6">
                 <input type="text" class="form-control" placeholder="食材名称">
@@ -129,20 +129,20 @@
         </div>
     </div>
     <div class="mb-3">
-        <label for="steps" class="mb-2">做法步骤</label>
+        <label for="steps" class="mb-2 ai-textbold">做法步骤</label>
         <div id="editor-wrapper">
             <div id="toolbar-container"><!-- 工具栏 --></div>
             <div id="editor-container"><!-- 编辑器 --></div>
         </div>
     </div>
     <div>
-        <label for="tips" class="form-label">小窍门</label>
+        <label for="tips" class="form-label ai-textbold">小窍门</label>
         <textarea class="form-control" rows="3" id="tips"></textarea>
     </div>
     <div class="d-flex justify-content-center">
-        <button type="button" class="btn btn-warning" id="saveDraft">保存草稿</button>
+        <button type="button" class="btn btn-warning ai-textbold" id="saveDraft">保存草稿</button>
         <div class="mx-2"><!-- This div acts as a spacer --></div>
-        <button type="button" class="btn btn-primary" id="submitReview">提交审核</button>
+        <button type="button" class="btn btn-primary ai-textbold" id="submitReview">提交审核</button>
     </div>
 </form>
 

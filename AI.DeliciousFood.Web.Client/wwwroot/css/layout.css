@@ -25,3 +25,7 @@
     width:100%;
     /*border:1px solid;*/
 }
+
+.ai-textbold {
+    font-weight: bold;
+}

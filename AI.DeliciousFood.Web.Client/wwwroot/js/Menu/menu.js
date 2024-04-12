@@ -135,22 +135,28 @@ $('#submitReview').on('click', function (event) {
         Files: uploadedFiles,
     }
 
-    $.ajax({
-        url: '/Menu/SaveMenu',
-        type: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify(menuData),
-        success: function (response) {
+    var errorMessage = validateMenuData(menuData);
+    if (errorMessage) {
+        showAlert(errorMessage);
+        return;
+    }
 
-            saveToastMessage('操作成功！');
-            showToastShown();
-            // 转到其他页面
-            window.location.href = response.redirectUrl;
-        },
-        error: function (error) {
-            console.error(error);
-        }
-    });
+    //$.ajax({
+    //    url: '/Menu/SaveMenu',
+    //    type: 'POST',
+    //    contentType: 'application/json',
+    //    data: JSON.stringify(menuData),
+    //    success: function (response) {
+
+    //        saveToastMessage('操作成功！');
+    //        showToastShown();
+    //        // 转到其他页面
+    //        window.location.href = response.redirectUrl;
+    //    },
+    //    error: function (error) {
+    //        console.error(error);
+    //    }
+    //});
 });
 
 
@@ -174,4 +180,46 @@ function getIngredients() {
         ingredients.push({ name: name, quantity: quantity });
     });
     return ingredients;
+}
+
+
+// 给每个输入框绑定失去焦点事件
+$(document).on('blur', '#recipeName, #description, #taste, #cookingCraft, #kitchenUtensils, #tips', function () {
+    if ($(this).val() === '') {
+        $(this).css('border-color', 'red');
+    }
+});
+
+// 给每个输入框绑定点击事件
+$(document).on('click', '#recipeName, #description, #taste, #cookingCraft, #kitchenUtensils, #tips', function () {
+    $(this).css('border-color', '');
+});
+
+function validateMenuData(menu) {
+    const checks = [
+        { condition: !menu.RecipeName, message: "请输入菜谱名称" },
+        { condition: menu.Files == null || menu.Files.length === 0, message: "请上传图片" },
+        { condition: !menu.Description, message: "请输入菜品描述" },
+        { condition: !menu.Taste, message: "请选择口味" },
+        { condition: !menu.CookingCraft, message: "请选择烹饪工艺" },
+        { condition: !menu.KitchenUtensils || menu.KitchenUtensils.length === 0, message: "请选择使用厨具" },
+        {
+            condition: !menu.IngredientsDetails ||
+                menu.IngredientsDetails.length === 0 ||
+                menu.IngredientsDetails[0].name === '' ||
+                menu.IngredientsDetails[0].quantity === '',
+            message: "请输入食材明细"
+        },
+        { condition: !menu.Steps || menu.Steps === "<p><br></p>", message: "请输入做法步骤" },
+        { condition: !menu.Tips, message: "请输入小窍门" } 
+    ];
+
+    let errorMessage = "";
+    checks.forEach((check) => {
+        if (check.condition) {
+            errorMessage += `<li>${check.message}</li>`;
+        }
+    });
+
+    return errorMessage ? `<ul>${errorMessage}</ul>` : "";
 }
