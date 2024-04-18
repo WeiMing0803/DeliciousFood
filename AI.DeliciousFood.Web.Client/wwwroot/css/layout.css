@@ -21,11 +21,28 @@
     box-shadow: 0 0 0 1px rgba(13,110,253,.25);
 }
 
-.ai-box{
-    width:100%;
+.ai-box {
+    width: 100%;
     /*border:1px solid;*/
 }
 
 .ai-textbold {
     font-weight: bold;
+}
+
+/*页面上的导航栏*/
+.ai-nav-bar ol {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    font-size: 12px;
+}
+
+.ai-nav-bar ol li {
+    display: inline;
+    margin-right: 8px;
+}
+
+.ai-nav-bar a {
+    text-decoration: none;
 }
