@@ -62,7 +62,7 @@
                                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Hello @User.Identity?.Name!</a>
                                             <ul class="dropdown-menu">
                                                 <li><a class="dropdown-item" asp-controller="account" asp-action="GetUserInfo">个人信息</a></li>
-                                                <li><a class="dropdown-item" href="#">VIP信息</a></li>
+                                                <li class="dropdown-item" data-bs-toggle="modal" data-bs-target="#vipModal">开通/续费Vip</li>
                                                 <li><a class="dropdown-item" asp-controller="account" asp-action="logout">退出</a></li>
                                             </ul>
                                         </li>
