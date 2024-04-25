@@ -7,7 +7,7 @@ namespace AI.DeliciousFood.Core.Model.TableConfiguration
     {
         public void Configure(EntityTypeBuilder<MemberPrice> builder)
         {
-            builder.ToTable("T_MemberPriceConfig");
+            builder.ToTable("T_MemberPrice");
             builder.HasKey(b => b.MenberPriceGuid).IsClustered(false);  //非聚集索引
             builder.Property(b => b.MenberPriceGuid).HasColumnType("uniqueidentifier").HasDefaultValueSql("NEWID()");
             builder.Property(b => b.MemberName).HasColumnType("nvarchar(50)");

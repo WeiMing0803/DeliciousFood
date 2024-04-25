@@ -8,5 +8,11 @@ namespace AI.DeliciousFood.Web.Client.Controllers
         {
             return View();
         }
+
+        public IActionResult GetMenberPrice()
+        {
+
+            return View();
+        }
     }
 }

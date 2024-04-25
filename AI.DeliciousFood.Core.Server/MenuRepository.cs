@@ -12,7 +12,7 @@ namespace AI.DeliciousFood.Core.Server
         Task SaveRecipeAsync(MenuDataModel menuData, UserInfo user, CancellationToken cancellationToken = default);
     }
 
-    public class MenuRepository(GenericRepository<FoodDbContext> repository) : IMenuRepository
+    public class MenuRepository(GenericRepository<FoodDbContext> dbContext) : IMenuRepository
     {
         public async Task SaveRecipeAsync(MenuDataModel menuData, UserInfo user, CancellationToken cancellationToken)
         {
@@ -36,7 +36,7 @@ namespace AI.DeliciousFood.Core.Server
                 Practice = menuData.Steps,
                 Tips = menuData.Tips
             };
-            await repository.AddAsync(recipe);
+            await dbContext.AddAsync(recipe);
             
 
             Directory.CreateDirectory(folderPath);

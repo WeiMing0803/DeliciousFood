@@ -12,7 +12,7 @@ namespace AI.DeliciousFood.Core.Model.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "T_MemberPriceConfig",
+                name: "T_MemberPrice",
                 columns: table => new
                 {
                     MenberPriceGuid = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWID()"),
