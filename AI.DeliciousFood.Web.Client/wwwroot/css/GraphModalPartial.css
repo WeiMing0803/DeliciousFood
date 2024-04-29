@@ -1,0 +1,68 @@
+﻿.members-container {
+    display: flex;
+    overflow: hidden;
+    white-space: nowrap; /* 防止多个div换行 */
+}
+
+.member-box {
+    display: inline-block;
+    margin-right: 10px;
+    text-align: center;
+    border: 1px solid #000; /* 边界以便于看到盒子 */
+    padding: 10px;
+    min-width: 150px; /* 保持div大小不变，即使内容较少 */
+}
+
+.arrow-container {
+    text-align: right; /* 箭头显示在容器的右边 */
+    display: none; /* 初始状态不显示，后续根据条件决定是否显示 */
+}
+
+/* 单独为VIP模态框设置大小 */
+@media (min-width: 320px) {
+    .vip-modal .modal-dialog {
+        max-width: 90%;
+    }
+}
+
+@media (min-width: 576px) {
+    .vip-modal .modal-dialog {
+        max-width: 80%;
+    }
+}
+
+@media (min-width: 768px) {
+    .vip-modal .modal-dialog {
+        max-width: 70%;
+    }
+}
+
+@media (min-width: 992px) {
+    .vip-modal .modal-dialog {
+        max-width: 60%;
+    }
+}
+
+@media (min-width: 1200px) {
+    .vip-modal .modal-dialog {
+        max-width: 50%;
+    }
+}
+
+/* 设置自定义模态框内容的高度 */
+.vip-modal .modal-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.vip-modal .modal-header,
+.vip-modal .modal-footer {
+    flex-shrink: 0;
+}
+
+/* 设置模态框正文的最大高度，并允许滚动 */
+.vip-modal .modal-body {
+    flex-grow: 1;
+    overflow-y: auto;
+    max-height: calc(100vh - 120px); /* Header, Footer 的高度 + 额外的间距 */
+}

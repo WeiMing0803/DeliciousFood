@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/AI.DeliciousFood.Web.Client.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/layout.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/graphmodalpartial.css"  asp-append-version="true"/>
     <link rel="stylesheet" href="~/lib/bootstrap-icons/font/bootstrap-icons.min.css" asp-append-version="true" />
 
     @await RenderSectionAsync("Styles", required: false)
@@ -63,14 +64,14 @@
                                             <ul class="dropdown-menu">
                                                 <li><a class="dropdown-item" asp-controller="account" asp-action="GetUserInfo">个人信息</a></li>
                                                 <li class="dropdown-item" data-bs-toggle="modal" data-bs-target="#vipModal">开通/续费Vip</li>
-                                                <li><a class="dropdown-item" asp-controller="account" asp-action="logout">退出</a></li>
+                                                <li><a class="dropdown-item" asp-controller="accountLogon" asp-action="logout">退出</a></li>
                                             </ul>
                                         </li>
                                     }
                                     else
                                     {
                                         <li class="nav-item text-end col-1">
-                                            <a asp-area="" asp-controller="Account" asp-action="logon" class="nav-link">登录 | 注册</a>
+                                            <a asp-area="" asp-controller="accountLogon" asp-action="logon" class="nav-link">登录 | 注册</a>
                                         </li>
                                     }
                                 </ul>

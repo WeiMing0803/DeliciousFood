@@ -48,6 +48,7 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddSingleton<GlobalConfig>();
 builder.Services.AddScoped(typeof(GenericRepository<>));
 builder.Services.AddScoped<IMenuRepository, MenuRepository>();
+builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 
 builder.Host.UseSerilog((ctx, lc) => lc
     .WriteTo.Console()

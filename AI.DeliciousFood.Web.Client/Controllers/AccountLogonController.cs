@@ -5,17 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AI.DeliciousFood.Web.Client.Controllers
 {
-    public partial class AccountController
+    public class AccountLogonController(UserManager<FoodUser> _userManager, SignInManager<FoodUser> _signInManager) : CommonControllerBase
     {
-        private readonly UserManager<FoodUser> _userManager;
-        private readonly SignInManager<FoodUser> _signInManager;
-
-        public AccountController(UserManager<FoodUser> userManager,
-            SignInManager<FoodUser> signInManager)
-        {
-            this._userManager = userManager;
-            this._signInManager = signInManager;
-        }
 
         #region 登录和注册
 

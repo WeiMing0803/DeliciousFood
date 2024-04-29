@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AI.DeliciousFood.Core.Server;
+using Microsoft.AspNetCore.Mvc;
 
 namespace AI.DeliciousFood.Web.Client.Controllers
 {
-    public partial class AccountController : CommonControllerBase
+    public partial class AccountController(IAccountRepository accountRepository) : CommonControllerBase
     {
         public IActionResult GetUserInfo()
         {
@@ -11,8 +12,12 @@ namespace AI.DeliciousFood.Web.Client.Controllers
 
         public IActionResult GetMenberPrice()
         {
-
-            return View();
+            var result = accountRepository.GetMenberPriceAsync();
+            return Ok(new
+            {
+                success = true,
+                data = result
+            });
         }
     }
 }

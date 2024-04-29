@@ -34,7 +34,7 @@
 
 <!-- 购买会员-->
 <div class="modal fade" id="vipModal" tabindex="-1" aria-labelledby="vipModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog modal-dialog-centered vip-modal">
         <div class="modal-content">
             <!-- 模态框头部 -->
             <div class="modal-header">
@@ -43,8 +43,13 @@
             </div>
             <!-- 模态框主体 -->
             <div class="modal-body">
-                <!-- 在此处添加VIP信息的内容 -->
-                在这里填写VIP用户的相关信息或者其他内容。
+                <div id="members-container" class="members-container">
+                    <!-- 会员信息将通过JavaScript加载至此处 -->
+                </div>
+                <div id="arrow-container" class="arrow-container">
+                    <!-- 如果会员数量超过 3 个，则显示右箭头 -->
+                    <button id="next-button" onclick="showNextMembers()">➡️</button>
+                </div>
             </div>
             <!-- 模态框底部 -->
             <div class="modal-footer">
