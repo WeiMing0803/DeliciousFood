@@ -46,3 +46,8 @@
 .ai-nav-bar a {
     text-decoration: none;
 }
+
+
+.ai-model-width {
+    max-width: 1000px !important;
+}

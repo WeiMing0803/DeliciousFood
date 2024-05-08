@@ -10,14 +10,5 @@ namespace AI.DeliciousFood.Web.Client.Controllers
             return View();
         }
 
-        public IActionResult GetMenberPrice()
-        {
-            var result = accountRepository.GetMenberPriceAsync();
-            return Ok(new
-            {
-                success = true,
-                data = result
-            });
-        }
     }
 }

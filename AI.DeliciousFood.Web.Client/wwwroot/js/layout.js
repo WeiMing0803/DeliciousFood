@@ -73,7 +73,7 @@ function showAlert(message) {
 // 当您的文档加载完毕时
 $(document).ready(function () {
     $('#vipModal').on('show.bs.modal', function (event) {
-        var url = "Account/GetMenberPrice";
+        var url = "Home/GetMenberPrice";
 
         $.ajax({
             url: url,

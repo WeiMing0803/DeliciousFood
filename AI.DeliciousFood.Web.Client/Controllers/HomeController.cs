@@ -1,4 +1,5 @@
 ﻿using AI.DeliciousFood.Core.Model;
+using AI.DeliciousFood.Core.Server;
 using AI.DeliciousFood.Web.Client.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -7,24 +8,24 @@ using System.Diagnostics;
 
 namespace AI.DeliciousFood.Web.Client.Controllers
 {
-    public class HomeController : CommonControllerBase
+    public class HomeController(IAccountRepository accountRepository) : CommonControllerBase
     {
-        private readonly SignInManager<FoodUser> _signInManager;
-        private readonly UserManager<FoodUser> _userManager;
-
-        public HomeController(
-            SignInManager<FoodUser> signInManager,
-            UserManager<FoodUser> userManager)
-        {
-            this._signInManager = signInManager;
-            this._userManager = userManager;
-        }
 
         public IActionResult Index()
         {
             var a = UserInfo;
             //Log.Error("Hello World");
             return View();
+        }
+
+        public IActionResult GetMenberPrice()
+        {
+            var result = accountRepository.GetMenberPriceAsync();
+            return Ok(new
+            {
+                success = true,
+                data = result
+            });
         }
 
         public IActionResult Privacy()
