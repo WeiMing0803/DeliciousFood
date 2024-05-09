@@ -9,7 +9,7 @@
         /// <summary>
         /// GUID
         /// </summary>
-        public Guid MenberPriceGuid { get; set; }
+        public Guid MemberPriceGuid { get; set; }
 
         /// <summary>
         /// 会员名称

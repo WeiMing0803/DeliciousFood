@@ -5,16 +5,48 @@
 }
 
 .member-box {
-    display: inline-block;
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     margin-right: 10px;
     text-align: center;
-    border: 1px solid #000; /* 边界以便于看到盒子 */
+    border: 1px solid #d9d5d5;
     padding: 10px;
-    min-width: 150px; /* 保持div大小不变，即使内容较少 */
-    height: 200px;
+    width: 200px;
+    height: 250px;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    background-color: #ffffff; /* 使用淡黄色背景 */
+    box-shadow: 0 2px 5px rgba(240, 240, 240, 0.2);
 }
 
-.arrow-container {
-    text-align: right; /* 箭头显示在容器的右边 */
-    display: none; /* 初始状态不显示，后续根据条件决定是否显示 */
-}
+    .member-box:hover {
+        background-color: #fff8dc;
+    }
+
+    .member-box div:first-child {
+        font-size: 18px;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 10px;
+    }
+
+    .member-box div:last-child {
+        font-size: 16px;
+        color: #666;
+    }
+
+    /* 货币符号样式 */
+    .member-box span.currency {
+        font-size: 16px;
+        vertical-align: bottom; /* 设置货币符号显示在数字下方 */
+    }
+
+    /* 价格数字样式 */
+    .member-box span.amount {
+        font-size: 34px; /* 价格数字比货币符号大 */
+        font-weight: bold; /* 加粗显示 */
+        color: #ff7f50;
+    }

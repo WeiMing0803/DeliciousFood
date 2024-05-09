@@ -21,7 +21,7 @@ namespace AI.DeliciousFood.Core.Model.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_T_MemberPriceConfig", x => x.MenberPriceGuid)
+                    table.PrimaryKey("PK_T_MemberPrice", x => x.MenberPriceGuid)
                         .Annotation("SqlServer:Clustered", false);
                 });
         }
@@ -30,7 +30,7 @@ namespace AI.DeliciousFood.Core.Model.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "T_MemberPriceConfig");
+                name: "T_MemberPrice");
         }
     }
 }

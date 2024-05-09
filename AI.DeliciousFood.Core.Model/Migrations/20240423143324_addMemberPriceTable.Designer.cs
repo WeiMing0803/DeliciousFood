@@ -143,7 +143,7 @@ namespace AI.DeliciousFood.Core.Model.Migrations
 
                     SqlServerKeyBuilderExtensions.IsClustered(b.HasKey("MenberPriceGuid"), false);
 
-                    b.ToTable("T_MemberPriceConfig", (string)null);
+                    b.ToTable("T_MemberPrice", (string)null);
                 });
 
             modelBuilder.Entity("AI.DeliciousFood.Core.Model.Recipe", b =>

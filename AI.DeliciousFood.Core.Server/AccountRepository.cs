@@ -16,7 +16,7 @@ namespace AI.DeliciousFood.Core.Server
         {
             if (MemberPrices == null)
             {
-                MemberPrices = dbContext.GetQueryable<MemberPrice>().ToDictionary(k => k.MenberPriceGuid, v => v);
+                MemberPrices = dbContext.GetQueryable<MemberPrice>().ToDictionary(k => k.MemberPriceGuid, v => v);
             }
             return MemberPrices;
         }

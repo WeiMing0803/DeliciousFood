@@ -1,5 +1,5 @@
 ﻿document.addEventListener('DOMContentLoaded', (event) => {
-     //检查 localStorage 是否有保存的显示消息的标志
+    //检查 localStorage 是否有保存的显示消息的标志
     if (localStorage.getItem("toastShown") === "true") {
         const myToast = new bootstrap.Toast(document.getElementById('myToast'), {
             delay: 5000
@@ -82,7 +82,6 @@ $(document).ready(function () {
                 const data = response.data.result;
 
                 const membersContainer = document.getElementById('members-container');
-                const arrowContainer = document.getElementById('arrow-container');
 
                 // 清空之前的内容
                 membersContainer.innerHTML = '';
@@ -93,33 +92,36 @@ $(document).ready(function () {
 
                     const memberBox = document.createElement('div');
                     memberBox.classList.add('member-box');
+                    memberBox.setAttribute('data-id', memberPrice.memberPriceGuid);
                     memberBox.innerHTML = `
-                            <div>会员名称：${memberPrice.memberName}</div>
-                            <div>会员价格：${memberPrice.price}</div>
+                            <div>${memberPrice.memberName}</div>
+                            <div>
+                                <span class="currency">￥</span>
+                                <span class="amount">${memberPrice.price}</span>                            
+                            </div>
                         `;
+                    //添加点击监听事件
+                    memberBox.addEventListener('click', function () {
+                        changeOnActive(this);
+                    });
+                    membersContainer.appendChild(memberBox);
 
-                    // 只有三个 div 显示在视图中
-                    if (index < 3) {
-                        membersContainer.appendChild(memberBox);
-                    }
-
-                    console.log(`会员价格GUID: ${memberPrice.menberPriceGuid}`);
+                    console.log(`会员价格GUID: ${memberPrice.memberPriceGuid}`);
                     console.log(`会员名称: ${memberPrice.memberName}`);
                     console.log(`价格: ${memberPrice.price}`);
                     console.log("------------------------");
                 });
-
-                // 如果超过三个会员，显示右箭头
-                if (Object.keys(data).length > 3) {
-                    arrowContainer.style.display = 'block';
-                } else {
-                    arrowContainer.style.display = 'none';
-                }
             },
             error: function (xhr, status, error) {
                 console.error(error);
-                $('#vipModalBody').html("无法获取数据，请稍后再试。");
+                $('#members-container').html("无法获取数据，请稍后再试。");
             }
         });
     });
+
+    function changeOnActive(element) {
+        console.log(element);
+        var id = $(element).data('id');
+        console.log(id);
+    }
 });
