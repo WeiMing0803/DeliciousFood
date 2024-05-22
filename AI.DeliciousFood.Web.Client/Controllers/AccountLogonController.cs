@@ -45,7 +45,7 @@ namespace AI.DeliciousFood.Web.Client.Controllers
                     ModelState.AddModelError(string.Empty, result.ToString());
                 }
             }
-            return View("login", model);
+            return View("LogOn", model);
         }
 
         [HttpPost]

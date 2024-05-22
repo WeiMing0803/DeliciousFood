@@ -125,3 +125,23 @@ $(document).ready(function () {
         console.log(id);
     }
 });
+
+
+var connection = new WebSocket('ws://' + window.location.host + '/ws');
+
+connection.onmessage = function (event) {
+    console.log('Payment status:', event.data);
+    if (event.data === '支付成功') {
+        alert('支付成功');
+    }
+};
+
+connection.onerror = function (error) {
+    console.error('WebSocket error:', error);
+};
+
+
+// 断开连接，如果页面关闭
+//window.onbeforeunload = function () {
+//    connection.close();
+//};
