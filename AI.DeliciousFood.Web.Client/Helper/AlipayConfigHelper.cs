@@ -9,5 +9,6 @@
         public string Format { get; set; }
         public string Charset { get; set; }
         public string SetNotifyUrl { get; set; }
+        public string AppId { get; set; }
     }
 }

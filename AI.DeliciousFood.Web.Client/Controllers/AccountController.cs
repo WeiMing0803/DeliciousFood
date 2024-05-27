@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AI.DeliciousFood.Web.Client.Controllers
 {
-    public partial class AccountController(IAccountRepository accountRepository) : CommonControllerBase
+    public partial class AccountController(IAlipayRepository accountRepository) : CommonControllerBase
     {
         public IActionResult GetUserInfo()
         {

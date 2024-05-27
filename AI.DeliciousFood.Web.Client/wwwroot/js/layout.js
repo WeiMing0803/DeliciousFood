@@ -73,7 +73,7 @@ function showAlert(message) {
 // 当您的文档加载完毕时
 $(document).ready(function () {
     $('#vipModal').on('show.bs.modal', function (event) {
-        var url = "Home/GetMenberPrice";
+        var url = "Alipay/GetMenberPrice";
 
         $.ajax({
             url: url,
@@ -82,6 +82,7 @@ $(document).ready(function () {
                 const data = response.data.result;
 
                 const membersContainer = document.getElementById('members-container');
+                const membersQRCode = document.getElementById('members-QRCode');
 
                 // 清空之前的内容
                 membersContainer.innerHTML = '';
@@ -92,6 +93,36 @@ $(document).ready(function () {
 
                     const memberBox = document.createElement('div');
                     memberBox.classList.add('member-box');
+
+                    //设置默认的支付二维码
+                    if (index === 0) {
+                        $.ajax({
+                            url: "Alipay/AlipayTradePrecreate",
+                            type: 'GET',
+                            data: { memberPriceGuid: memberPrice.memberPriceGuid },
+                            success: function (data2) {
+                                // 创建支付宝预支付二维码
+                                if (data2.success) {
+                                    const qrCode = document.createElement('div');
+                                    qrCode.innerHTML = `
+                                            <div>
+                                                <span>扫描二维码支付</span>
+                                                <span class="currency">￥</span>
+                                                <span class="amount">${memberPrice.price}</span>                            
+                                            </div>
+                                             <img src="https://quickchart.io/qr?text=${encodeURIComponent(data2.data)}" />
+                                        `;
+                                    membersQRCode.appendChild(qrCode);
+                                }
+                            },
+                            error: function (error2) {
+                                console.error("Second request error:", error2);
+                            }
+                        });
+                        memberBox.classList.add('member-select');                       
+                    }
+
+
                     memberBox.setAttribute('data-id', memberPrice.memberPriceGuid);
                     memberBox.innerHTML = `
                             <div>${memberPrice.memberName}</div>
@@ -106,6 +137,7 @@ $(document).ready(function () {
                     });
                     membersContainer.appendChild(memberBox);
 
+                    console.log(`${index}`);
                     console.log(`会员价格GUID: ${memberPrice.memberPriceGuid}`);
                     console.log(`会员名称: ${memberPrice.memberName}`);
                     console.log(`价格: ${memberPrice.price}`);
@@ -117,9 +149,20 @@ $(document).ready(function () {
                 $('#members-container').html("无法获取数据，请稍后再试。");
             }
         });
+
+
     });
 
     function changeOnActive(element) {
+
+        // 移除之前设置的 'member-select'
+        const previouslySelected = document.querySelector('.member-select');
+        if (previouslySelected) {
+            previouslySelected.classList.remove('member-select');
+        }
+        // 给当前的 div 添加 class 样式 'member-select'
+        element.classList.add('member-select');
+
         console.log(element);
         var id = $(element).data('id');
         console.log(id);

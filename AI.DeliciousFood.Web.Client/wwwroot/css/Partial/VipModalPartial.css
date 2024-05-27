@@ -1,4 +1,21 @@
-﻿.members-container {
+﻿.modal-body {
+    display: flex;
+    justify-content: space-between;
+}
+
+#members-container {
+    width: 70%;
+}
+
+#members-QRCode {
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.members-container {
     display: flex;
     overflow: hidden;
     white-space: nowrap; /* 防止多个div换行 */
@@ -42,11 +59,22 @@
     .member-box span.currency {
         font-size: 16px;
         vertical-align: bottom; /* 设置货币符号显示在数字下方 */
+        color: #4D0819;
     }
 
     /* 价格数字样式 */
     .member-box span.amount {
         font-size: 34px; /* 价格数字比货币符号大 */
         font-weight: bold; /* 加粗显示 */
-        color: #ff7f50;
+        color: #4D0819;
+    }
+
+.member-select {
+    background-color: #FFD37A;
+    border: none;
+}
+
+    .member-select:hover {
+        background-color: #FFD37A;
+        border: none;
     }
