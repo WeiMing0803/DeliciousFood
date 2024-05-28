@@ -6,7 +6,5 @@
         public string[] FlavorsList => File.ReadAllLines(Path.Combine(webHostEnvironment.WebRootPath, "constantFile", "FlavorsList.txt"));
         public string[] KitchenToolsList => File.ReadAllLines(Path.Combine(webHostEnvironment.WebRootPath, "constantFile", "KitchenToolsList.txt"));
 
-        public string AlipayPublicKey => configuration["AlipayPublicKey"];
-        public string SignType => configuration["SignType"];
     }
 }
