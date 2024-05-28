@@ -26,8 +26,6 @@ namespace AI.DeliciousFood.Web.Client.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var a = UserInfo;
-            var b = alipayConfigHelper.AlipayPublicKey;
             //Log.Error("Hello World");
             //await webSocketManager.BroadcastMessage("支付成功");
 
@@ -39,6 +37,15 @@ namespace AI.DeliciousFood.Web.Client.Controllers
         {
             await webSocketManager.HandleConnectionAsync(HttpContext, UserInfo.UserId.ToString());
         }
+
+
+        public async Task<IActionResult> Privacy()
+        {
+
+            await webSocketManager.SendPrivateMessage("支付成功", UserInfo.UserId.ToString());
+            return View();
+        }
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

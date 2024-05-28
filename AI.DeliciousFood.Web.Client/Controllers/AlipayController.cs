@@ -30,14 +30,10 @@ namespace AI.DeliciousFood.Web.Client.Controllers
             });
         }
 
-        public async Task<IActionResult> Privacy()
-        {
-
-            await webSocketManager.SendPrivateMessage("支付成功", UserInfo.UserId.ToString());
-            return View();
-        }
-
-
+        /// <summary>
+        /// 用于创建预支付二维码
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         
         public async Task<IActionResult> AlipayTradePrecreate(Guid memberPriceGuid)
@@ -62,7 +58,10 @@ namespace AI.DeliciousFood.Web.Client.Controllers
             model.OutTradeNo = DateTime.Now.ToString("yyyyMMddHHmmssfff");
             model.TotalAmount = currentMemberPrice.Price.ToString();
             model.Subject = currentMemberPrice.MemberName;
+            model.PassbackParams = UserInfo.UserId.ToString();
 
+            // 设置异步通知的URL
+            request.SetNotifyUrl($"{alipayConfigHelper.SetNotifyUrl}alipay/notify");
             request.SetBizModel(model);
 
             AlipayTradePrecreateResponse response = alipayClient.Execute(request);
@@ -88,20 +87,23 @@ namespace AI.DeliciousFood.Web.Client.Controllers
         }
 
 
+        /// <summary>
+        /// 支付成功回调方法
+        /// </summary>
+        /// <returns></returns>
         [HttpPost("alipay/notify")]
         public async Task<IActionResult> AlipayNotify()
         {
-            string charset = "UTF-8";
-
             Dictionary<string, string> dict = new Dictionary<string, string>();
             foreach (var key in Request.Form.Keys)
             {
                 dict[key] = Request.Form[key];
             }
 
-            bool isVerified = AlipaySignature.RSACheckV1(dict, globalConfig.AlipayPublicKey, charset, globalConfig.SignType, false);
+            bool isVerified = AlipaySignature.RSACheckV1(dict, alipayConfigHelper.AlipayPublicKey, alipayConfigHelper.Charset, alipayConfigHelper.SignType, false);
             if (!isVerified)
             {
+                Log.Error("alipay/notify: Invalid Signature");
                 return BadRequest("Invalid Signature"); // 签名验证失败
             }
 
@@ -110,7 +112,7 @@ namespace AI.DeliciousFood.Web.Client.Controllers
             {
                 // 接收并处理支付宝通知
                 // 如果支付成功:
-                var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                string userId = dict["passback_params"];
                 await webSocketManager.SendPrivateMessage("支付成功", userId);
 
                 // 处理交易完成后的业务逻辑

@@ -55,19 +55,24 @@
         color: #666;
     }
 
-    /* 货币符号样式 */
-    .member-box span.currency {
-        font-size: 16px;
-        vertical-align: bottom; /* 设置货币符号显示在数字下方 */
-        color: #4D0819;
-    }
+/* 货币符号样式 */
+.currency {
+    font-size: 16px;
+    vertical-align: bottom; /* 设置货币符号显示在数字下方 */
+    color: #4D0819;
+}
 
-    /* 价格数字样式 */
-    .member-box span.amount {
-        font-size: 34px; /* 价格数字比货币符号大 */
-        font-weight: bold; /* 加粗显示 */
-        color: #4D0819;
-    }
+.currencyPay {
+    font-size: 16px;
+    color: #4D0819;
+}
+
+/* 价格数字样式 */
+.amount {
+    font-size: 34px; /* 价格数字比货币符号大 */
+    font-weight: bold; /* 加粗显示 */
+    color: #4D0819;
+}
 
 .member-select {
     background-color: #FFD37A;

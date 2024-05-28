@@ -81,8 +81,7 @@ $(document).ready(function () {
             success: function (response) {
                 const data = response.data.result;
 
-                const membersContainer = document.getElementById('members-container');
-                const membersQRCode = document.getElementById('members-QRCode');
+                const membersContainer = document.getElementById('members-container');                
 
                 // 清空之前的内容
                 membersContainer.innerHTML = '';
@@ -96,34 +95,14 @@ $(document).ready(function () {
 
                     //设置默认的支付二维码
                     if (index === 0) {
-                        $.ajax({
-                            url: "Alipay/AlipayTradePrecreate",
-                            type: 'GET',
-                            data: { memberPriceGuid: memberPrice.memberPriceGuid },
-                            success: function (data2) {
-                                // 创建支付宝预支付二维码
-                                if (data2.success) {
-                                    const qrCode = document.createElement('div');
-                                    qrCode.innerHTML = `
-                                            <div>
-                                                <span>扫描二维码支付</span>
-                                                <span class="currency">￥</span>
-                                                <span class="amount">${memberPrice.price}</span>                            
-                                            </div>
-                                             <img src="https://quickchart.io/qr?text=${encodeURIComponent(data2.data)}" />
-                                        `;
-                                    membersQRCode.appendChild(qrCode);
-                                }
-                            },
-                            error: function (error2) {
-                                console.error("Second request error:", error2);
-                            }
-                        });
+                        createAlipayQRCode(memberPrice);
+
                         memberBox.classList.add('member-select');                       
                     }
 
 
                     memberBox.setAttribute('data-id', memberPrice.memberPriceGuid);
+                    memberBox.setAttribute('data-price', memberPrice.price);
                     memberBox.innerHTML = `
                             <div>${memberPrice.memberName}</div>
                             <div>
@@ -137,11 +116,11 @@ $(document).ready(function () {
                     });
                     membersContainer.appendChild(memberBox);
 
-                    console.log(`${index}`);
-                    console.log(`会员价格GUID: ${memberPrice.memberPriceGuid}`);
-                    console.log(`会员名称: ${memberPrice.memberName}`);
-                    console.log(`价格: ${memberPrice.price}`);
-                    console.log("------------------------");
+                    //console.log(`${index}`);
+                    //console.log(`会员价格GUID: ${memberPrice.memberPriceGuid}`);
+                    //console.log(`会员名称: ${memberPrice.memberName}`);
+                    //console.log(`价格: ${memberPrice.price}`);
+                    //console.log("------------------------");
                 });
             },
             error: function (xhr, status, error) {
@@ -150,6 +129,23 @@ $(document).ready(function () {
             }
         });
 
+
+
+        var connection = new WebSocket('ws://' + window.location.host + '/ws');
+        connection.onmessage = function (event) {
+            console.log('Payment status:', event.data);
+            if (event.data === '支付成功') {
+                alert('支付成功');
+                $('#vipModal').modal('hide');
+            }
+        };
+        connection.onerror = function (error) {
+            console.error('WebSocket error:', error);
+        };
+        // 断开连接，如果页面关闭
+        window.onbeforeunload = function () {
+            connection.close();
+        };
 
     });
 
@@ -163,28 +159,43 @@ $(document).ready(function () {
         // 给当前的 div 添加 class 样式 'member-select'
         element.classList.add('member-select');
 
-        console.log(element);
-        var id = $(element).data('id');
-        console.log(id);
+        //console.log(element);
+
+        const memberPrice = {
+            memberPriceGuid: $(element).data('id'),
+            price: $(element).data('price'),
+        }
+        createAlipayQRCode(memberPrice);
     }
+
+    function createAlipayQRCode(memberPrice) {
+        const membersQRCode = document.getElementById('members-QRCode');
+        membersQRCode.innerHTML = '';
+        $.ajax({
+            url: "Alipay/AlipayTradePrecreate",
+            type: 'GET',
+            data: { memberPriceGuid: memberPrice.memberPriceGuid },
+            success: function (data2) {
+                // 创建支付宝预支付二维码
+                //TODO:这里付款二维码使用的是在线的，会有点慢，后续可以改进为本地使用 qrcode.js
+                if (data2.success) {
+                    const qrCode = document.createElement('div');
+                    qrCode.innerHTML = `
+                                            <div>
+                                                <span>扫描二维码支付</span>
+                                                <span class="currencyPay">￥</span>
+                                                <span class="amount">${memberPrice.price}</span>                            
+                                            </div>
+                                             <img src="https://quickchart.io/qr?text=${encodeURIComponent(data2.data)}" />
+                                        `;
+                    membersQRCode.appendChild(qrCode);
+                }
+            },
+            error: function (error2) {
+                console.error("Second request error:", error2);
+            }
+        });
+    }
+
 });
 
-
-var connection = new WebSocket('ws://' + window.location.host + '/ws');
-
-connection.onmessage = function (event) {
-    console.log('Payment status:', event.data);
-    if (event.data === '支付成功') {
-        alert('支付成功');
-    }
-};
-
-connection.onerror = function (error) {
-    console.error('WebSocket error:', error);
-};
-
-
-// 断开连接，如果页面关闭
-//window.onbeforeunload = function () {
-//    connection.close();
-//};
