@@ -37,7 +37,7 @@
 
                 <!-- logo -->
                 <div id="logo" class="sidebar-header">
-                    <a href="index.html"><img src="images/logo-sidebar.png" title="LightYear" alt="LightYear" /></a>
+                    <a asp-controller="Home" asp-action="Index"><img src="@Url.Content("~/images/logo-sidebar.png")" title="LightYear" alt="LightYear" /></a>
                 </div>
                 <div class="lyear-layout-sidebar-info lyear-scroll">
 
@@ -45,18 +45,18 @@
 
                         <ul class="nav-drawer">
                             <li class="nav-item active">
-                                <a href="index.html">
+                                <a asp-controller="Home" asp-action="Index">
                                     <i class="mdi mdi-home-city-outline"></i>
                                     <span>后台首页</span>
                                 </a>
                             </li>
-                            <li class="nav-item nav-item-has-subnav">
+                            <li class="nav-item nav-item-has-subnav open">
                                 <a href="javascript:void(0)">
                                     <i class="mdi mdi-television-guide"></i>
-                                    <span>布局</span>
+                                    <span>用户管理</span>
                                 </a>
                                 <ul class="nav nav-subnav">
-                                    <li> <a href="lyear_layout_break_point.html">拐点</a> </li>
+                                    <li> <a asp-controller="UserManage" asp-action="UserList">用户列表</a> </li>
                                     <li> <a href="lyear_layout_containers.html">容器</a> </li>
                                     <li> <a href="lyear_layout_grid.html">栅格</a> </li>
                                     <li> <a href="lyear_layout_columns.html">列</a> </li>
