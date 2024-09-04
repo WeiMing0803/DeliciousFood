@@ -219,8 +219,10 @@
 </div>
 
 @section Scripts {
+    <!-- 数字动态滚动增加效果 -->
+    <script type="text/javascript" src="~/js/scroll-numbers.js" asp-append-version="true"></script>
     <!--引入chart插件js-->
-    <script type="text/javascript" src="~/js/chart.min.js"></script>
+    <script type="text/javascript" src="~/js/chart.min.js" asp-append-version="true"></script>
     <script type="text/javascript">
         $(document).ready(function (e) {
             var $dashChartBarsCnt = jQuery('.js-chartjs-bars')[0].getContext('2d'),
