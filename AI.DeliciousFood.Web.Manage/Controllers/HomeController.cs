@@ -13,6 +13,11 @@ namespace AI.DeliciousFood.Web.Manage.Controllers
             _logger = logger;
         }
 
+        public IActionResult DefaultIndex()
+        {
+            return View();
+        }
+
         public IActionResult Index()
         {
             return View();
