@@ -1,3 +1,5 @@
+using AI.DeliciousFood.Core.Data;
+using AI.DeliciousFood.Core.ManageServer;
 using AI.DeliciousFood.Core.Model;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -41,6 +43,9 @@ builder.Services.AddAuthentication(options =>
 .AddCookie(IdentityConstants.ExternalScheme)
 .AddCookie(IdentityConstants.TwoFactorUserIdScheme);
 
+
+builder.Services.AddScoped(typeof(GenericRepository<>));
+builder.Services.AddScoped<IUserManagementRepository, UserManagementRepository>();
 
 var app = builder.Build();
 

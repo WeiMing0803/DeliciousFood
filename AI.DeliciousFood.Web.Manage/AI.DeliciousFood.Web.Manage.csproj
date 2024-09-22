@@ -4,10 +4,11 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>disable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>d96f0a45-71ef-47f4-b0d9-a3b928c12054</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AI.DeliciousFood.Core.Server\AI.DeliciousFood.Core.Server.csproj" />
+    <ProjectReference Include="..\AI.DeliciousFood.Core.ManageServer\AI.DeliciousFood.Core.ManageServer.csproj" />
   </ItemGroup>
 
 </Project>

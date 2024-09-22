@@ -9,6 +9,7 @@ namespace AI.DeliciousFood.Core.Model.TableConfiguration
         {
             builder.ToTable("AspNetUsers");
             builder.Property(b => b.MembershipExpireAt).HasColumnType("date").HasDefaultValueSql("CAST(GETDATE() AS DATE)");
+            builder.Property(b => b.CreateDateTime).HasColumnType("datetime").HasDefaultValueSql("GETDATE()");
         }
     }
 }
