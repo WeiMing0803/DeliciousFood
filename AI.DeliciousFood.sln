@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AI.DeliciousFood.Core.Serve
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AI.DeliciousFood.Web.Manage", "AI.DeliciousFood.Web.Manage\AI.DeliciousFood.Web.Manage.csproj", "{EED45B94-B635-4DEC-86DB-16963355D6BE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AI.DeliciousFood.Core.ManageServer", "AI.DeliciousFood.Core.ManageServer\AI.DeliciousFood.Core.ManageServer.csproj", "{E25CC620-60C5-4309-875C-C39E0AE5E941}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AI.DeliciousFood.Core.ManageServer", "AI.DeliciousFood.Core.ManageServer\AI.DeliciousFood.Core.ManageServer.csproj", "{E25CC620-60C5-4309-875C-C39E0AE5E941}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

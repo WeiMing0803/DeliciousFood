@@ -1,0 +1,57 @@
+﻿@using AI.DeliciousFood.Core.Common.ManageModel.UserManager
+@model PaginationModel
+
+<ul class="pagination">
+    @* 上一页按钮 *@
+    <li class="page-item @(Model.CurrentPage > 1 ? "" : "disabled")">
+        <a class="page-link" href="@Url.Action(Model.ActionName, Model.ControllerName, new { page = Model.CurrentPage - 1, itemsPerPage = Model.PageSize })">上一页</a>
+    </li>
+
+    @* 如果总页数少于等于7页，显示所有页码 *@
+    @if (Model.TotalPages <= 7)
+    {
+        @for (int i = 1; i <= Model.TotalPages; i++)
+        {
+            <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                <a class="page-link" href="@Url.Action(Model.ActionName, Model.ControllerName, new { page = i, itemsPerPage = Model.PageSize })">@i</a>
+            </li>
+        }
+    }
+    else
+    {
+        @* 首页页码 *@
+        <li class="page-item @(Model.CurrentPage == 1 ? "active" : "")">
+            <a class="page-link" href="@Url.Action(Model.ActionName, Model.ControllerName, new { page = 1, itemsPerPage = Model.PageSize })">1</a>
+        </li>
+
+        @* 当前页码前的省略号 *@
+        @if (Model.CurrentPage > 4)
+        {
+            <li class="page-item disabled"><span class="page-link">...</span></li>
+        }
+
+        @* 中间页码 *@
+        @for (int i = Math.Max(2, Model.CurrentPage - 2); i <= Math.Min(Model.TotalPages - 1, Model.CurrentPage + 2); i++)
+        {
+            <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                <a class="page-link" href="@Url.Action(Model.ActionName, Model.ControllerName, new { page = i, itemsPerPage = Model.PageSize })">@i</a>
+            </li>
+        }
+
+        @* 当前页码后的省略号 *@
+        @if (Model.CurrentPage < Model.TotalPages - 3)
+        {
+            <li class="page-item disabled"><span class="page-link">...</span></li>
+        }
+
+        @* 尾页页码 *@
+        <li class="page-item @(Model.CurrentPage == Model.TotalPages ? "active" : "")">
+            <a class="page-link" href="@Url.Action(Model.ActionName, Model.ControllerName, new { page = Model.TotalPages, itemsPerPage = Model.PageSize })">@Model.TotalPages</a>
+        </li>
+    }
+
+    @* 下一页按钮 *@
+    <li class="page-item @(Model.CurrentPage < Model.TotalPages ? "" : "disabled")">
+        <a class="page-link" href="@Url.Action(Model.ActionName, Model.ControllerName, new { page = Model.CurrentPage + 1, itemsPerPage = Model.PageSize })">下一页</a>
+    </li>
+</ul>

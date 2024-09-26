@@ -1,5 +1,4 @@
-﻿using AI.DeliciousFood.Core.Common.ManageModel;
-using AI.DeliciousFood.Core.Common.ManageModel.UserManager;
+﻿using AI.DeliciousFood.Core.Common.ManageModel.UserManager;
 using AI.DeliciousFood.Core.ManageServer;
 using AI.DeliciousFood.Core.Model;
 using Microsoft.AspNetCore.Mvc;
@@ -50,7 +49,9 @@ public class UserManagement(IUserManagementRepository userManagement) : Controll
                 CurrentPage = page,
                 TotalPages = totalPages,
                 PageSize = itemsPerPage,
-                TotalCount = totalUserCount
+                TotalCount = totalUserCount,
+                ControllerName = "UserManagement",
+                ActionName = "UserList"
             }
         };
 
