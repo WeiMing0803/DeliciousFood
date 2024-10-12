@@ -1,6 +1,6 @@
 ﻿@using AI.DeliciousFood.Core.Common.ManageModel.UserManager
-@model UserListViewModel
-
+@* @model UserListViewModel
+ *@
 <!DOCTYPE html>
 <html lang="zh">
 
@@ -17,6 +17,8 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <link rel="stylesheet" type="text/css" href="~/css/materialdesignicons.min.css" asp-append-version="true">
     <link rel="stylesheet" type="text/css" href="~/css/bootstrap.min.css" asp-append-version="true">
+    <!--表格插件css-->
+    <link rel="stylesheet" href="~/js/bootstrap-table/bootstrap-table.min.css" asp-append-version="true">
     <link rel="stylesheet" type="text/css" href="~/css/style.min.css" asp-append-version="true">
 </head>
 
@@ -31,87 +33,7 @@
                         <div class="card-title">用户列表</div>
                     </header>
                     <div class="card-body">
-                        <div class="card-search mb-2-5">
-                            <form class="search-form" method="get" action="#!" role="form">
-
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="row">
-                                            <label class="col-sm-4 col-form-label"><span class="text-danger">*</span> 任务名称</label>
-                                            <div class="col-sm-8">
-                                                <input type="text" class="form-control pull-left" name="name" value="" placeholder="请输入任务名称" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="row">
-                                            <label class="col-sm-4 col-form-label"><span class="text-danger">*</span> 任务类型</label>
-                                            <div class="col-sm-8">
-                                                <select name="type" class="form-select">
-                                                    <option value="1">小说</option>
-                                                    <option value="2">古籍</option>
-                                                    <option value="3">专辑</option>
-                                                    <option value="4">自传</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <button type="submit" class="btn btn-primary me-1">搜索</button>
-                                        <button type="reset" class="btn btn-default">重置</button>
-                                    </div>
-                                </div>
-
-                            </form>
-                        </div>
-                        <div class="card-btns mb-2-5">
-                            <a class="btn btn-primary me-1" href="#!"><i class="mdi mdi-plus"></i> 新增</a>
-                            <a class="btn btn-success me-1" href="#!"><i class="mdi mdi-check"></i> 启用</a>
-                            <a class="btn btn-warning me-1" href="#!"><i class="mdi mdi-block-helper"></i> 禁用</a>
-                            <a class="btn btn-danger" href="#!"><i class="mdi mdi-window-close"></i> 删除</a>
-                        </div>
-                        <div class="table-responsive">
-                            <table class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>编号</th>
-                                        <th>用户名</th>
-                                        <th>邮箱</th>
-                                        <th>手机号</th>
-                                        <th>会员到期时间</th>
-                                        <th>状态</th>
-                                        <th>操作</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (UserManagerModel user in Model.Users)
-                                    {
-                                        <tr>
-                                            <td>@user.Id</td>
-                                            <td>@user.UserName</td>
-                                            <td>@user.Email</td>
-                                            <td>@user.PhoneNumber</td>
-                                            <td>@user.MembershipExpireAt</td>
-                                            <td>
-                                                <font class="text-success">正常</font>
-                                            </td>
-                                            <td>
-                                                <div class="btn-group btn-group-sm">
-                                                    <a class="btn btn-default" href="#!" data-bs-toggle="tooltip" title="编辑">
-                                                        <i class="mdi mdi-pencil"></i>
-                                                    </a>
-                                                    <a class="btn btn-default" href="#!" data-bs-toggle="tooltip" title="删除">
-                                                        <i class="mdi mdi-window-close"></i>
-                                                    </a>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
-                        </div>                       
-
-                        @await Html.PartialAsync("_Pagination", Model.Pagination)
+                        <table id="table"></table>
 
                     </div>
                 </div>
@@ -120,10 +42,16 @@
         </div>
 
     </div>
+
     <script type="text/javascript" src="~/js/jquery.min.js" asp-append-version="true"></script>
     <script type="text/javascript" src="~/js/popper.min.js" asp-append-version="true"></script>
     <script type="text/javascript" src="~/js/bootstrap.min.js" asp-append-version="true"></script>
     <script type="text/javascript" src="~/js/main.min.js" asp-append-version="true"></script>
+    <!--表格插件js-->
+    <script src="~/js/bootstrap-table/bootstrap-table.js" asp-append-version="true"></script>
+    <script src="~/js/bootstrap-table/locale/bootstrap-table-zh-CN.min.js" asp-append-version="true"></script>
+
+    <script src="~/viewjs/usermanagement/pagination.js" asp-append-version="true"></script>
 </body>
 
 </html>

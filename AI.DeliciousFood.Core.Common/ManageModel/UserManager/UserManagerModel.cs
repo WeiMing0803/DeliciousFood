@@ -7,12 +7,7 @@
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
         public DateTime MembershipExpireAt { get; set; }
-    }
-
-    public class UserListViewModel
-    {
-        public IEnumerable<UserManagerModel> Users { get; set; }
-        public PaginationModel Pagination { get; set; }
+        public string Status { get; set; }
     }
 
     public class PaginationModel
