@@ -7,11 +7,11 @@
     <meta name="keywords" content="LightYear,LightYearAdmin,光年,后台模板,后台管理系统,光年HTML模板">
     <meta name="description" content="Light Year Admin V5是一个基于Bootstrap v5.1.3的后台管理系统的HTML模板。">
     <meta name="author" content="yinq">
-    <title>首页 - 美食美刻后台管理系统模板</title>
-    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+    <title>首页 - 美食美刻后台管理系统</title>
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-touch-fullscreen" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <link rel="shortcut icon" href="~/food.ico" type="image/x-icon" />
     <link rel="stylesheet" type="text/css" href="~/css/materialdesignicons.min.css" asp-append-version="true" />
     <link rel="stylesheet" type="text/css" href="~/css/bootstrap.min.css" asp-append-version="true" />
     <link rel="stylesheet" type="text/css" href="~/css/animate.min.css" asp-append-version="true" />
@@ -27,7 +27,9 @@
 
                 <!-- logo -->
                 <div id="logo" class="sidebar-header">
-                    <a href="index.html"><img src="images/logo-sidebar.png" title="LightYear" alt="LightYear" /></a>
+                    <a href="index.html">
+                        <img src="~/images/page/logo-sidebar.png" title="LightYear" alt="LightYear" style="max-width: 89%;" />
+                    </a>
                 </div>
                 <div class="lyear-layout-sidebar-info lyear-scroll">
 
@@ -483,7 +485,7 @@
                                 </li>
                                 <li class="dropdown-divider"></li>
                                 <li>
-                                    <a class="dropdown-item" href="lyear_pages_login_1.html">
+                                    <a class="dropdown-item" asp-controller="AccountLogon" asp-action="LogOn">
                                         <i class="mdi mdi-logout-variant"></i>
                                         <span>退出登录</span>
                                     </a>
