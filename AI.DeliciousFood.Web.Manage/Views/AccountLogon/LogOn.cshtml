@@ -30,9 +30,9 @@
 
             <div class="d-flex vh-100">
                 <div class="p-5 align-self-end">
-                    <img src="images/logo.png" alt="...">
+                    @* <img src="~/images/logo-sidebar.png" alt="..."> *@
                     <br><br><br>
-                    <p class="text-white">美食每客基于Bootstrap v5.1.3的后台管理系统。</p>
+                    <p class="text-white">美食每客 基于Bootstrap v5.1.3的后台管理系统。</p>
                 </div>
             </div>
 
@@ -45,15 +45,15 @@
                 </div>
                 <p class="text-center text-muted"><small>请使用您的账号登录系统</small></p>
 
-                <form action="#!" method="post" class="signin-form needs-validation" novalidate>
+                <form action="/AccountLogon/LogOn" method="post" class="signin-form needs-validation" novalidate>
                     <div class="mb-3">
                         <label for="username">用户名</label>
-                        <input type="text" class="form-control" id="username" placeholder="请输入您的用户名" required>
+                        <input type="text" class="form-control" id="username" name="username" placeholder="请输入您的用户名" required>
                     </div>
 
                     <div class="mb-3">
                         <label for="password">密码</label>
-                        <input type="password" class="form-control" id="password" placeholder="请输入您的密码" required>
+                        <input type="password" class="form-control" id="password" name="password" placeholder="请输入您的密码" required>
                     </div>
 
                     <div class="mb-3">
@@ -76,89 +76,6 @@
     <script type="text/javascript" src="~/js/bootstrap.min.js" asp-append-version="true"></script>
     <script type="text/javascript" src="~/js/lyear-loading.js" asp-append-version="true"></script>
     <script type="text/javascript" src="~/js/bootstrap-notify.min.js" asp-append-version="true"></script>
-    <script type="text/javascript">
-        var loader;
-        $(document).ajaxStart(function () {
-            $("button:submit").html('登录中...').attr("disabled", true);
-            loader = $('button:submit').lyearloading({
-                opacity: 0.2,
-                spinnerSize: 'nm'
-            });
-        }).ajaxStop(function () {
-            loader.destroy();
-            $("button:submit").html('立即登录').attr("disabled", false);
-        });
-        $('.signin-form').on('submit', function (event) {
-            if ($(this)[0].checkValidity() === false) {
-                event.preventDefault();
-                event.stopPropagation();
-                $(this).addClass('was-validated');
-                return false;
-            }
-
-            var $data = $(this).serialize();
-
-            $.post($(this).attr('action'), $data, function (res) {
-                //if (res.code) {
-                // 这里没有后端地址，就直接假设成功
-                if (true) {
-                    $.notify({
-                        message: '登录成功，页面即将跳转~',
-                    }, {
-                        type: 'success',
-                        placement: {
-                            from: 'top',
-                            align: 'right'
-                        },
-                        z_index: 10800,
-                        delay: 1500,
-                        animate: {
-                            enter: 'animate__animated animate__fadeInUp',
-                            exit: 'animate__animated animate__fadeOutDown'
-                        }
-                    });
-                    setTimeout(function () {
-                        location.href = 'index.html';
-                    }, 1500);
-                } else {
-                    $.notify({
-                        message: '登录失败，错误原因：' + res.msg,
-                    }, {
-                        type: 'danger',
-                        placement: {
-                            from: 'top',
-                            align: 'right'
-                        },
-                        z_index: 10800,
-                        delay: 1500,
-                        animate: {
-                            enter: 'animate__animated animate__shakeX',
-                            exit: 'animate__animated animate__fadeOutDown'
-                        }
-                    });
-                    $('#password').val('');
-                    $("#captcha").click();
-                }
-            }).fail(function () {
-                $.notify({
-                    message: '服务器错误',
-                }, {
-                    type: 'danger',
-                    placement: {
-                        from: 'top',
-                        align: 'right'
-                    },
-                    z_index: 10800,
-                    delay: 1500,
-                    animate: {
-                        enter: 'animate__animated animate__shakeX',
-                        exit: 'animate__animated animate__fadeOutDown'
-                    }
-                });
-            });
-
-            return false;
-        });
-    </script>
+    <script type="text/javascript" src="~/viewjs/logon/logOn.js" asp-append-version="true"></script>
 </body>
 </html>
