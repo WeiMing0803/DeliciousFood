@@ -65,4 +65,7 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=DefaultIndex}/{id?}");
 
+// 初始化数据库并植入角色和用户
+//await InitializeDB.InitializeDatabase(app.Services);
+
 app.Run();
