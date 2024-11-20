@@ -14,16 +14,16 @@ builder.Services.AddDbContext<FoodDbContext>(opt =>
 });
 builder.Services.AddIdentityCore<FoodUser>(options =>
 {
-    //options.Lockout.MaxFailedAccessAttempts = 10; //ÃÜÂë´íÎóÊ§°Ü´ÎÊı
-    //options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromSeconds(10);    //ÃÜÂë´íÎóËø¶¨Ê±¼ä
-    options.User.AllowedUserNameCharacters = null; //Ìø¹ı¶ÔÓÃ»§ÃûµÄÑéÖ¤
-    options.Password.RequireDigit = false; //Êı×Ö
-    options.Password.RequiredLength = 6; //³¤¶È
-    options.Password.RequireLowercase = false; //Ğ¡Ğ´
-    options.Password.RequireNonAlphanumeric = false; //ÌØÊâ×Ö·û
-    options.Password.RequireUppercase = false; //´óĞ´
-    options.Tokens.PasswordResetTokenProvider = TokenOptions.DefaultEmailProvider;  //ÓÃÓÚÉú³ÉÃÜÂëÖØÖÃµç×ÓÓÊ¼şÖĞÊ¹ÓÃµÄÁîÅÆ£¨ÏÖÔÚÊÇÉú³ÉÊı×Ö£©£»Èç¹ûÊÇ°ÑÖØÖÃÁ´½Ó·¢µ½ÓÃ»§£¬ÄÇÃ´¾Í²»ÓÃÅäÖÃ
-    options.Tokens.EmailConfirmationTokenProvider = TokenOptions.DefaultEmailProvider;  //»ñÈ¡»òÉèÖÃÁîÅÆÌá¹©³ÌĞò£¬ÓÃÓÚÉú³ÉÔÚÕÊ»§È·ÈÏµç×ÓÓÊ¼şÖĞÊ¹ÓÃµÄÁîÅÆ£»ÉÏÃæÉú³ÉµÄÑéÖ¤ÂëÌ«³¤¡¢Ì«¸´ÔÓ¡£Èç¹ûÊÇÓÃ»§ÊäÈëµÄÑéÖ¤Âë£¬ÔòÒªÅäÖÃ
+    //options.Lockout.MaxFailedAccessAttempts = 10; //å¯†ç é”™è¯¯å¤±è´¥æ¬¡æ•°
+    //options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromSeconds(10);    //å¯†ç é”™è¯¯é”å®šæ—¶é—´
+    options.User.AllowedUserNameCharacters = null; //è·³è¿‡å¯¹ç”¨æˆ·åçš„éªŒè¯
+    options.Password.RequireDigit = false; //æ•°å­—
+    options.Password.RequiredLength = 6; //é•¿åº¦
+    options.Password.RequireLowercase = false; //å°å†™
+    options.Password.RequireNonAlphanumeric = false; //ç‰¹æ®Šå­—ç¬¦
+    options.Password.RequireUppercase = false; //å¤§å†™
+    options.Tokens.PasswordResetTokenProvider = TokenOptions.DefaultEmailProvider;  //ç”¨äºç”Ÿæˆå¯†ç é‡ç½®ç”µå­é‚®ä»¶ä¸­ä½¿ç”¨çš„ä»¤ç‰Œï¼ˆç°åœ¨æ˜¯ç”Ÿæˆæ•°å­—ï¼‰ï¼›å¦‚æœæ˜¯æŠŠé‡ç½®é“¾æ¥å‘åˆ°ç”¨æˆ·ï¼Œé‚£ä¹ˆå°±ä¸ç”¨é…ç½®
+    options.Tokens.EmailConfirmationTokenProvider = TokenOptions.DefaultEmailProvider;  //è·å–æˆ–è®¾ç½®ä»¤ç‰Œæä¾›ç¨‹åºï¼Œç”¨äºç”Ÿæˆåœ¨å¸æˆ·ç¡®è®¤ç”µå­é‚®ä»¶ä¸­ä½¿ç”¨çš„ä»¤ç‰Œï¼›ä¸Šé¢ç”Ÿæˆçš„éªŒè¯ç å¤ªé•¿ã€å¤ªå¤æ‚ã€‚å¦‚æœæ˜¯ç”¨æˆ·è¾“å…¥çš„éªŒè¯ç ï¼Œåˆ™è¦é…ç½®
 });
 IdentityBuilder identityBuilder = new IdentityBuilder(typeof(FoodUser), typeof(FoodRole), builder.Services);
 identityBuilder.AddEntityFrameworkStores<FoodDbContext>()
@@ -32,7 +32,7 @@ identityBuilder.AddEntityFrameworkStores<FoodDbContext>()
     .AddRoleManager<RoleManager<FoodRole>>()
     .AddSignInManager<SignInManager<FoodUser>>();
 
-//Ìí¼ÓcookieÈÏÖ¤signInManager.PasswordSignInAsync·½·¨ĞèÒªÊ¹ÓÃµ½
+//æ·»åŠ cookieè®¤è¯signInManager.PasswordSignInAsyncæ–¹æ³•éœ€è¦ä½¿ç”¨åˆ°
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = IdentityConstants.ApplicationScheme;
@@ -65,7 +65,7 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=DefaultIndex}/{id?}");
 
-// ³õÊ¼»¯Êı¾İ¿â²¢Ö²Èë½ÇÉ«ºÍÓÃ»§
+// åˆå§‹åŒ–æ•°æ®ï¼Œæ³¨å†ŒAdminç”¨æˆ·å’Œè§’è‰²
 //await InitializeDB.InitializeDatabase(app.Services);
 
 app.Run();
