@@ -112,7 +112,8 @@ const columns = [{
     sortName: 'sortId',
     switchable: false,
     width: 8,
-    widthUnit: 'rem'
+    widthUnit: 'rem',
+    visible: false
 }, {
     field: 'userName',
     align: 'center',
@@ -127,11 +128,24 @@ const columns = [{
     align: 'center',
     title: '电话号码'
 }, {
+    field: 'roleId',
+    align: 'center',
+    title: '角色',
+    formatter: function (value, row, index) {
+        const roleMap = {
+            1: '管理员',
+            2: '普通用户',
+            3: 'VIP用户'
+        };
+        return roleMap[value] || '未知角色';
+    }
+}, {
     field: 'membershipExpireAt',
     align: 'center',
     title: '会员到期时间'
 }, {
     field: 'status',
+    align: 'center',
     title: '状态',
     formatter: function (value, row, index) {
         var value = "";
@@ -147,6 +161,7 @@ const columns = [{
 }, {
     field: 'operate',
     title: '操作',
+    align: 'center',
     formatter: btnGroup,  // 自定义方法
     events: {
         'click .edit-btn': function (event, value, row, index) {
@@ -164,14 +179,17 @@ const columns = [{
 // 自定义操作按钮
 function btnGroup() {
     let html =
-        '<a href="#!" class="btn btn-sm btn-default me-1 edit-btn" title="编辑" data-bs-toggle="tooltip"><i class="mdi mdi-pencil"></i></a>' +
-        '<a href="#!" class="btn btn-sm btn-default del-btn" title="删除" data-bs-toggle="tooltip"><i class="mdi mdi-window-close"></i></a>';
+        '<a href="#!" class="btn btn-sm btn-default me-1 edit-btn" title="编辑" data-bs-toggle="tooltip"><i class="mdi mdi-pencil"></i></a>';
+        //+ '<a href="#!" class="btn btn-sm btn-default del-btn" title="删除" data-bs-toggle="tooltip"><i class="mdi mdi-window-close"></i></a>'
     return html;
 }
 
 // 操作方法 - 编辑
-function editUser() {
-    alert('跳转修改信息');
+function editUser(row) {
+    console.log(row);
+    var myModal = new bootstrap.Modal(document.getElementById('editUserModal'));
+    $("#editUserModalLabel").text(row.userName);
+    myModal.show();
 }
 // 操作方法 - 删除
 function delUser() {

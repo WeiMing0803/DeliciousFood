@@ -1,6 +1,7 @@
 ﻿using AI.DeliciousFood.Core.Common.ManageModel.UserManager;
 using AI.DeliciousFood.Core.ManageServer;
 using AI.DeliciousFood.Core.Model;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AI.DeliciousFood.Web.Manage.Controllers;
@@ -14,25 +15,13 @@ public class UserManagement(IUserManagementRepository userManagement) : Controll
 
     public async Task<IActionResult> GetUserList(int limit, int offset)
     {
-        IEnumerable<FoodUser> userList = await userManagement.GetUserListAsync();
-        List<UserManagerModel> result = userList
-            .OrderBy(x => x.Id) // 确保有序，以支持分页
-            .Select(x => new UserManagerModel
-            {
-                Id = x.Id,
-                UserName = x.UserName,
-                Email = x.Email,
-                PhoneNumber = x.PhoneNumber,
-                MembershipExpireAt = x.MembershipExpireAt,
-                Status = "1"
-            })
-            .ToList();
+        List<UserManagerModel> userList = await userManagement.GetUserListAsync();
 
         // 获取总数
-        int total = result.Count;
+        int total = userList.Count;
 
         // 分页
-        var pagedResult = result
+        var pagedResult = userList
             .Skip(offset)
             .Take(limit)
             .ToList();
@@ -41,4 +30,15 @@ public class UserManagement(IUserManagementRepository userManagement) : Controll
         return Json(new { total, rows = pagedResult });
     }
 
+
+    [HttpGet]
+    public async Task<IActionResult> GetRoles()
+    {
+        IEnumerable<FoodRole> result = await userManagement.GetRolestAsync();
+        return Ok(new
+        {
+            success = true,
+            data = result
+        });
+    }
 }

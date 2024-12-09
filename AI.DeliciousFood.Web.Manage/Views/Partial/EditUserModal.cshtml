@@ -1,0 +1,32 @@
+<!-- 编辑用户信息-->
+<div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title" id="editUserModalLabel"></h6>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="editUser-container">
+                    <!-- 编辑用户信息将通过JavaScript加载至此处 -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" id="saveButton">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('saveButton').addEventListener('click', function() {
+        // 在这里处理保存逻辑
+        // 可以获取表单数据、发送请求到服务器等
+        console.log('保存按钮点击');
+
+        // 关闭模态框，可以选择在保存成功后关闭
+        var myModal = bootstrap.Modal.getInstance(document.getElementById('editUserModal'));
+        myModal.hide();
+    });
+</script>

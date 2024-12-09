@@ -28,7 +28,8 @@ public class InitializeDB
         {
             UserName = "admin",
             Email = "admin@example.com",
-            EmailConfirmed = true
+            EmailConfirmed = true,
+            PhoneNumber = "123456"
         };
 
         var existingAdminUser = await userManager.FindByNameAsync(adminUser.UserName);

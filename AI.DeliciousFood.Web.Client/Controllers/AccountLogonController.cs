@@ -1,5 +1,6 @@
 ﻿using AI.DeliciousFood.Core.Model;
 using AI.DeliciousFood.Core.Model.ViewModels;
+using AI.DeliciousFood.Core.Common.Model;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -67,6 +68,7 @@ namespace AI.DeliciousFood.Web.Client.Controllers
                     IdentityResult result = await _userManager.CreateAsync(user, model.Password);
                     if (result.Succeeded)
                     {
+                        IdentityResult roleAssignmentResult = await _userManager.AddToRoleAsync(user, Roles.USER.ToString());
                         await _signInManager.SignInAsync(user, isPersistent: false);
                         return RedirectToAction("Index", "Home");
                     }
