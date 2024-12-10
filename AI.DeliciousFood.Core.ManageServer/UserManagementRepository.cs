@@ -31,7 +31,7 @@ public class UserManagementRepository(GenericRepository<FoodDbContext> dbContext
                 UserName = u.user.UserName ?? string.Empty,
                 Email = u.user.Email ?? string.Empty,
                 PhoneNumber = u.user.PhoneNumber ?? string.Empty,
-                MembershipExpireAt = u.user.MembershipExpireAt,
+                MembershipExpireAt = DateOnly.FromDateTime(u.user.MembershipExpireAt),
                 RoleId = u.userRole.RoleId.ToString(),
                 Status = "1"
             })
