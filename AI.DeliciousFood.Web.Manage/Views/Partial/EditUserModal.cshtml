@@ -1,5 +1,5 @@
 <!-- 编辑用户信息-->
-<div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
+<div class="modal fade" id="editUserModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
@@ -9,6 +9,41 @@
             <div class="modal-body">
                 <div id="editUser-container">
                     <!-- 编辑用户信息将通过JavaScript加载至此处 -->
+                    <form >
+                        <div class="mb-3">
+                            <label for="floatingInputInvalid">电子邮件</label>
+                            <input type="email" class="form-control" id="floatingInputInvalid" value="test@example.com">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="floatingInputInvalid">电话号码</label>
+                            <input type="text" class="form-control" id="floatingInputInvalid" value="test@example.com">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="example-1">角色</label>
+                            <select class="form-control selectpicker" name="example-1" id="example-1">
+                                <option value="1" selected>码奴</option>
+                                <option value="2">码农</option>
+                                <option value="3">码匠</option>
+                                <option value="4">码神</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="example-1">会员到期时间</label>
+                            <div class="input-group">
+                                <input type="text" id="datepicker" class="form-control" data-provide="datepicker" data-today-highlight="true"
+                                       data-autoclose="false" />
+                                <span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="floatingInputInvalid">创建时间</label>
+                            <input type="text" class="form-control" id="floatingInputInvalid" value="test@example.com">
+                        </div>
+                    </form>
                 </div>
             </div>
             <div class="modal-footer">
@@ -18,15 +53,3 @@
         </div>
     </div>
 </div>
-
-<script>
-    document.getElementById('saveButton').addEventListener('click', function() {
-        // 在这里处理保存逻辑
-        // 可以获取表单数据、发送请求到服务器等
-        console.log('保存按钮点击');
-
-        // 关闭模态框，可以选择在保存成功后关闭
-        var myModal = bootstrap.Modal.getInstance(document.getElementById('editUserModal'));
-        myModal.hide();
-    });
-</script>

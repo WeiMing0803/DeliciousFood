@@ -144,6 +144,11 @@ const columns = [{
     align: 'center',
     title: '会员到期时间'
 }, {
+    field: 'createDateTime',
+    align: 'center',
+    title: '创建时间',
+    visible: false
+}, {
     field: 'status',
     align: 'center',
     title: '状态',
