@@ -30,6 +30,13 @@ public class UserManagement(IUserManagementRepository userManagement) : Controll
         return Json(new { total, rows = pagedResult });
     }
 
+    [HttpPost]
+    public async Task<IActionResult> SaveUser(SaveUserModel model)
+    {
+        await userManagement.SaveUser(model);
+        return Ok(new { success = true });
+    }
+
 
     [HttpGet]
     public async Task<IActionResult> GetRoles()

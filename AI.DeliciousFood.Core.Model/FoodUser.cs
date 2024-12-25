@@ -9,7 +9,7 @@ namespace AI.DeliciousFood.Core.Model
 {
     public class FoodUser : IdentityUser<long>
     {
-        public DateTime MembershipExpireAt { get; set; }
+        public DateOnly MembershipExpireAt { get; set; }
         public DateTime CreateDateTime { get; set; }
     }
 }

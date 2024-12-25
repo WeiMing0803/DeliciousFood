@@ -193,7 +193,18 @@ function btnGroup() {
 function editUser(row) {
     console.log(row);
     var myModal = new bootstrap.Modal(document.getElementById('editUserModal'));
-    $("#editUserModalLabel").text(row.userName);
+
+    // 赋值给模态框中的各个字段
+    $("#originalRole").val(row.roleId);
+    $("#originalExpireAt").val(row.membershipExpireAt);
+    $("#editUserModalLabel").text(row.userName);    
+    $("#userId").val(row.id);
+    $("#emailInput").val(row.email);
+    $("#phoneInput").val(row.phoneNumber);
+    $("#datepicker").val(row.membershipExpireAt);
+    $("#createDateTime").val(row.createDateTime);
+    $('#role').selectpicker('val', row.roleId.toString());    // 设置下拉框的值
+
     myModal.show();
 }
 // 操作方法 - 删除

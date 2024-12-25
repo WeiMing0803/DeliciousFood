@@ -7,7 +7,7 @@
         public required string Email { get; set; }
         public required string PhoneNumber { get; set; }
         public required DateOnly MembershipExpireAt { get; set; }
-        public required DateTime CreateDateTime { get; set; }
+        public required string CreateDateTime { get; set; }
         public required string RoleId { get; set; }
         public required string Status { get; set; }
     }
@@ -20,5 +20,12 @@
         public int TotalCount { get; set; }
         public required string ControllerName { get; set; }
         public required string ActionName { get; set; }
+    }
+
+    public class SaveUserModel
+    {
+        public long Id { get; set; }
+        public DateOnly MembershipExpireAt { get; set; }
+        public string RoleId { get; set; }
     }
 }

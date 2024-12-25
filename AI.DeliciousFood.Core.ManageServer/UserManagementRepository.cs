@@ -11,6 +11,8 @@ public interface IUserManagementRepository
 {
     Task<List<UserManagerModel>> GetUserListAsync(CancellationToken cancellationToken = default);
     Task<IEnumerable<FoodRole>> GetRolestAsync(CancellationToken cancellationToken = default);
+    Task SaveUser(SaveUserModel model, CancellationToken cancellationToken = default);
+
 }
 
 public class UserManagementRepository(GenericRepository<FoodDbContext> dbContextBase, FoodDbContext dbContext, RoleManager<FoodRole> roleManager) : IUserManagementRepository
@@ -31,8 +33,8 @@ public class UserManagementRepository(GenericRepository<FoodDbContext> dbContext
                 UserName = u.user.UserName ?? string.Empty,
                 Email = u.user.Email ?? string.Empty,
                 PhoneNumber = u.user.PhoneNumber ?? string.Empty,
-                MembershipExpireAt = DateOnly.FromDateTime(u.user.MembershipExpireAt),
-                CreateDateTime = u.user.CreateDateTime,
+                MembershipExpireAt = u.user.MembershipExpireAt,
+                CreateDateTime = u.user.CreateDateTime.ToString("yyyy-MM-dd HH:mm:ss.fff"),
                 RoleId = u.userRole.RoleId.ToString(),
                 Status = "1"
             })
@@ -43,9 +45,23 @@ public class UserManagementRepository(GenericRepository<FoodDbContext> dbContext
     public async Task<IEnumerable<FoodRole>> GetRolestAsync(CancellationToken cancellationToken = default)
     {
         if (Roles == null)
-        {
             Roles = await roleManager.Roles.ToListAsync(cancellationToken);
-        }
+
         return Roles;
+    }
+
+    public async Task SaveUser(SaveUserModel model, CancellationToken cancellationToken = default)
+    {
+        if (model.MembershipExpireAt != DateOnly.MinValue)
+            await dbContext.FoodUsers
+               .Where(x => x.Id == model.Id)
+               .ExecuteUpdateAsync(setters => setters
+                   .SetProperty(u => u.MembershipExpireAt, model.MembershipExpireAt), cancellationToken);
+
+        if (!string.IsNullOrEmpty(model.RoleId))
+            await dbContext.UserRoles
+                .Where(x => x.UserId == model.Id)
+                .ExecuteUpdateAsync(setters => setters
+                    .SetProperty(u => u.RoleId, long.Parse(model.RoleId)), cancellationToken);
     }
 }

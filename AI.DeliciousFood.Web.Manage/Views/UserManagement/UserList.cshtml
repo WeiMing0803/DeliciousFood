@@ -64,23 +64,54 @@
     <script type="text/javascript" src="~/js/bootstrap-datepicker/locales/bootstrap-datepicker.zh-CN.min.js"></script>
 
     <script>
-        $(document).ready(function() {
-            $('#datepicker').datepicker('setDate', new Date());
-        });
         document.getElementById('saveButton').addEventListener('click', function() {
-            // 在这里处理保存逻辑
-            // 可以获取表单数据、发送请求到服务器等
-            console.log('保存按钮点击');
+            const role = $('#originalRole').val();
+            const expireAt = $('#originalExpireAt').val();
+            const newRole = $('#role').val();
+            const newExpireAt = $('#datepicker').val();
+
+            const data = {
+                id: $('#userId').val()
+            };
+
+            if (newRole !== role) {
+                data.roleId = newRole;
+            }
+
+            if (newExpireAt !== expireAt) {
+                data.membershipExpireAt = newExpireAt;
+            }
+
+            // 如果没有任何值更改，则不执行保存操作
+            if (!data.roleId && !data.membershipExpireAt) {
+                console.log('没有发现任何更改，保存操作被跳过');
+                closeModal('editUserModal');
+                return;
+            }
+
+            $.ajax({
+                url: '/UserManagement/SaveUser',
+                type: 'POST',
+                data: data,
+                success: function(response) {
+                    console.log('保存成功');
+                    // 保存成功后，刷新表格
+                    $('#table').bootstrapTable('refresh');
+                },
+                error: function(error) {
+                    console.error('保存失败');
+                }
+            });
 
             // 关闭模态框，可以选择在保存成功后关闭
-            var myModal = bootstrap.Modal.getInstance(document.getElementById('editUserModal'));
-            myModal.hide();
+            closeModal('editUserModal');
         });
 
-            // 如果你需要在某个事件上简单获取值，比如按钮点击
-        function getDateValue() {
-            var dateValue = $('#datepicker').val();
-            console.log("Selected date: ", dateValue);
+        function closeModal(modalId) {
+            var myModal = bootstrap.Modal.getInstance(document.getElementById(modalId));
+            if (myModal) {
+                myModal.hide();
+            }    
         }
     </script>
 </body>
