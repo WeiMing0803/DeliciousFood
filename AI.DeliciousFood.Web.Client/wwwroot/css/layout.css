@@ -1,4 +1,4 @@
-/*弹出框*/
+/* 弹出框 */
 .toast-container {
     position: fixed;
     bottom: 1rem;
@@ -6,31 +6,156 @@
     z-index: 1050;
 }
 
-
+/* 搜索框样式 */
 .submit-box {
     border: 1px solid #dbdcdd;
     border-radius: 0px 3px 3px 0px;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
-    .submit-box :hover {
-        background-color: #f0f0f0;
+    .submit-box:hover {
+        background-color: #e9ecef;
+        border-color: #ced4da;
         border-radius: 0px 3px 3px 0px;
     }
 
 .form-control:focus {
-    box-shadow: 0 0 0 1px rgba(13,110,253,.25);
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+    border-color: #86b7fe;
 }
 
-.ai-box {
-    width: 100%;
-    /*border:1px solid;*/
+/* 导航栏整体样式 */
+.navbar {
+    padding: 0.5rem 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
 }
 
-.ai-textbold {
+/* 调整导航项居中对齐 */
+.navbar-collapse {
+    display: flex;
+    align-items: center; /* 垂直居中 */
+    justify-content: space-between; /* 左右两端对齐 */
+    flex-wrap: nowrap; /* 禁止换行 */
+}
+
+/* 左侧导航项往中间靠 */
+.navbar-nav {
+    display: flex;
+    align-items: center; /* 垂直居中 */
+    margin-left: auto; /* 将导航项整体向中间推 */
+    margin-right: auto; /* 将导航项整体向中间推 */
+    gap: 1.5rem; /* 导航链接之间的间距 */
+}
+
+    .navbar-nav .nav-item {
+        display: flex;
+        align-items: center; /* 垂直居中 */
+    }
+
+    /* 动态下划线效果（普通导航项 & 下拉导航项） */
+    .navbar-nav .nav-link,
+    .navbar-nav .nav-link.dropdown-toggle {
+        font-size: 1rem;
+        color: #495057;
+        position: relative;
+        padding: 0.5rem 1rem;
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+
+        .navbar-nav .nav-link::after,
+        .navbar-nav .nav-link.dropdown-toggle::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            height: 2px;
+            width: 0;
+            background-color: #0d6efd;
+            transition: width 0.3s ease;
+        }
+
+        .navbar-nav .nav-link:hover,
+        .navbar-nav .nav-link.dropdown-toggle:hover {
+            color: #0d6efd;
+        }
+
+            .navbar-nav .nav-link:hover::after,
+            .navbar-nav .nav-link.dropdown-toggle:hover::after {
+                width: 100%;
+            }
+
+/* 搜索框样式 */
+.ai-search {
+    display: flex;
+    align-items: center;
+    gap: 0.2rem; /* 搜索框和按钮之间的间距 */
+}
+
+    .ai-search .form-control {
+        border: 1px solid #ced4da;
+        border-radius: 3px 0 0 3px;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .ai-search .form-control:focus {
+            border-color: #86b7fe;
+            box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+        }
+
+    .ai-search .submit-box button {
+        border: none;
+        background-color: #0d6efd;
+        color: white;
+        transition: background-color 0.3s ease;
+    }
+
+        .ai-search .submit-box button:hover {
+            background-color: #0b5ed7;
+        }
+
+/* 用户下拉菜单 */
+.nav-item.dropdown .dropdown-menu {
+    border-radius: 0.25rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border: none;
+}
+
+.dropdown-item {
+    font-size: 0.9rem;
+    color: #495057;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+    .dropdown-item:hover {
+        background-color: #f8f9fa;
+        color: #0d6efd;
+    }
+
+
+.user-dropdown {
+    cursor: default;
+}
+
+    .user-dropdown:hover {
+        cursor: pointer;
+    }
+
+/* 登录注册按钮 */
+.nav-item.text-end .nav-link {
+    font-size: 1rem;
+    color: #0d6efd;
     font-weight: bold;
+    transition: color 0.3s ease;
 }
 
-/*页面上的导航栏*/
+    .nav-item.text-end .nav-link:hover {
+        color: #0a58ca;
+        text-decoration: underline;
+    }
+
+/* 页面上的导航栏 */
 .ai-nav-bar ol {
     list-style-type: none;
     padding: 0;
@@ -38,16 +163,16 @@
     font-size: 12px;
 }
 
-.ai-nav-bar ol li {
-    display: inline;
-    margin-right: 8px;
-}
+    .ai-nav-bar ol li {
+        display: inline;
+        margin-right: 8px;
+    }
 
 .ai-nav-bar a {
     text-decoration: none;
 }
 
-
+/* 弹窗宽度限制 */
 .ai-model-width {
     max-width: 1000px !important;
 }
