@@ -141,22 +141,22 @@ $('#submitReview').on('click', function (event) {
         return;
     }
 
-    //$.ajax({
-    //    url: '/Menu/SaveMenu',
-    //    type: 'POST',
-    //    contentType: 'application/json',
-    //    data: JSON.stringify(menuData),
-    //    success: function (response) {
+    $.ajax({
+        url: '/Menu/SaveMenu',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(menuData),
+        success: function (response) {
 
-    //        saveToastMessage('操作成功！');
-    //        showToastShown();
-    //        // 转到其他页面
-    //        window.location.href = response.redirectUrl;
-    //    },
-    //    error: function (error) {
-    //        console.error(error);
-    //    }
-    //});
+            saveToastMessage('操作成功！');
+            showToastShown();
+            // 转到其他页面
+            window.location.href = response.redirectUrl;
+        },
+        error: function (error) {
+            console.error(error);
+        }
+    });
 });
 
 

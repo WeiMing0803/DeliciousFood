@@ -1,4 +1,20 @@
-﻿
+﻿@using AI.DeliciousFood.Core.Common.Model.Account
+@model UserInfoModel
+@{
+    ViewData["Title"] = "个人信息";
+    Dictionary<string, string> roles = new Dictionary<string, string>
+    {
+        { "1", "管理员" },
+        { "2", "普通用户" },
+        { "3", "VIP用户" }
+    };
+    roles.TryGetValue(Model.RoleId, out var roleName);
+}
+
+@section Styles {
+    <link href="~/css/lightyear/materialdesignicons.min.css" rel="stylesheet" />
+}
+
 <nav class="ai-nav-bar">
     <ol>
         <li>
@@ -15,4 +31,60 @@
 
 <hr />
 
-<p>你好</p>
+<div class="container-fluid">
+    <div class="row">
+        <div class="card">
+            <header class="card-header d-flex justify-content-between">
+                <div class="card-title">我的资料</div>
+                <ul class="card-actions">
+                    <li><a href="#!"><i class="mdi mdi-pen"></i></a></li>
+                    <li><a href="#!" class="card-btn-slide"><i class="mdi mdi-chevron-up"></i></a></li>
+                    <li><a href="#!" class="card-btn-fullscreen"><i class="mdi mdi-fullscreen"></i></a></li>
+                </ul>
+            </header>
+            <div class="card-body">
+                <form>
+                    <input id="id" value="@Model.Id" hidden/>
+                    <input type="hidden" id="roleId" name="roleId" value="@Model.RoleId">
+
+                    <div class="mb-3">
+                        <label for="userName" class="form-label">名称</label>
+                        <input type="text" class="form-control" id="userName" placeholder="请输入您的名称" value="@Model.UserName">
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">电子邮件</label>
+                        <input type="email" class="form-control" id="email" placeholder="请输入您的电子邮件" value="@Model.Email"> 
+                    </div>
+                    <div class="mb-3">
+                        <label for="phoneNumber" class="form-label">电话号码</label>
+                        <input type="tel" class="form-control" id="phoneNumber" placeholder="请输入您的电话号码" value="@Model.PhoneNumber">
+                    </div>
+                   <div class="mb-3">
+                        <label for="role" class="form-label">角色</label>
+                        <input type="text" class="form-control" id="userName" placeholder="请输入您的名称" value="@roleName" disabled>
+                    </div>
+                    <div class="mb-3">
+                        <label for="membershipExpireAt" class="form-label">会员到期时间</label>
+                        <input type="date" class="form-control" value="@Model.MembershipExpireAt" disabled>
+                    </div>
+                    <div class="mb-3">
+                        <label for="createDateTime" class="form-label">账号创建日期</label>
+                        <input type="datetime-local" class="form-control" value="@Model.CreateDateTime" disabled>
+                    </div>
+                </form>
+            </div>
+            <footer class="card-footer d-flex justify-content-between">
+                <div class="form-check mt-2">
+                </div>
+                <div class="example-btn">
+                    <button class="btn btn-primary" type="reset">重置</button>
+                    <button class="btn btn-success" type="submit">保存</button>
+                </div>
+            </footer>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/lightyear/main.min.js"></script>
+}

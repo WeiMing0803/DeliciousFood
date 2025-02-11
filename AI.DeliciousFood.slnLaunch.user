@@ -1,0 +1,15 @@
+[
+  {
+    "Name": "启动两个项目",
+    "Projects": [
+      {
+        "Path": "AI.DeliciousFood.Web.Client\\AI.DeliciousFood.Web.Client.csproj",
+        "Action": "StartWithoutDebugging"
+      },
+      {
+        "Path": "AI.DeliciousFood.Web.Manage\\AI.DeliciousFood.Web.Manage.csproj",
+        "Action": "StartWithoutDebugging"
+      }
+    ]
+  }
+]

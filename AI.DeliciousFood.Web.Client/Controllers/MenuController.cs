@@ -17,7 +17,7 @@ namespace AI.DeliciousFood.Web.Client.Controllers
         [HttpPost]
         public async Task<IActionResult> SaveMenu([FromBody] MenuDataModel menuData)
         {
-            //await menuRepository.SaveRecipeAsync(menuData, UserInfo);
+            await menuRepository.SaveRecipeAsync(menuData, UserInfo);
             return Ok(new
             {
                 success = true,

@@ -3,7 +3,6 @@ using AI.DeliciousFood.Core.Model;
 using AI.DeliciousFood.Core.Server;
 using AI.DeliciousFood.Web.Client;
 using AI.DeliciousFood.Web.Client.Helper;
-using Aop.Api;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -53,6 +52,7 @@ builder.Services.AddSingleton<WebSocketManagerHelper>();
 builder.Services.AddScoped(typeof(GenericRepository<>));
 builder.Services.AddScoped<IMenuRepository, MenuRepository>();
 builder.Services.AddScoped<IAlipayRepository, AlipayRepository>();
+builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 
 builder.Services.Configure<AlipayConfigHelper>(builder.Configuration.GetSection("AlipayConfig"));
 builder.Services.AddSingleton(resolver => resolver.GetRequiredService<IOptions<AlipayConfigHelper>>().Value);
