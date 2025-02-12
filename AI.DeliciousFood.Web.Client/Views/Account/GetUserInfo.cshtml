@@ -37,31 +37,34 @@
             <header class="card-header d-flex justify-content-between">
                 <div class="card-title">我的资料</div>
                 <ul class="card-actions">
-                    <li><a href="#!"><i class="mdi mdi-pen"></i></a></li>
+                    <li><a href="#!" id="editIcon"><i class="mdi mdi-pen"></i></a></li>
                     <li><a href="#!" class="card-btn-slide"><i class="mdi mdi-chevron-up"></i></a></li>
                     <li><a href="#!" class="card-btn-fullscreen"><i class="mdi mdi-fullscreen"></i></a></li>
                 </ul>
             </header>
             <div class="card-body">
-                <form>
-                    <input id="id" value="@Model.Id" hidden/>
+                <form id="userForm">
+                    <input id="id" value="@Model.Id" hidden />
                     <input type="hidden" id="roleId" name="roleId" value="@Model.RoleId">
 
                     <div class="mb-3">
                         <label for="userName" class="form-label">名称</label>
-                        <input type="text" class="form-control" id="userName" placeholder="请输入您的名称" value="@Model.UserName">
+                        <input type="text" class="form-control" id="userName" placeholder="请输入您的名称" value="@Model.UserName" disabled>
+                        <div class="text-danger" id="userNameError" style="display: none;"></div>
                     </div>
                     <div class="mb-3">
                         <label for="email" class="form-label">电子邮件</label>
-                        <input type="email" class="form-control" id="email" placeholder="请输入您的电子邮件" value="@Model.Email"> 
+                        <input type="email" class="form-control" id="email" placeholder="请输入您的电子邮件" value="@Model.Email" disabled>
+                        <div class="text-danger" id="emailError" style="display: none;"></div>
                     </div>
                     <div class="mb-3">
                         <label for="phoneNumber" class="form-label">电话号码</label>
-                        <input type="tel" class="form-control" id="phoneNumber" placeholder="请输入您的电话号码" value="@Model.PhoneNumber">
+                        <input type="tel" class="form-control" id="phoneNumber" placeholder="请输入您的电话号码" value="@Model.PhoneNumber" disabled>
+                        <div class="text-danger" id="phoneError" style="display: none;"></div>
                     </div>
-                   <div class="mb-3">
+                    <div class="mb-3">
                         <label for="role" class="form-label">角色</label>
-                        <input type="text" class="form-control" id="userName" placeholder="请输入您的名称" value="@roleName" disabled>
+                        <input type="text" class="form-control" value="@roleName" disabled>
                     </div>
                     <div class="mb-3">
                         <label for="membershipExpireAt" class="form-label">会员到期时间</label>
@@ -74,11 +77,10 @@
                 </form>
             </div>
             <footer class="card-footer d-flex justify-content-between">
-                <div class="form-check mt-2">
-                </div>
+                <div class="form-check mt-2"></div>
                 <div class="example-btn">
-                    <button class="btn btn-primary" type="reset">重置</button>
-                    <button class="btn btn-success" type="submit">保存</button>
+                    <button class="btn btn-primary" id="cancelButton" type="button" style="display: none;">取消</button>
+                    <button class="btn btn-success" id="saveButton" type="button" style="display: none;">保存</button>
                 </div>
             </footer>
         </div>
@@ -87,4 +89,5 @@
 
 @section Scripts {
     <script src="~/js/lightyear/main.min.js"></script>
+    <script src="~/js/account/getuserinfo.js" asp-append-version="true"></script>
 }
