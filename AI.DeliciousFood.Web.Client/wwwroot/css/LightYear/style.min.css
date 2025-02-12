@@ -78,7 +78,7 @@
 
 html,
 body {
-	height: 100%;
+	height: auto !important; /* 确保高度根据内容自动调整 */
 }
 
 a {
