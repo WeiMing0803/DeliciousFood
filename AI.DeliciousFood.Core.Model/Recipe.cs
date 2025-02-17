@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AI.DeliciousFood.Core.Common.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -92,6 +93,11 @@ namespace AI.DeliciousFood.Core.Model
         /// 是否批准
         /// </summary>
         public bool IsApproval { get; set; }
+
+        /// <summary>
+        /// 状态
+        /// </summary>
+        public StatusEnum Status { get; set; }
 
         public FoodUser User { get; set; }
     }

@@ -26,6 +26,7 @@ namespace AI.DeliciousFood.Core.Model.TableConfiguration
             builder.Property(b => b.UpdateTime).HasColumnType("datetime").IsRequired().HasDefaultValueSql("GETDATE()");
             builder.Property(b => b.IsDelete).HasColumnType("bit").IsRequired();
             builder.Property(b => b.IsApproval).HasColumnType("bit").IsRequired();
+            builder.Property(b => b.Status).HasConversion<string>().HasMaxLength(20).IsRequired();
 
             builder.HasOne(b => b.User)
                 .WithMany()
