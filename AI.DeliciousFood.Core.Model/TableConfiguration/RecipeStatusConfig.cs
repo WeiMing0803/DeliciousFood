@@ -10,7 +10,7 @@ public class RecipeStatusConfig : IEntityTypeConfiguration<RecipeStatus>
         builder.ToTable("T_RecipeStatus");
         builder.HasKey(b => b.Guid).IsClustered(false);
         builder.Property(b => b.Guid).HasColumnType("uniqueidentifier").HasDefaultValueSql("NEWID()");
-        builder.Property(b => b.RecipeGuid).HasColumnType("uniqueidentifier").HasDefaultValueSql("NEWID()");
+        builder.Property(b => b.RecipeGuid).HasColumnType("uniqueidentifier");
         builder.Property(b => b.Status).HasConversion<string>().HasMaxLength(20).IsRequired();
         builder.Property(b => b.Approver).HasColumnType("bigint");
         builder.Property(b => b.CreateTime).HasColumnType("datetime").IsRequired().HasDefaultValueSql("GETDATE()");
