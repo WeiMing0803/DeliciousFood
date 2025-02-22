@@ -94,11 +94,7 @@ namespace AI.DeliciousFood.Core.Model
         /// </summary>
         public bool IsApproval { get; set; }
 
-        /// <summary>
-        /// 状态
-        /// </summary>
-        public StatusEnum Status { get; set; }
-
         public FoodUser User { get; set; }
+        public RecipeStatus RecipeStatus { get; set; }
     }
 }
