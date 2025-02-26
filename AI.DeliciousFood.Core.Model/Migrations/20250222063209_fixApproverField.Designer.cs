@@ -4,6 +4,7 @@ using AI.DeliciousFood.Core.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AI.DeliciousFood.Core.Model.Migrations
 {
     [DbContext(typeof(FoodDbContext))]
-    partial class FoodDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250222063209_fixApproverField")]
+    partial class fixApproverField
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -241,9 +244,6 @@ namespace AI.DeliciousFood.Core.Model.Migrations
 
                     b.Property<long?>("Approver")
                         .HasColumnType("bigint");
-
-                    b.Property<string>("Comment")
-                        .HasColumnType("nvarchar(500)");
 
                     b.Property<DateTime>("CreateTime")
                         .ValueGeneratedOnAdd()

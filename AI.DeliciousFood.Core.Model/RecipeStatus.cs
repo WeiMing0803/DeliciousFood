@@ -22,7 +22,12 @@ public class RecipeStatus
     /// <summary>
     /// 审批人
     /// </summary>
-    public long Approver { get; set; }
+    public long? Approver { get; set; }
+
+    /// <summary>
+    /// 审批意见
+    /// </summary>
+    public string? Comment { get; set; }
 
     /// <summary>
     /// 创建时间

@@ -2,27 +2,34 @@
 using AI.DeliciousFood.Core.Data;
 using AI.DeliciousFood.Core.Model;
 using AI.DeliciousFood.Web.Client.Models;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using System.Text;
 
-namespace AI.DeliciousFood.Core.Server
+namespace AI.DeliciousFood.Core.Server;
+
+public interface IMenuRepository
 {
-    public interface IMenuRepository
-    {
-        Task SaveRecipeAsync(MenuDataModel menuData, UserInfo user, CancellationToken cancellationToken = default);
-    }
+    Task SaveRecipeAsync(MenuDataModel menuData, UserInfo user, CancellationToken cancellationToken = default);
+}
 
-    public class MenuRepository(GenericRepository<FoodDbContext> dbContext) : IMenuRepository
+
+public class MenuRepository(GenericRepository<FoodDbContext> dbContext, FoodDbContext foodDbContext, ILogger<MenuRepository> logger) : IMenuRepository
+{
+    public async Task SaveRecipeAsync(MenuDataModel menuData, UserInfo user, CancellationToken cancellationToken)
     {
-        public async Task SaveRecipeAsync(MenuDataModel menuData, UserInfo user, CancellationToken cancellationToken)
+        using var transaction = await foodDbContext.Database.BeginTransactionAsync();
+        try
         {
             string folderPath = Path.Combine("Images",
-                                 DateTime.Now.ToString("yyyyMM"),
-                                 DateTime.Now.Day.ToString(),
-                                 menuData.RecipeName + "_" + DateTime.Now.ToString("HHmmssff"));
+                         DateTime.Now.ToString("yyyyMM"),
+                         DateTime.Now.Day.ToString(),
+                         menuData.RecipeName + "_" + DateTime.Now.ToString("HHmmssff"));
 
-            Recipe recipe = new Recipe()
+            Guid recipeGuid = Guid.NewGuid();
+
+            Recipe recipe = new()
             {
+                Guid = recipeGuid,
                 UserId = user.UserId,
                 RecipeName = menuData.RecipeName,
                 FileNames = folderPath,
@@ -37,13 +44,31 @@ namespace AI.DeliciousFood.Core.Server
                 Tips = menuData.Tips
             };
             await dbContext.AddAsync(recipe);
-            
 
             Directory.CreateDirectory(folderPath);
             foreach (FileUpload file in menuData.Files)
             {
                 await File.WriteAllBytesAsync(Path.Combine(folderPath, file.FileName), file.FileBytes);
             }
+
+            RecipeStatus recipeStatus = new()
+            {
+                RecipeGuid = recipeGuid,
+                Status = StatusEnum.UnderReview,
+                Approver = null
+            };
+            await dbContext.AddAsync(recipeStatus);
+
+            await foodDbContext.SaveChangesAsync();
+            await transaction.CommitAsync();
+        }
+        catch (Exception ex)
+        {
+            await transaction.RollbackAsync();
+            // 记录日志 (例如，使用 ILogger)
+            logger.LogError(ex, "创建菜谱失败");
+            // 可以根据需要抛出自定义异常，或者返回错误信息
+            throw new ApplicationException("创建菜谱失败", ex);
         }
     }
 }

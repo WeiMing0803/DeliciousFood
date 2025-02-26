@@ -12,7 +12,8 @@ public class RecipeStatusConfig : IEntityTypeConfiguration<RecipeStatus>
         builder.Property(b => b.Guid).HasColumnType("uniqueidentifier").HasDefaultValueSql("NEWID()");
         builder.Property(b => b.RecipeGuid).HasColumnType("uniqueidentifier");
         builder.Property(b => b.Status).HasConversion<string>().HasMaxLength(20).IsRequired();
-        builder.Property(b => b.Approver).HasColumnType("bigint");
+        builder.Property(b => b.Approver).HasColumnType("bigint").IsRequired(false);
+        builder.Property(b => b.Comment).HasColumnType("nvarchar(500)").IsRequired(false);
         builder.Property(b => b.CreateTime).HasColumnType("datetime").IsRequired().HasDefaultValueSql("GETDATE()");
         builder.Property(b => b.UpdateTime).HasColumnType("datetime").IsRequired().HasDefaultValueSql("GETDATE()");
         

@@ -7,6 +7,11 @@ namespace AI.DeliciousFood.Core.Data
         public async Task AddAsync<TEntity>(TEntity entity) where TEntity : class
         {
             await _context.Set<TEntity>().AddAsync(entity);
+        }
+
+        public async Task AddAndSaveAsync<TEntity>(TEntity entity) where TEntity : class
+        {
+            await _context.Set<TEntity>().AddAsync(entity);
             await _context.SaveChangesAsync();
         }
 
