@@ -1,5 +1,4 @@
 ﻿using AI.DeliciousFood.Core.Common.ManageModel.UserManager;
-using AI.DeliciousFood.Core.Common.Model;
 using AI.DeliciousFood.Core.Data;
 using AI.DeliciousFood.Core.Model;
 using Microsoft.AspNetCore.Identity;

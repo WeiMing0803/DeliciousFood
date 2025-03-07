@@ -2,7 +2,6 @@
 using AI.DeliciousFood.Core.Model;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
 namespace AI.DeliciousFood.Web.Manage.Controllers;
 

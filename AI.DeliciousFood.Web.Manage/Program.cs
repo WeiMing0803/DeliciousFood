@@ -46,6 +46,7 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddScoped(typeof(GenericRepository<>));
 builder.Services.AddScoped<IUserManagementRepository, UserManagementRepository>();
+builder.Services.AddScoped<IRecipeManagementRepository, RecipeManagementRepository>();
 
 var app = builder.Build();
 

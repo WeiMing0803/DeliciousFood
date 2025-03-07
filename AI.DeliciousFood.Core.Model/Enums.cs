@@ -1,4 +1,6 @@
-﻿namespace AI.DeliciousFood.Core.Common.Model;
+﻿using System.ComponentModel;
+
+namespace AI.DeliciousFood.Core.Common.Model;
 public enum Roles
 {
     ADMIN = 1,
@@ -8,20 +10,12 @@ public enum Roles
 
 public enum StatusEnum
 {
-    /// <summary>
-    /// 草稿
-    /// </summary>
+    [Description("草稿")]
     Draft = 1,
-    /// <summary>
-    /// 审核中
-    /// </summary>
+    [Description("审核中")]
     UnderReview = 2,
-    /// <summary>
-    /// 审核通过
-    /// </summary>
+    [Description("审核通过")]
     Approved = 3,
-    /// <summary>
-    /// 审核未通过
-    /// </summary>
+    [Description("审核未通过")]
     NotApproved = 4
 }
