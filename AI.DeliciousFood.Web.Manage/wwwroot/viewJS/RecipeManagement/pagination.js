@@ -142,49 +142,17 @@ const columns = [{
     field: 'operate',
     title: '操作',
     align: 'center',
-    formatter: btnGroup,  // 自定义方法
-    events: {
-        'click .edit-btn': function (event, value, row, index) {
-            event.stopPropagation();
-            editUser(row);
-        },
-        'click .del-btn': function (event, value, row, index) {
-            event.stopPropagation();
-            delUser(row);
-        }
-    }
+    formatter: function (value, row, index) {
+        return btnGroup(row);
+    }   
 }];
 
-
 // 自定义操作按钮
-function btnGroup() {
+function btnGroup(row) {
     let html =
-        '<a href="#!" class="btn btn-sm btn-default me-1 edit-btn" title="查看" data-bs-toggle="tooltip"><i class="mdi mdi-pencil"></i></a>';
+        `<a href="#!" class="js-create-tab" data-title="${row.recipeName}" data-url="/RecipeManagement/GetRecipe?recipeGuid=${row.recipeGuid}"><i class="mdi mdi-pencil"></i></a>`;
         //+ '<a href="#!" class="btn btn-sm btn-default del-btn" title="删除" data-bs-toggle="tooltip"><i class="mdi mdi-window-close"></i></a>'
     return html;
-}
-
-// 操作方法 - 编辑
-function editUser(row) {
-    console.log(row);
-    var myModal = new bootstrap.Modal(document.getElementById('editUserModal'));
-
-    // 赋值给模态框中的各个字段
-    $("#originalRole").val(row.roleId);
-    $("#originalExpireAt").val(row.membershipExpireAt);
-    $("#editUserModalLabel").text(row.userName);    
-    $("#userId").val(row.id);
-    $("#emailInput").val(row.email);
-    $("#phoneInput").val(row.phoneNumber);
-    $("#datepicker").val(row.membershipExpireAt);
-    $("#createDateTime").val(row.createDateTime);
-    $('#role').selectpicker('val', row.roleId.toString());    // 设置下拉框的值
-
-    myModal.show();
-}
-// 操作方法 - 删除
-function delUser() {
-    alert('信息删除成功');
 }
 
 $('table').bootstrapTable({

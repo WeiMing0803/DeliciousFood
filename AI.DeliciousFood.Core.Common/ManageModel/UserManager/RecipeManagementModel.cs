@@ -11,3 +11,23 @@ public class RecipeManagementModel
     public required string UpdateTime { get; set; }
     public required string RecipeStatus { get; set; }
 }
+
+public class RecipeModel
+{
+    public Guid RecipeGuid { get; set; }
+    public required string UserName { get; set; }
+    public required string RecipeName { get; set; }
+    public required string RecipeDescription { get; set; }
+    public required string RoductionDifficulty { get; set; }
+    public required string TasksTime { get; set; }
+    public required string Flavors { get; set; }
+    public required string CookingCraft { get; set; }
+    public required string UseKitchenUtensils { get; set; }
+    public required string Practice { get; set; }
+    public required string Tips { get; set; }
+    public required string CreateTime { get; set; }
+    public required string UpdateTime { get; set; }
+    public required string FileNames { get; set; }
+    public required string Ingredients { get; set; }
+    public required string RecipeStatus { get; set; }
+}

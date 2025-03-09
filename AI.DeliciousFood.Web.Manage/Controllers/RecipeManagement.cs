@@ -1,6 +1,7 @@
 ﻿using AI.DeliciousFood.Core.Common.ManageModel.UserManager;
 using AI.DeliciousFood.Core.ManageServer;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace AI.DeliciousFood.Web.Manage.Controllers;
 
@@ -26,5 +27,12 @@ public class RecipeManagement(IRecipeManagementRepository recipeManagementReposi
 
         // 返回包含 total 和 rows 的对象
         return Json(new { total, rows = pagedResult });
+    }
+
+    public async Task<IActionResult> GetRecipe(Guid recipeGuid)
+    {
+        RecipeModel recipe = await recipeManagementRepository.GetRecipeAsync(recipeGuid);
+        System.IO.File.WriteAllTextAsync(@"C:\Users\jevew\Desktop\recipe.json", JsonConvert.SerializeObject(recipe));
+        return View(recipe);
     }
 }
