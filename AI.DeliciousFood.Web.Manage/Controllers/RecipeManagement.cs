@@ -32,7 +32,6 @@ public class RecipeManagement(IRecipeManagementRepository recipeManagementReposi
     public async Task<IActionResult> GetRecipe(Guid recipeGuid)
     {
         RecipeModel recipe = await recipeManagementRepository.GetRecipeAsync(recipeGuid);
-        System.IO.File.WriteAllTextAsync(@"C:\Users\jevew\Desktop\recipe.json", JsonConvert.SerializeObject(recipe));
         return View(recipe);
     }
 }

@@ -1,6 +1,4 @@
-﻿using AI.DeliciousFood.Core.Common.Model;
-
-namespace AI.DeliciousFood.Core.Common.ManageModel.UserManager;
+﻿namespace AI.DeliciousFood.Core.Common.ManageModel.UserManager;
 
 public class RecipeManagementModel
 {
