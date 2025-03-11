@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 
 namespace AI.DeliciousFood.Web.Manage.Controllers;
 
-public class RecipeManagement(IRecipeManagementRepository recipeManagementRepository) : Controller
+public class RecipeManagement(IRecipeManagementRepository recipeManagementRepository, GlobalConfig globalConfig) : Controller
 {
     public IActionResult RecipeList()
     {
@@ -32,6 +32,7 @@ public class RecipeManagement(IRecipeManagementRepository recipeManagementReposi
     public async Task<IActionResult> GetRecipe(Guid recipeGuid)
     {
         RecipeModel recipe = await recipeManagementRepository.GetRecipeAsync(recipeGuid);
+        recipe.ImageUrl = globalConfig.ClientHost + recipe.ImageUrl;
         return View(recipe);
     }
 }
