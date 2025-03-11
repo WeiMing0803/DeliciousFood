@@ -30,6 +30,11 @@ namespace AI.DeliciousFood.Core.Model
         public string FileNames { get; set; }
 
         /// <summary>
+        /// 图片地址
+        /// </summary>
+        public string ImageUrl { get; set; }
+
+        /// <summary>
         /// 菜谱描述
         /// </summary>
         public string RecipeDescription { get; set; }

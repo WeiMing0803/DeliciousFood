@@ -17,7 +17,12 @@
     <link rel="stylesheet" type="text/css" href="~/css/materialdesignicons.min.css">
     <link rel="stylesheet" type="text/css" href="~/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="~/css/style.min.css">
-    <link rel="stylesheet" href="~/viewcss/recipemanagement/getrecipe.css" />
+    <link rel="stylesheet" href="~/viewcss/recipemanagement/getrecipe.css" asp-append-version="true"/>
+
+    <!--灯箱效果插件css-->
+    <link type="text/css" rel="stylesheet" href="~/js/magnific-popup/magnific-popup.min.css">
+    <link rel="stylesheet" type="text/css" href="~/css/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="~/css/style.min.css">
 </head>
 
 <body>
@@ -27,14 +32,23 @@
 
             <div class="col-lg-12">
                 <div class="card">
-                    <header class="card-header">
+                    <header class="card-header d-flex align-items-center">
                         <div class="card-title">审核菜谱</div>
+                        <div class="ms-auto">
+                            <button class="btn btn-outline-primary">
+                                <i class="mdi mdi-checkbox-marked-circle-outline"></i> 审核通过
+                            </button>
+                            <button class="btn btn-outline-danger">
+                                <i class="mdi mdi-close"></i> 驳回
+                            </button>
+                        </div>
                     </header>
                     <div class="card-body">
+                        <input hidden value="@Model.RecipeGuid" id="recipeGuid" />
 
                         <figure class="text-center">
                             <blockquote class="blockquote">
-                                <p>@Model.RecipeName</p>
+                                <p><strong>@Model.RecipeName</strong></p>
                             </blockquote>
                             <blockquote class="blockquote">
                                 <p>@Model.RecipeDescription</p>
@@ -72,10 +86,18 @@
                         </section>
 
                         <div class="lyear-divider">食材</div>
-                        <p>徽章（badge）组件可以作为链接或按钮的一个组成部分，以提供计数功能。</p>
-                        <button type="button" class="btn btn-primary">
-                            未读消息 <span class="badge bg-secondary">4</span>
-                        </button>
+                        <div class="ingredient-container">
+                            @foreach (var item in Model.Ingredients)
+                            {
+                                <div class="ingredient-item">
+                                    <i class="fas fa-carrot"></i>
+                                    <strong>@item.Name：</strong>
+                                    <span>@item.Quantity</span>
+                                </div>
+                            }
+                        </div>
+
+                       
 
                         <div class="lyear-divider">做法</div>
                         @Html.Raw(Model.Practice)
@@ -83,40 +105,38 @@
                         <div class="lyear-divider">小贴士</div>
                         <p>
                             @Model.Tips
-                        </p>                       
+                        </p>
 
                         <div class="lyear-divider">菜品展示</div>
                         <div class="mb-3 col-md-12 position-relative">
                             <div class="js-upload-images">
-@*                                 @foreach (var item in )
-                                {
-                                    
-                                } *@
                                 <ul id="file_list_more_pics" class="list-inline row lyear-uploads-pic mb-0">
-                                    <li class="col-6 col-sm-3 col-md-2 list-images-item">
-                                        <figure>
-                                            <img src="images/gallery/1.jpg" />
-                                            <figcaption>
-                                                <a class="btn btn-round btn-primary btn-link-pic" href="images/gallery/1.jpg">
-                                                    <i class="mdi mdi-eye"></i>
-                                                </a>
-                                            </figcaption>
-                                        </figure>
-                                    </li>
-                                    <li class="col-6 col-sm-3 col-md-2 list-images-item">
-                                        <figure>
-                                            <img src="images/gallery/g-1.jpg" />
-                                            <figcaption>
-                                                <a class="btn btn-round btn-primary btn-link-pic" href="images/gallery/g-1.jpg">
-                                                    <i class="mdi mdi-eye"></i>
-                                                </a>
-                                            </figcaption>
-                                        </figure>
-                                    </li>
+                                    @foreach (var item in Model.FileNames.Split(","))
+                                    {
+                                        <li class="col-6 col-sm-3 col-md-2 list-images-item">
+                                            <figure>
+                                                <img src="@($"http://localhost:5178/{Model.ImageUrl}/{item}")" />
+                                                <figcaption>
+                                                    <a class="btn btn-round btn-primary btn-link-pic" href="@($"http://localhost:5178/{Model.ImageUrl}/{item}")">
+                                                        <i class="mdi mdi-eye"></i>
+                                                    </a>
+                                                </figcaption>
+                                            </figure>
+                                        </li>
+                                    }
                                 </ul>
                             </div>
                         </div>
 
+                        <div class="lyear-divider">状态</div>
+                        <figure class="text-center">
+                            <blockquote class="blockquote">
+                                <p>菜谱状态：@Model.RecipeStatus</p>
+                            </blockquote>
+                            <blockquote class="blockquote">
+                                <p>最后更新时间：@Model.UpdateTime</p>
+                            </blockquote>
+                        </figure>
 
                     </div>
                 </div>
@@ -129,6 +149,24 @@
     <script type="text/javascript" src="~/js/popper.min.js"></script>
     <script type="text/javascript" src="~/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="~/js/main.min.js"></script>
+
+    <!--上传插件-->
+    <script type="text/javascript" src="~/js/webuploader/webuploader.js"></script>
+    <!--灯箱效果插件-->
+    <script type="text/javascript" src="~/js/magnific-popup/magnific-popup.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+          // 图片展示
+          $('.js-upload-images').magnificPopup({
+            delegate: 'a.btn-link-pic', // 只对带有这个类的<a>标签进行图片预览
+            type: 'image',
+            gallery: {
+              enabled: true  // 启用画廊模式（左右切换）
+            }
+          });
+        });
+    </script>
 </body>
 
 </html>

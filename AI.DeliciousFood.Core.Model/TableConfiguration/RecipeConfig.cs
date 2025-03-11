@@ -13,6 +13,7 @@ namespace AI.DeliciousFood.Core.Model.TableConfiguration
             builder.Property(b => b.UserId).HasColumnType("bigint");
             builder.Property(b => b.RecipeName).HasColumnType("nvarchar(50)").IsRequired();
             builder.Property(b => b.FileNames).HasColumnType("nvarchar(max)").IsRequired();
+            builder.Property(b => b.ImageUrl).HasColumnType("nvarchar(255)").IsRequired();
             builder.Property(b => b.RecipeDescription).HasColumnType("nvarchar(500)").IsRequired();
             builder.Property(b => b.RoductionDifficulty).HasColumnType("nvarchar(50)").IsRequired();
             builder.Property(b => b.TasksTime).HasColumnType("nvarchar(50)").IsRequired();

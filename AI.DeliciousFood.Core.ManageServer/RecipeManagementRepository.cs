@@ -5,6 +5,7 @@ using AI.DeliciousFood.Core.Data;
 using AI.DeliciousFood.Core.Model;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace AI.DeliciousFood.Core.ManageServer;
 
@@ -73,7 +74,8 @@ public class RecipeManagementRepository(GenericRepository<FoodDbContext> dbConte
              CreateTime = u.recipese.CreateTime.ToString("yyyy-MM-dd HH:mm:ss.fff"),
              UpdateTime = u.recipese.UpdateTime.ToString("yyyy-MM-dd HH:mm:ss.fff"),
              FileNames = u.recipese.FileNames,
-             Ingredients = u.recipese.Ingredients,
+             ImageUrl = u.recipese.ImageUrl,
+             Ingredients = JsonConvert.DeserializeObject<List<Ingredients>>(u.recipese.Ingredients)!,
              RecipeStatus = u.recipeStatus.Status.GetDescription()
          })
          .FirstAsync();

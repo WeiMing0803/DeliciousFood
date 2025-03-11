@@ -32,3 +32,37 @@
 		margin-right: 10px;
 		font-size: 1.2em;
 	}
+
+
+
+.ingredient-container {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr); /* 每行两列 */
+	gap: 15px;
+}
+
+.ingredient-item {
+	background-color: #f9f9f9;
+	padding: 15px;
+	border-radius: 8px;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	display: flex;
+	align-items: center;
+	transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+	.ingredient-item:hover {
+		transform: translateY(-3px);
+		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+	}
+
+	.ingredient-item strong {
+		margin-left: 8px;
+		color: #444;
+	}
+
+	.ingredient-item i {
+		color: #e44d26;
+		margin-right: 10px;
+		font-size: 1.2em;
+	}

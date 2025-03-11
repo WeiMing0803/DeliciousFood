@@ -5,6 +5,7 @@ using AI.DeliciousFood.Web.Client;
 using AI.DeliciousFood.Web.Client.Helper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Options;
 using Serilog;
 
@@ -71,6 +72,13 @@ if (!app.Environment.IsDevelopment())
 app.UseSerilogRequestLogging();
 
 app.UseStaticFiles();
+
+//配置根目录下的 Images 文件夹为静态资源，提供给Manage项目使用
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(Path.Combine(app.Environment.ContentRootPath, "Images")),
+    RequestPath = "/Images"
+});
 
 app.UseWebSockets();
 

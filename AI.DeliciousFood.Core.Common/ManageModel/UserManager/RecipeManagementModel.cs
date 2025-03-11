@@ -26,6 +26,14 @@ public class RecipeModel
     public required string CreateTime { get; set; }
     public required string UpdateTime { get; set; }
     public required string FileNames { get; set; }
-    public required string Ingredients { get; set; }
+    public required string ImageUrl { get; set; }
+    public required List<Ingredients> Ingredients { get; set; }
     public required string RecipeStatus { get; set; }
+}
+
+
+public class Ingredients
+{
+    public required string Name { get; set; }
+    public required string Quantity { get; set; }
 }
