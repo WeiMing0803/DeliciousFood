@@ -37,3 +37,10 @@ public class Ingredients
     public required string Name { get; set; }
     public required string Quantity { get; set; }
 }
+
+public class SaveRecipeCommentModel
+{
+    public Guid RecipeGuid { get; set; }
+    public string? Comment { get; set; }
+    public bool Approval { get; set; }
+}

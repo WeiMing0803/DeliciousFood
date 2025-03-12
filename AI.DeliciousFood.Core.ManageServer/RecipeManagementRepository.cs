@@ -13,6 +13,7 @@ public interface IRecipeManagementRepository
 {
     Task<List<RecipeManagementModel>> GetRecipeListAsync(CancellationToken cancellationToken = default);
     Task<RecipeModel> GetRecipeAsync(Guid recipeGuid, CancellationToken cancellationToken = default);
+    Task SaveRecipeComment(SaveRecipeCommentModel recipeComment, UserInfo user, CancellationToken cancellationToken = default);
 
 }
 
@@ -87,5 +88,16 @@ public class RecipeManagementRepository(GenericRepository<FoodDbContext> dbConte
         }
 
         return recipe;
+    }
+
+    public async Task SaveRecipeComment(SaveRecipeCommentModel recipeComment, UserInfo user, CancellationToken cancellationToken = default)
+    {
+        await dbContext.RecipeStatus
+               .Where(u => u.RecipeGuid == recipeComment.RecipeGuid)
+               .ExecuteUpdateAsync(setters => setters
+                   .SetProperty(u => u.Comment, recipeComment.Comment)
+                   .SetProperty(u => u.Status, recipeComment.Approval ? StatusEnum.Approved : StatusEnum.NotApproved)
+                   .SetProperty(u => u.UpdateTime, DateTime.Now)
+                   .SetProperty(u => u.Approver, user.UserId), cancellationToken);
     }
 }

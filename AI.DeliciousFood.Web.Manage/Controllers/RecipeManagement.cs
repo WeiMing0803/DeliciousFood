@@ -1,11 +1,10 @@
 ﻿using AI.DeliciousFood.Core.Common.ManageModel.UserManager;
 using AI.DeliciousFood.Core.ManageServer;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 
 namespace AI.DeliciousFood.Web.Manage.Controllers;
 
-public class RecipeManagement(IRecipeManagementRepository recipeManagementRepository, GlobalConfig globalConfig) : Controller
+public class RecipeManagement(IRecipeManagementRepository recipeManagementRepository, GlobalConfig globalConfig) : CommonControllerBase
 {
     public IActionResult RecipeList()
     {
@@ -34,5 +33,13 @@ public class RecipeManagement(IRecipeManagementRepository recipeManagementReposi
         RecipeModel recipe = await recipeManagementRepository.GetRecipeAsync(recipeGuid);
         recipe.ImageUrl = globalConfig.ClientHost + recipe.ImageUrl;
         return View(recipe);
+    }
+
+
+    [HttpPost]
+    public async Task<IActionResult> SaveRecipeComment([FromBody] SaveRecipeCommentModel recipeComment)
+    {
+        await recipeManagementRepository.SaveRecipeComment(recipeComment, UserInfo);
+        return Ok(new { success = true });
     }
 }
