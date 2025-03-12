@@ -17,7 +17,7 @@
     <link rel="stylesheet" type="text/css" href="~/css/materialdesignicons.min.css">
     <link rel="stylesheet" type="text/css" href="~/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="~/css/style.min.css">
-    <link rel="stylesheet" href="~/viewcss/recipemanagement/getrecipe.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="~/viewcss/recipemanagement/getrecipe.css" asp-append-version="true" />
 
     <!--灯箱效果插件css-->
     <link type="text/css" rel="stylesheet" href="~/js/magnific-popup/magnific-popup.min.css">
@@ -29,6 +29,8 @@
     <div class="container-fluid">
 
         <div class="row">
+
+            @await Html.PartialAsync("~/Views/Partial/GetRecipeModal.cshtml")
 
             <div class="col-lg-12">
                 <div class="card">
@@ -48,7 +50,7 @@
 
                         <figure class="text-center">
                             <blockquote class="blockquote">
-                                <p><strong>@Model.RecipeName</strong></p>
+                                <p id="recipeName"><strong>@Model.RecipeName</strong></p>
                             </blockquote>
                             <blockquote class="blockquote">
                                 <p>@Model.RecipeDescription</p>
@@ -97,7 +99,7 @@
                             }
                         </div>
 
-                       
+
 
                         <div class="lyear-divider">做法</div>
                         @Html.Raw(Model.Practice)
@@ -154,6 +156,8 @@
     <script type="text/javascript" src="~/js/webuploader/webuploader.js"></script>
     <!--灯箱效果插件-->
     <script type="text/javascript" src="~/js/magnific-popup/magnific-popup.min.js"></script>
+    <!--引入长度验证插件js-->
+    <script type="text/javascript" src="~/js/bootstrap-maxlength/bootstrap-maxlength.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
 
@@ -165,7 +169,44 @@
               enabled: true  // 启用画廊模式（左右切换）
             }
           });
+
+         // 文本域使用
+         $("textarea#textarea").maxlength({
+            threshold: 255,
+            warningClass: "badge bg-info",
+            limitReachedClass: "badge bg-warning"
+         });
+
+
+        var myModal = new bootstrap.Modal(document.getElementById('recipeReviewRejectModal'));
+         // 审核驳回事件
+        $(".btn-outline-danger").click(function () {
+          $('#recipeReviewRejectModalLabel').text($('#recipeName').text());
+          myModal.show();
         });
+
+        // 提交审核驳回
+        $('#submitButton').click(function () {
+          const recipe = {
+                recipeGuid: $('#recipeGuid').val(),
+                Comment: $('#textarea').val(),
+                Approval: false
+            };
+
+            $.ajax({
+                    url: "/RecipeManagement/SaveRecipeComment",
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(recipe),
+                    success: function (response) {
+                },
+                error: function () {
+                },
+            });
+
+           myModal.hide();
+        });
+      });
     </script>
 </body>
 
