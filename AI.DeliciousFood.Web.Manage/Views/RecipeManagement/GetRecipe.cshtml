@@ -36,14 +36,17 @@
                 <div class="card">
                     <header class="card-header d-flex align-items-center">
                         <div class="card-title">审核菜谱</div>
-                        <div class="ms-auto">
-                            <button class="btn btn-outline-primary">
-                                <i class="mdi mdi-checkbox-marked-circle-outline"></i> 审核通过
-                            </button>
-                            <button class="btn btn-outline-danger">
-                                <i class="mdi mdi-close"></i> 驳回
-                            </button>
-                        </div>
+                        @if (Model.RecipeStatus == "审核中")
+                        {
+                            <div class="ms-auto">
+                                <button class="btn btn-outline-primary">
+                                    <i class="mdi mdi-checkbox-marked-circle-outline"></i> 审核通过
+                                </button>
+                                <button class="btn btn-outline-danger">
+                                    <i class="mdi mdi-close"></i> 驳回
+                                </button>
+                            </div>
+                        }
                     </header>
                     <div class="card-body">
                         <input hidden value="@Model.RecipeGuid" id="recipeGuid" />
@@ -133,7 +136,7 @@
                         <div class="lyear-divider">状态</div>
                         <figure class="text-center">
                             <blockquote class="blockquote">
-                                <p>菜谱状态：@Model.RecipeStatus</p>
+                                <p>菜谱状态：<span class="badge bg-success">@Model.RecipeStatus</span></p>
                             </blockquote>
                             <blockquote class="blockquote">
                                 <p>最后更新时间：@Model.UpdateTime</p>
@@ -208,17 +211,17 @@
             };
 
             $.ajax({
-                    url: "/RecipeManagement/SaveRecipeComment",
-                    method: 'POST',
-                    contentType: 'application/json',
-                    data: JSON.stringify(recipe),
-                    success: function (response) {
+                url: "/RecipeManagement/SaveRecipeComment",
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(recipe),
+                success: function (response) {
+                    myModal.hide();
+                    window.location.href = "/RecipeManagement/GetRecipe?recipeGuid=" + $('#recipeGuid').val();
                 },
                 error: function () {
                 },
             });
-
-           myModal.hide();
         });
       });
     </script>
