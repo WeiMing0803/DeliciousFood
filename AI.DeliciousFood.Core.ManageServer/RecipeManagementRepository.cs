@@ -95,8 +95,9 @@ public class RecipeManagementRepository(GenericRepository<FoodDbContext> dbConte
         await dbContext.RecipeStatus
                .Where(u => u.RecipeGuid == recipeComment.RecipeGuid)
                .ExecuteUpdateAsync(setters => setters
-                   //.SetProperty(u => u.Comment, string.IsNullOrWhiteSpace(recipeComment.Comment) ? "" : recipeComment.Comment)
-                   //.SetProperty(u => u.Status, recipeComment.Approval ? StatusEnum.Approved : StatusEnum.NotApproved)
+                   .SetProperty(u => u.Comment, recipeComment.Comment)
+                   .SetProperty(u => u.Status, recipeComment.Approval ? StatusEnum.Approved : StatusEnum.NotApproved)
+                   .SetProperty(u => u.UpdateTime, DateTime.Now)
                    .SetProperty(u => u.Approver, user.UserId), cancellationToken);
     }
 }

@@ -36,14 +36,17 @@
                 <div class="card">
                     <header class="card-header d-flex align-items-center">
                         <div class="card-title">审核菜谱</div>
-                        <div class="ms-auto">
-                            <button class="btn btn-outline-primary">
-                                <i class="mdi mdi-checkbox-marked-circle-outline"></i> 审核通过
-                            </button>
-                            <button class="btn btn-outline-danger">
-                                <i class="mdi mdi-close"></i> 驳回
-                            </button>
-                        </div>
+                        @if (Model.RecipeStatus == "审核中")
+                        {
+                            <div class="ms-auto">
+                                <button class="btn btn-outline-primary">
+                                    <i class="mdi mdi-checkbox-marked-circle-outline"></i> 审核通过
+                                </button>
+                                <button class="btn btn-outline-danger">
+                                    <i class="mdi mdi-close"></i> 驳回
+                                </button>
+                            </div>
+                        }
                     </header>
                     <div class="card-body">
                         <input hidden value="@Model.RecipeGuid" id="recipeGuid" />
@@ -133,7 +136,7 @@
                         <div class="lyear-divider">状态</div>
                         <figure class="text-center">
                             <blockquote class="blockquote">
-                                <p>菜谱状态：@Model.RecipeStatus</p>
+                                <p>菜谱状态：<span class="badge bg-success">@Model.RecipeStatus</span></p>
                             </blockquote>
                             <blockquote class="blockquote">
                                 <p>最后更新时间：@Model.UpdateTime</p>
@@ -161,27 +164,41 @@
     <script type="text/javascript">
         $(document).ready(function () {
 
-          // 图片展示
-          $('.js-upload-images').magnificPopup({
+            // 图片展示
+            $('.js-upload-images').magnificPopup({
             delegate: 'a.btn-link-pic', // 只对带有这个类的<a>标签进行图片预览
             type: 'image',
             gallery: {
-              enabled: true  // 启用画廊模式（左右切换）
+                enabled: true  // 启用画廊模式（左右切换）
             }
-          });
+            });
 
-         // 文本域使用
-         $("textarea#textarea").maxlength({
+            // 文本域使用
+            $("textarea#textarea").maxlength({
             threshold: 255,
             warningClass: "badge bg-info",
             limitReachedClass: "badge bg-warning"
-         });
+            });
 
 
         var myModal = new bootstrap.Modal(document.getElementById('recipeReviewRejectModal'));
+        var approvalStatus = false;
+
+         // 审核通过事件
+        $(".btn-outline-primary").click(function () {
+            $('#recipeReviewRejectModalLabel').text($('#recipeName').text());
+            $('#recipeReviewApproval').show();
+            $('#textarea').hide();
+              approvalStatus = true;
+            myModal.show();
+        });
+
          // 审核驳回事件
         $(".btn-outline-danger").click(function () {
           $('#recipeReviewRejectModalLabel').text($('#recipeName').text());
+          $('#recipeReviewApproval').hide();
+          $('#textarea').show();
+          approvalStatus = false;
           myModal.show();
         });
 
@@ -190,21 +207,21 @@
           const recipe = {
                 recipeGuid: $('#recipeGuid').val(),
                 Comment: $('#textarea').val(),
-                Approval: false
+                Approval: approvalStatus
             };
 
             $.ajax({
-                    url: "/RecipeManagement/SaveRecipeComment",
-                    method: 'POST',
-                    contentType: 'application/json',
-                    data: JSON.stringify(recipe),
-                    success: function (response) {
+                url: "/RecipeManagement/SaveRecipeComment",
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(recipe),
+                success: function (response) {
+                    myModal.hide();
+                    window.location.href = "/RecipeManagement/GetRecipe?recipeGuid=" + $('#recipeGuid').val();
                 },
                 error: function () {
                 },
             });
-
-           myModal.hide();
         });
       });
     </script>
