@@ -1,0 +1,84 @@
+﻿.card-body {
+    overflow: hidden; /* 防止溢出 */
+    text-overflow: ellipsis; /* 超出部分显示省略号（可选） */
+    word-wrap: break-word; /* 允许长单词换行 */
+    white-space: normal; /* 让文字正常换行 */
+}
+
+.card-img-top {
+    width: 100%; /* 让图片宽度填满 card */
+    height: 200px; /* 统一高度（可调整） */
+    object-fit: cover; /* 保持图片比例并填充整个区域 */
+    border-top-left-radius: 10px; /* 让边角更美观（可选） */
+    border-top-right-radius: 10px;
+}
+
+
+    .card-body .row {
+        display: flex;
+        flex-wrap: nowrap; /* 默认情况下：横向滚动 */
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+.card-fullscreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden; /* 重要！防止外部滚动 */
+    background: white;
+    z-index: 9999;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+    .card-fullscreen .card-body {
+        flex: 1; /* 让 body 填充剩余空间 */
+        overflow-y: auto; /* 仅允许内部滚动 */
+    }
+
+
+    .card.card-fullscreen .row {
+        flex-wrap: wrap !important; /* 允许换行 */
+        overflow-x: visible !important; /* 取消横向滚动 */
+    }
+
+
+
+/* 动画样式 */
+.card.h-100 {
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer; /* 让整个卡片在悬浮时变成手掌 */
+}
+
+    .card.h-100:hover {
+        transform: translateY(-5px) scale(1.02); /* 悬浮时只放大一点点 */
+        box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+/* 详情按钮样式 */
+.card .details-btn {
+    position: absolute;
+    bottom: -50px; /* 初始状态隐藏 */
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    transition: bottom 0.3s ease-in-out, opacity 0.3s ease-in-out;
+    cursor: pointer;
+    opacity: 0;
+}
+
+/* 悬停时，按钮滑动上来 */
+.card.h-100:hover .details-btn {
+    bottom: 15px;
+    opacity: 1;
+}
