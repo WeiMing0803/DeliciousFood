@@ -8,7 +8,8 @@ public partial class AccountController(IAlipayRepository alipayRepository, IAcco
 {
     public async Task<IActionResult> GetUserInfo()
     {
-        UserInfoModel user = await accountRepository.GetUserAsync(UserInfo.UserId);
+        GetUserInfoModel user = await accountRepository.GetUserInfoAsync(UserInfo.UserId);
+
         return View(user);
     }
 

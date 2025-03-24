@@ -1,5 +1,5 @@
 ﻿@using AI.DeliciousFood.Core.Common.Model.Account
-@model UserInfoModel
+@model GetUserInfoModel
 @{
     ViewData["Title"] = "个人信息";
     Dictionary<string, string> roles = new Dictionary<string, string>
@@ -8,7 +8,7 @@
         { "2", "普通用户" },
         { "3", "VIP用户" }
     };
-    roles.TryGetValue(Model.RoleId, out var roleName);
+    roles.TryGetValue(Model.UserInfoModel.RoleId, out var roleName);
 }
 
 @section Styles {
@@ -45,22 +45,22 @@
             </header>
             <div class="card-body">
                 <form id="userForm">
-                    <input id="id" value="@Model.Id" hidden />
-                    <input type="hidden" id="roleId" name="roleId" value="@Model.RoleId">
+                    <input id="id" value="@Model.UserInfoModel.Id" hidden />
+                    <input type="hidden" id="roleId" name="roleId" value="@Model.UserInfoModel.RoleId">
 
                     <div class="mb-3">
                         <label for="userName" class="form-label">名称</label>
-                        <input type="text" class="form-control" id="userName" placeholder="请输入您的名称" value="@Model.UserName" disabled>
+                        <input type="text" class="form-control" id="userName" placeholder="请输入您的名称" value="@Model.UserInfoModel.UserName" disabled>
                         <div class="text-danger" id="userNameError" style="display: none;"></div>
                     </div>
                     <div class="mb-3">
                         <label for="email" class="form-label">电子邮件</label>
-                        <input type="email" class="form-control" id="email" placeholder="请输入您的电子邮件" value="@Model.Email" disabled>
+                        <input type="email" class="form-control" id="email" placeholder="请输入您的电子邮件" value="@Model.UserInfoModel.Email" disabled>
                         <div class="text-danger" id="emailError" style="display: none;"></div>
                     </div>
                     <div class="mb-3">
                         <label for="phoneNumber" class="form-label">电话号码</label>
-                        <input type="tel" class="form-control" id="phoneNumber" placeholder="请输入您的电话号码" value="@Model.PhoneNumber" disabled>
+                        <input type="tel" class="form-control" id="phoneNumber" placeholder="请输入您的电话号码" value="@Model.UserInfoModel.PhoneNumber" disabled>
                         <div class="text-danger" id="phoneError" style="display: none;"></div>
                     </div>
                     <div class="mb-3">
@@ -69,11 +69,11 @@
                     </div>
                     <div class="mb-3">
                         <label for="membershipExpireAt" class="form-label">会员到期时间</label>
-                        <input type="date" class="form-control" value="@Model.MembershipExpireAt" disabled>
+                        <input type="date" class="form-control" value="@Model.UserInfoModel.MembershipExpireAt" disabled>
                     </div>
                     <div class="mb-3">
                         <label for="createDateTime" class="form-label">账号创建时间</label>
-                        <input type="datetime-local" class="form-control" value="@Model.CreateDateTime" disabled>
+                        <input type="datetime-local" class="form-control" value="@Model.UserInfoModel.CreateDateTime" disabled>
                     </div>
                 </form>
             </div>
@@ -108,7 +108,7 @@
     <div class="row">
         <div class="card">
             <header class="card-header d-flex justify-content-between">
-                <div class="card-title">审核中</div>
+                <div class="card-title">审核中（审核未通过）</div>
                 <ul class="card-actions">
                     <li><a href="#!" class="card-btn-slide"><i class="mdi mdi-chevron-up"></i></a></li>
                     <li><a href="#!" class="card-btn-fullscreen"><i class="mdi mdi-fullscreen"></i></a></li>

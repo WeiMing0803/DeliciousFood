@@ -1,4 +1,5 @@
-﻿using AI.DeliciousFood.Core.Common.Model.Account;
+﻿using AI.DeliciousFood.Core.Common.Model;
+using AI.DeliciousFood.Core.Common.Model.Account;
 using AI.DeliciousFood.Core.Data;
 using AI.DeliciousFood.Core.Model;
 using Microsoft.AspNetCore.Identity;
@@ -10,6 +11,7 @@ namespace AI.DeliciousFood.Core.Server;
 public interface IAccountRepository
 {
     Task<UserInfoModel> GetUserAsync(long userId, CancellationToken cancellationToken = default);
+    Task<GetUserInfoModel> GetUserInfoAsync(long userId, CancellationToken cancellationToken = default);
     bool IsUserNameTaken(string userName, long userId);
     bool IsEmailTaken(string email, long userId);
     bool IsPhoneNumberTaken(string phoneNumber, long userId);
@@ -39,6 +41,45 @@ public class AccountRepository(GenericRepository<FoodDbContext> dbContextBase, F
                     .FirstOrDefaultAsync(cancellationToken);
         return userInfo;
     }
+
+    public async Task<GetUserInfoModel> GetUserInfoAsync(long userId, CancellationToken cancellationToken = default)
+    {
+        var recipes = await dbContext.Recipes
+            .Include(x => x.RecipeStatus)
+            .Select(x => new
+            {
+                x.Guid,
+                x.RecipeName,
+                x.RecipeDescription,
+                FileName = x.FileNames.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).First(),
+                x.ImageUrl,
+                Status = x.RecipeStatus.Status
+            })
+            .ToListAsync(cancellationToken);
+
+        Dictionary<StatusEnum, List<MenuSummary>> groupedRecipes = recipes
+            .GroupBy(x => x.Status)
+            .ToDictionary(g => g.Key, g => g.Select(r => new MenuSummary
+            {
+                Guid = r.Guid,
+                RecipeName = r.RecipeName,
+                RecipeDescription = r.RecipeDescription,
+                FileName = r.FileName,
+                ImageUrl = r.ImageUrl
+            }).ToList());
+
+        return new GetUserInfoModel
+        {
+            UserInfoModel = await GetUserAsync(userId, cancellationToken),
+            Approved = groupedRecipes.GetValueOrDefault(StatusEnum.Approved, new List<MenuSummary>()),
+            UnderReviewOrNotApproved = groupedRecipes
+                .Where(kv => kv.Key is StatusEnum.UnderReview or StatusEnum.NotApproved)
+                .SelectMany(kv => kv.Value)
+                .ToList(),
+            Draft = groupedRecipes.GetValueOrDefault(StatusEnum.Draft, new List<MenuSummary>())
+        };
+    }
+
 
     public bool IsEmailTaken(string email, long userId)
     {
