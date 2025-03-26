@@ -1,0 +1,127 @@
+﻿@using AI.DeliciousFood.Core.Common.Model.Account
+@model RecipeModel
+
+
+
+<div class="container-fluid">
+
+    <div class="row">
+
+        <div class="col-lg-12">
+            <div class="card">
+                <header class="card-header d-flex align-items-center">
+                    <div class="card-title">菜谱信息</div>
+                    @if (Model.RecipeStatus == "审核中")
+                    {
+                        <div class="ms-auto">
+                            <button class="btn btn-outline-primary">
+                                <i class="mdi mdi-checkbox-marked-circle-outline"></i> 审核通过
+                            </button>
+                            <button class="btn btn-outline-danger">
+                                <i class="mdi mdi-close"></i> 驳回
+                            </button>
+                        </div>
+                    }
+                </header>
+                <div class="card-body">
+                    <input hidden value="@Model.RecipeGuid" id="recipeGuid" />
+
+                    <figure class="text-center">
+                        <blockquote class="blockquote">
+                            <p id="recipeName"><strong>@Model.RecipeName</strong></p>
+                        </blockquote>
+                        <blockquote class="blockquote">
+                            <p>@Model.RecipeDescription</p>
+                        </blockquote>
+                        <figcaption class="blockquote-footer">
+                            @Model.UserName | @Model.CreateTime
+                        </figcaption>
+                    </figure>
+
+                    <section class="recipe-details">
+                        <div class="detail-row">
+                            <div class="detail-item">
+                                <i class="fas fa-tachometer-alt"></i>
+                                <strong>制作难度：</strong><span>@Model.RoductionDifficulty</span>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fas fa-clock"></i>
+                                <strong>烹饪时间：</strong><span>@Model.TasksTime</span>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fas fa-pepper-hot"></i>
+                                <strong>口味：</strong><span>@Model.Flavors</span>
+                            </div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-item">
+                                <i class="fas fa-utensils"></i>
+                                <strong>烹饪工艺：</strong><span>@Model.CookingCraft</span>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fas fa-blender"></i>
+                                <strong>厨具：</strong><span>@Model.UseKitchenUtensils</span>
+                            </div>
+                        </div>
+                    </section>
+
+                    <div class="lyear-divider">食材</div>
+                    <div class="ingredient-container">
+                        @foreach (var item in Model.Ingredients)
+                        {
+                            <div class="ingredient-item">
+                                <i class="fas fa-carrot"></i>
+                                <strong>@item.Name：</strong>
+                                <span>@item.Quantity</span>
+                            </div>
+                        }
+                    </div>
+
+
+
+                    <div class="lyear-divider">做法</div>
+                    @Html.Raw(Model.Practice)
+
+                    <div class="lyear-divider">小贴士</div>
+                    <p>
+                        @Model.Tips
+                    </p>
+
+                    <div class="lyear-divider">菜品展示</div>
+                    <div class="mb-3 col-md-12 position-relative">
+                        <div class="js-upload-images">
+                            <ul id="file_list_more_pics" class="list-inline row lyear-uploads-pic mb-0">
+                                @foreach (var item in Model.FileNames.Split(","))
+                                {
+                                    <li class="col-6 col-sm-3 col-md-2 list-images-item">
+                                        <figure>
+                                            <img src="@($"{Model.ImageUrl}/{item}")" />
+                                            <figcaption>
+                                                <a class="btn btn-round btn-primary btn-link-pic" href="@($"{Model.ImageUrl}/{item}")">
+                                                    <i class="mdi mdi-eye"></i>
+                                                </a>
+                                            </figcaption>
+                                        </figure>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="lyear-divider">状态</div>
+                    <figure class="text-center">
+                        <blockquote class="blockquote">
+                            <p>菜谱状态：<span class="badge bg-success">@Model.RecipeStatus</span></p>
+                        </blockquote>
+                        <blockquote class="blockquote">
+                            <p>最后更新时间：@Model.UpdateTime</p>
+                        </blockquote>
+                    </figure>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
