@@ -125,3 +125,10 @@ function resetFormToInitialState() {
     // 更新编辑状态
     isEditing = false;
 }
+
+
+//跳转到菜谱详情页
+function goToDetails(e) {
+    var guid = $(e).data("guid");
+    window.location.href = "/Account/GetRecipe?recipeGuid=" + guid;
+}

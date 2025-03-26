@@ -105,12 +105,12 @@
                         @foreach (var item in Model.Approved)
                         {
                             <div class="col">
-                                <div class="card h-100">
+                                <div class="card h-100" data-guid="@item.Guid" onclick="goToDetails(this)">
                                     <img src="../@item.ImageUrl/@item.FileName" class="card-img-top" alt="...">
                                     <div class="card-body">
                                         <h5 class="card-title">@item.RecipeName</h5>
                                         <p class="card-text">@item.RecipeDescription</p>
-                                        <div class="details-btn" onclick="goToDetails(@item.Guid)">查看详情</div>
+                                        <div class="details-btn">查看详情</div>
                                     </div>
                                 </div>
                             </div>
@@ -143,12 +143,12 @@
                         @foreach (var item in Model.UnderReviewOrNotApproved)
                         {
                             <div class="col">
-                                <div class="card h-100">
+                                <div class="card h-100" data-guid="@item.Guid" onclick="goToDetails(this)">
                                     <img src="../@item.ImageUrl/@item.FileName" class="card-img-top" alt="...">
                                     <div class="card-body">
                                         <h5 class="card-title">@item.RecipeName</h5>
                                         <p class="card-text">@item.RecipeDescription</p>
-                                        <div class="details-btn" onclick="goToDetails(@item.Guid)">查看详情</div>
+                                        <div class="details-btn">查看详情</div>
                                     </div>
                                 </div>
                             </div>
@@ -181,12 +181,12 @@
                         @foreach (var item in Model.Draft)
                         {
                             <div class="col">
-                                <div class="card h-100">
+                                <div class="card h-100" data-guid="@item.Guid" onclick="goToDetails(this)">
                                     <img src="../@item.ImageUrl/@item.FileName" class="card-img-top" alt="...">
                                     <div class="card-body">
                                         <h5 class="card-title">@item.RecipeName</h5>
                                         <p class="card-text">@item.RecipeDescription</p>
-                                        <div class="details-btn" onclick="goToDetails(@item.Guid)">查看详情</div>
+                                        <div class="details-btn">查看详情</div>
                                     </div>
                                 </div>
                             </div>

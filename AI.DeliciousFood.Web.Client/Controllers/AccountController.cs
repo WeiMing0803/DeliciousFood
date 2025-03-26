@@ -57,4 +57,12 @@ public partial class AccountController(IAlipayRepository alipayRepository, IAcco
         return Ok(new { success = true });
     }
 
+
+    [HttpGet]
+    public async Task<IAccountRepository> GetRecipe(Guid recipeGuid)
+    {
+        //var menu = await accountRepository.GetMenu(menuGuid);
+        //return menu;
+        return null;
+    }
 }
