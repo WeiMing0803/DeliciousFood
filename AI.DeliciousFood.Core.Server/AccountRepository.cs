@@ -116,7 +116,7 @@ public class AccountRepository(GenericRepository<FoodDbContext> dbContextBase, F
             FileNames = u.recipese.FileNames,
             ImageUrl = u.recipese.ImageUrl,
             Ingredients = JsonConvert.DeserializeObject<List<Ingredients>>(u.recipese.Ingredients)!,
-            RecipeStatus = u.recipeStatus.Status.ToString() == StatusEnum.Approved.ToString() ? "已发布" : u.recipeStatus.Status.GetDescription(),
+            RecipeStatus = u.recipeStatus.Status.GetDescription(),
         })
         .FirstAsync();
 

@@ -12,7 +12,7 @@ public class HomeController(IAlipayRepository accountRepository,
     ) : CommonControllerBase
 {
 
-    public async Task<IActionResult> Index()
+    public IActionResult Index()
     {
         //Log.Error("Hello World");
         //await webSocketManager.BroadcastMessage("支付成功");

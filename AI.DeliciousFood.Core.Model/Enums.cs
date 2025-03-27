@@ -14,7 +14,7 @@ public enum StatusEnum
     Draft = 1,
     [Description("审核中")]
     UnderReview = 2,
-    [Description("审核通过")]
+    [Description("已发布")]
     Approved = 3,
     [Description("审核未通过")]
     NotApproved = 4

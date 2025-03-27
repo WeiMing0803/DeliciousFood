@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="~/css/partial/vipmodalpartial.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/lib/bootstrap-icons/font/bootstrap-icons.min.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/lightyear/style.min.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/lightyear/materialdesignicons.min.css" asp-append-version="true" />
 
     @await RenderSectionAsync("Styles", required: false)
 </head>
@@ -83,9 +84,13 @@
     </header>
     <div class="container">
         @await Html.PartialAsync("GraphModalPartial")
-    <main role="main" class="pb-3">            
-        @RenderBody()
-    </main>
+        <main role="main" class="pb-3">            
+            @RenderBody()
+        </main>
+
+        <button id="backToTop" class="back-to-top">
+            <i class="mdi mdi-arrow-up"></i>
+        </button>
     </div>
 
     <footer class="border-top footer text-muted">

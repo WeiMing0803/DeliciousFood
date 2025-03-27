@@ -51,3 +51,40 @@
 .ai-model-width {
     max-width: 1000px !important;
 }
+
+
+
+/* 用于返回顶部按钮样式 */
+.back-to-top {
+    position: fixed;
+    bottom: 50px;
+    right: 30px;
+    width: 50px;
+    height: 50px;
+    background: rgba(52, 152, 219, 0.8); /* 蓝色半透明背景 */
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: opacity 0.3s, transform 0.3s;
+    opacity: 0;
+    visibility: hidden;
+    z-index: 1000;
+}
+
+    .back-to-top i {
+        font-size: 24px;
+    }
+
+    .back-to-top:hover {
+        background: rgba(41, 128, 185, 0.9);
+    }
+
+    .back-to-top.show {
+        opacity: 1;
+        visibility: visible;
+    }
