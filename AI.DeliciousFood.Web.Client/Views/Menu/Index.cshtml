@@ -33,122 +33,146 @@
 
 <hr />
 
-<form class="row g-3">
-    <div class="mb-3">
-        <label for="recipeName" class="form-label"></label>
-        <input type="text" class="form-control" id="recipeName" placeholder="菜谱名称">
-    </div>
-    <div class="mb-3">
-        <label for="picture" class="mb-2 ai-textbold">图片上传</label>
-        @* <input id="file-1" name="file" type="file" multiple class="form-control" data-overwrite-initial="false" data-min-file-count="1" /> *@
-        <div class="file-loading">
-            <input id="input-ke-2" name="file" type="file" multiple>
-        </div>
-    </div>
-    <div>
-        <label for="description" class="form-label ai-textbold">菜品描述</label>
-        <textarea class="form-control" rows="3" id="description"></textarea>
-    </div>
-    <div class="mb-3">
-        <label for="productionDifficulty" class="form-label ai-textbold">制作难度</label>
-        <fieldset tabindex="0" class='radioGroup'>
-            <input id='g1o11' name="productionDifficulty" value="简单" checked type="radio">
-            <label for='g1o11'>简单</label>
-            <input id='g1o21' name="productionDifficulty" value="初级" type="radio">
-            <label for='g1o21'>初级</label>
-            <input id='g1o31' name="productionDifficulty" value="中级" type="radio">
-            <label for='g1o31'>中级</label>
-            <input id='g1o41' name="productionDifficulty" value="高级" type="radio">
-            <label for='g1o41'>高级</label>
-        </fieldset>
-    </div>
-    <div class="mb-3">
-        <label for="needsTime" class="form-label ai-textbold">需要时间</label>
-        <fieldset tabindex="0" class='radioGroup'>
-            <input id='g1o1' name="needsTime" value="十分钟" checked type="radio">
-            <label for='g1o1'>十分钟</label>
-            <input id='g1o2' name="needsTime" value="二十分钟" type="radio">
-            <label for='g1o2'>二十分钟</label>
-            <input id='g1o3' name="needsTime" value="半小时" type="radio">
-            <label for='g1o3'>半小时</label>
-            <input id='g1o4' name="needsTime" value="三刻钟" type="radio">
-            <label for='g1o4'>三刻钟</label>
-            <input id='g1o5' name="needsTime" value="一小时" type="radio">
-            <label for='g1o5'>一小时</label>
-            <input id='g1o6' name="needsTime" value="数小时" type="radio">
-            <label for='g1o6'>数小时</label>
-            <input id='g1o7' name="needsTime" value="一天" type="radio">
-            <label for='g1o7'>一天</label>
-            <input id='g1o8' name="needsTime" value="数天" type="radio">
-            <label for='g1o8'>数天</label>
-        </fieldset>
-    </div>
-    <div class="col-md-4">
-        <div class="form-group">
-            <label for="taste" class="form-label ai-textbold">口味</label>
-        </div>
-        <div class="form-group">
-            @Html.DropDownList("CookingTechniques", new SelectList(cookingTechniques), "--请选择--", new { id = "taste" })
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="form-group">
-            <label for="cookingCraft" class="form-label ai-textbold">烹饪工艺</label>
-        </div>
-        <div class="form-group">
-            @Html.DropDownList("CookingTechniques", new SelectList(flavorsList), "--请选择--", new { id = "cookingCraft" })
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="form-group">
-            <label for="kitchenUtensils" class="form-label ai-textbold">使用厨具</label>
-        </div>
-        <div class="form-group">
-            @Html.ListBox("CookingTechniques", new SelectList(kitchenToolsList), new { multiple = "multiple", id = "kitchenUtensils" })
-        </div>
-    </div>
-    <div class="mb-3">
-        <label for="ingredientsDetails" class="mb-2 ai-textbold">食材明细</label>
-        <div class="row mb-1 ai-ingredientsDetails" id="box_1">
-            <div class="col-md-6">
-                <input type="text" class="form-control" placeholder="食材名称">
-            </div>
-            <div class="col-md-2">
-                <input type="text" class="form-control" placeholder="用量">
-            </div>
-            <div class="col-md-2">
-                <div class="row">
-                    <div class="col-md-2">
-                        <svg t="1697177914495" class="icon" id="ai-undiminished" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="15671" width="32" height="32"><path d="M960.031235 159.921913v703.656418c0 52.974134-42.979014 95.953148-95.953148 95.953148h-703.656418c-52.974134 0-95.953148-42.979014-95.953148-95.953148v-703.656418c0-52.974134 42.979014-95.953148 95.953148-95.953148h703.656418c52.974134 0 95.953148 42.979014 95.953148 95.953148z m-831.593949-159.921913C57.771791 0 0.499756 57.272035 0.499756 127.937531v767.625183c0 70.665495 57.272035 127.937531 127.93753 127.93753h767.625183c70.665495 0 127.937531-57.272035 127.937531-127.93753v-767.625183c0-70.665495-57.272035-127.937531-127.937531-127.937531h-767.625183z" p-id="15672" fill="#cccccc"></path><path d="M799.609566 544.234261H223.890678c-17.691362 0-31.984383-14.293021-31.984382-31.984383s14.293021-31.984383 31.984382-31.984383h575.718888c17.691362 0 31.984383 14.293021 31.984382 31.984383s-14.293021 31.984383-31.984382 31.984383z" p-id="15673" fill="#CCCCCC"></path></svg>
-                        @* <svg t="1697177914495" class="icon" id="ai-reduce" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="15671" width="32" height="32"><path d="M960.031235 159.921913v703.656418c0 52.974134-42.979014 95.953148-95.953148 95.953148h-703.656418c-52.974134 0-95.953148-42.979014-95.953148-95.953148v-703.656418c0-52.974134 42.979014-95.953148 95.953148-95.953148h703.656418c52.974134 0 95.953148 42.979014 95.953148 95.953148z m-831.593949-159.921913C57.771791 0 0.499756 57.272035 0.499756 127.937531v767.625183c0 70.665495 57.272035 127.937531 127.93753 127.93753h767.625183c70.665495 0 127.937531-57.272035 127.937531-127.93753v-767.625183c0-70.665495-57.272035-127.937531-127.937531-127.937531h-767.625183z" p-id="15672" fill="#d81e06"></path><path d="M799.609566 544.234261H223.890678c-17.691362 0-31.984383-14.293021-31.984382-31.984383s14.293021-31.984383 31.984382-31.984383h575.718888c17.691362 0 31.984383 14.293021 31.984382 31.984383s-14.293021 31.984383-31.984382 31.984383z" p-id="15673" fill="#d81e06"></path></svg> *@
-                    </div>
-                    <div class="col-md-2">
-                        <svg t="1697178067934" class="icon" id="ai-add" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="18351" width="32" height="32"><path d="M960.031235 159.921913v703.656418c0 52.974134-42.979014 95.953148-95.953148 95.953148h-703.656418c-52.974134 0-95.953148-42.979014-95.953148-95.953148v-703.656418c0-52.974134 42.979014-95.953148 95.953148-95.953148h703.656418c52.974134 0 95.953148 42.979014 95.953148 95.953148z m-831.593949-159.921913C57.771791 0 0.499756 57.272035 0.499756 127.937531v767.625183c0 70.665495 57.272035 127.937531 127.93753 127.93753h767.625183c70.665495 0 127.937531-57.272035 127.937531-127.93753v-767.625183c0-70.665495-57.272035-127.937531-127.937531-127.937531h-767.625183z" p-id="18352" fill="#3b7bff"></path><path d="M831.593948 513.149439c-0.499756 17.391508-15.192582 31.084822-32.684041 31.084822H559.726696c-8.795705 0-15.992191 7.196486-15.992191 15.992191v239.183211c0 17.391508-13.693314 32.184285-31.084822 32.684041-18.091166 0.499756-32.883943-13.993167-32.883944-31.984382V560.226452c0-8.795705-7.196486-15.992191-15.992191-15.992191H224.590337c-17.391508 0-32.184285-13.693314-32.684041-31.084822-0.499756-18.091166 13.993167-32.883943 31.984382-32.883944h239.88287c8.795705 0 15.992191-7.196486 15.992191-15.992191V225.090093c0-17.391508 13.693314-32.184285 31.084822-32.684041 18.091166-0.499756 32.883943 13.993167 32.883944 31.984382v239.88287c0 8.795705 7.196486 15.992191 15.992191 15.992191h239.88287c17.991215 0 32.484139 14.792777 31.984382 32.883944z" p-id="18353" fill="#3b7bff"></path></svg>
-                    </div>
+<div class="container-fluid">
+
+    <div class="row">
+
+        <div class="col-lg-12">
+            <div class="card">
+                <header class="card-header d-flex justify-content-between">
+                    <div class="card-title">发布菜谱</div>
+                    <ul class="card-actions">
+                        <li><a href="#!" class="card-btn-slide"><i class="mdi mdi-chevron-up"></i></a></li>
+                        <li><a href="#!" class="card-btn-fullscreen"><i class="mdi mdi-fullscreen"></i></a></li>
+                    </ul>
+                </header>
+
+                <div class="card-body">
+                    <form class="row g-3">
+                        <div class="mb-3">
+                            <label for="recipeName" class="form-label"></label>
+                            <input type="text" class="form-control" id="recipeName" placeholder="菜谱名称">
+                        </div>
+                        <div class="mb-3">
+                            <label for="picture" class="mb-2 ai-textbold">图片上传</label>
+                            @* <input id="file-1" name="file" type="file" multiple class="form-control" data-overwrite-initial="false" data-min-file-count="1" /> *@
+                            <div class="file-loading">
+                                <input id="input-ke-2" name="file" type="file" multiple>
+                            </div>
+                        </div>
+                        <div>
+                            <label for="description" class="form-label ai-textbold">菜品描述</label>
+                            <textarea class="form-control" rows="3" id="description"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="productionDifficulty" class="form-label ai-textbold">制作难度</label>
+                            <fieldset tabindex="0" class='radioGroup'>
+                                <input id='g1o11' name="productionDifficulty" value="简单" checked type="radio">
+                                <label for='g1o11'>简单</label>
+                                <input id='g1o21' name="productionDifficulty" value="初级" type="radio">
+                                <label for='g1o21'>初级</label>
+                                <input id='g1o31' name="productionDifficulty" value="中级" type="radio">
+                                <label for='g1o31'>中级</label>
+                                <input id='g1o41' name="productionDifficulty" value="高级" type="radio">
+                                <label for='g1o41'>高级</label>
+                            </fieldset>
+                        </div>
+                        <div class="mb-3">
+                            <label for="needsTime" class="form-label ai-textbold">需要时间</label>
+                            <fieldset tabindex="0" class='radioGroup'>
+                                <input id='g1o1' name="needsTime" value="十分钟" checked type="radio">
+                                <label for='g1o1'>十分钟</label>
+                                <input id='g1o2' name="needsTime" value="二十分钟" type="radio">
+                                <label for='g1o2'>二十分钟</label>
+                                <input id='g1o3' name="needsTime" value="半小时" type="radio">
+                                <label for='g1o3'>半小时</label>
+                                <input id='g1o4' name="needsTime" value="三刻钟" type="radio">
+                                <label for='g1o4'>三刻钟</label>
+                                <input id='g1o5' name="needsTime" value="一小时" type="radio">
+                                <label for='g1o5'>一小时</label>
+                                <input id='g1o6' name="needsTime" value="数小时" type="radio">
+                                <label for='g1o6'>数小时</label>
+                                <input id='g1o7' name="needsTime" value="一天" type="radio">
+                                <label for='g1o7'>一天</label>
+                                <input id='g1o8' name="needsTime" value="数天" type="radio">
+                                <label for='g1o8'>数天</label>
+                            </fieldset>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="taste" class="form-label ai-textbold">口味</label>
+                            </div>
+                            <div class="form-group">
+                                @Html.DropDownList("CookingTechniques", new SelectList(cookingTechniques), "--请选择--", new { id = "taste" })
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="cookingCraft" class="form-label ai-textbold">烹饪工艺</label>
+                            </div>
+                            <div class="form-group">
+                                @Html.DropDownList("CookingTechniques", new SelectList(flavorsList), "--请选择--", new { id = "cookingCraft" })
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="kitchenUtensils" class="form-label ai-textbold">使用厨具</label>
+                            </div>
+                            <div class="form-group">
+                                @Html.ListBox("CookingTechniques", new SelectList(kitchenToolsList), new { multiple = "multiple", id = "kitchenUtensils" })
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="ingredientsDetails" class="mb-2 ai-textbold">食材明细</label>
+                            <div class="row mb-1 ai-ingredientsDetails" id="box_1">
+                                <div class="col-md-6">
+                                    <input type="text" class="form-control" placeholder="食材名称">
+                                </div>
+                                <div class="col-md-2">
+                                    <input type="text" class="form-control" placeholder="用量">
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <svg t="1697177914495" class="icon" id="ai-undiminished" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="15671" width="32" height="32"><path d="M960.031235 159.921913v703.656418c0 52.974134-42.979014 95.953148-95.953148 95.953148h-703.656418c-52.974134 0-95.953148-42.979014-95.953148-95.953148v-703.656418c0-52.974134 42.979014-95.953148 95.953148-95.953148h703.656418c52.974134 0 95.953148 42.979014 95.953148 95.953148z m-831.593949-159.921913C57.771791 0 0.499756 57.272035 0.499756 127.937531v767.625183c0 70.665495 57.272035 127.937531 127.93753 127.93753h767.625183c70.665495 0 127.937531-57.272035 127.937531-127.93753v-767.625183c0-70.665495-57.272035-127.937531-127.937531-127.937531h-767.625183z" p-id="15672" fill="#cccccc"></path><path d="M799.609566 544.234261H223.890678c-17.691362 0-31.984383-14.293021-31.984382-31.984383s14.293021-31.984383 31.984382-31.984383h575.718888c17.691362 0 31.984383 14.293021 31.984382 31.984383s-14.293021 31.984383-31.984382 31.984383z" p-id="15673" fill="#CCCCCC"></path></svg>
+                                            @* <svg t="1697177914495" class="icon" id="ai-reduce" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="15671" width="32" height="32"><path d="M960.031235 159.921913v703.656418c0 52.974134-42.979014 95.953148-95.953148 95.953148h-703.656418c-52.974134 0-95.953148-42.979014-95.953148-95.953148v-703.656418c0-52.974134 42.979014-95.953148 95.953148-95.953148h703.656418c52.974134 0 95.953148 42.979014 95.953148 95.953148z m-831.593949-159.921913C57.771791 0 0.499756 57.272035 0.499756 127.937531v767.625183c0 70.665495 57.272035 127.937531 127.93753 127.93753h767.625183c70.665495 0 127.937531-57.272035 127.937531-127.93753v-767.625183c0-70.665495-57.272035-127.937531-127.937531-127.937531h-767.625183z" p-id="15672" fill="#d81e06"></path><path d="M799.609566 544.234261H223.890678c-17.691362 0-31.984383-14.293021-31.984382-31.984383s14.293021-31.984383 31.984382-31.984383h575.718888c17.691362 0 31.984383 14.293021 31.984382 31.984383s-14.293021 31.984383-31.984382 31.984383z" p-id="15673" fill="#d81e06"></path></svg> *@
+                                        </div>
+                                        <div class="col-md-2">
+                                            <svg t="1697178067934" class="icon" id="ai-add" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="18351" width="32" height="32"><path d="M960.031235 159.921913v703.656418c0 52.974134-42.979014 95.953148-95.953148 95.953148h-703.656418c-52.974134 0-95.953148-42.979014-95.953148-95.953148v-703.656418c0-52.974134 42.979014-95.953148 95.953148-95.953148h703.656418c52.974134 0 95.953148 42.979014 95.953148 95.953148z m-831.593949-159.921913C57.771791 0 0.499756 57.272035 0.499756 127.937531v767.625183c0 70.665495 57.272035 127.937531 127.93753 127.93753h767.625183c70.665495 0 127.937531-57.272035 127.937531-127.93753v-767.625183c0-70.665495-57.272035-127.937531-127.937531-127.937531h-767.625183z" p-id="18352" fill="#3b7bff"></path><path d="M831.593948 513.149439c-0.499756 17.391508-15.192582 31.084822-32.684041 31.084822H559.726696c-8.795705 0-15.992191 7.196486-15.992191 15.992191v239.183211c0 17.391508-13.693314 32.184285-31.084822 32.684041-18.091166 0.499756-32.883943-13.993167-32.883944-31.984382V560.226452c0-8.795705-7.196486-15.992191-15.992191-15.992191H224.590337c-17.391508 0-32.184285-13.693314-32.684041-31.084822-0.499756-18.091166 13.993167-32.883943 31.984382-32.883944h239.88287c8.795705 0 15.992191-7.196486 15.992191-15.992191V225.090093c0-17.391508 13.693314-32.184285 31.084822-32.684041 18.091166-0.499756 32.883943 13.993167 32.883944 31.984382v239.88287c0 8.795705 7.196486 15.992191 15.992191 15.992191h239.88287c17.991215 0 32.484139 14.792777 31.984382 32.883944z" p-id="18353" fill="#3b7bff"></path></svg>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="steps" class="mb-2 ai-textbold">做法步骤</label>
+                            <div id="editor-wrapper">
+                                <div id="toolbar-container"><!-- 工具栏 --></div>
+                                <div id="editor-container"><!-- 编辑器 --></div>
+                            </div>
+                        </div>
+                        <div>
+                            <label for="tips" class="form-label ai-textbold">小窍门</label>
+                            <textarea class="form-control" rows="3" id="tips"></textarea>
+                        </div>
+                        <div class="d-flex justify-content-center">
+                            <button type="button" class="btn btn-warning ai-textbold" id="saveDraft">保存草稿</button>
+                            <div class="mx-2"><!-- This div acts as a spacer --></div>
+                            <button type="button" class="btn btn-primary ai-textbold" id="submitReview">提交审核</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
+
     </div>
-    <div class="mb-3">
-        <label for="steps" class="mb-2 ai-textbold">做法步骤</label>
-        <div id="editor-wrapper">
-            <div id="toolbar-container"><!-- 工具栏 --></div>
-            <div id="editor-container"><!-- 编辑器 --></div>
-        </div>
-    </div>
-    <div>
-        <label for="tips" class="form-label ai-textbold">小窍门</label>
-        <textarea class="form-control" rows="3" id="tips"></textarea>
-    </div>
-    <div class="d-flex justify-content-center">
-        <button type="button" class="btn btn-warning ai-textbold" id="saveDraft">保存草稿</button>
-        <div class="mx-2"><!-- This div acts as a spacer --></div>
-        <button type="button" class="btn btn-primary ai-textbold" id="submitReview">提交审核</button>
-    </div>
-</form>
+
+</div>
 
 @section Scripts {
-    @* 图片上传 *@
+    <!-- 卡片收缩 -->
+    <script src="~/js/lightyear/main.modify.min.js"></script>
+    <!-- 图片上传 -->
     <script src="~/lib/bootstrap-fileinput/js/plugins/sortable.min.js"></script>
     <script src="~/lib/bootstrap-fileinput/js/fileinput.min.js"></script>
     <script src="~/lib/bootstrap-fileinput/js/locales/zh.min.js"></script>

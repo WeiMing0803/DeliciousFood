@@ -21,32 +21,6 @@
         white-space: nowrap;
     }
 
-.card-fullscreen {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    overflow: hidden; /* 重要！防止外部滚动 */
-    background: white;
-    z-index: 9999;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-}
-
-    .card-fullscreen .card-body {
-        flex: 1; /* 让 body 填充剩余空间 */
-        overflow-y: auto; /* 仅允许内部滚动 */
-    }
-
-
-    .card.card-fullscreen .row {
-        flex-wrap: wrap !important; /* 允许换行 */
-        overflow-x: visible !important; /* 取消横向滚动 */
-    }
-
-
 
 /* 动画样式 */
 .card.h-100 {

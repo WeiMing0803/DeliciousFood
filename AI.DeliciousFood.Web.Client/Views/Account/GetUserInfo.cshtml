@@ -12,7 +12,7 @@
 }
 
 @section Styles {
-<link href="~/css/account/getuserinfo.css" rel="stylesheet" />
+    <link href="~/css/account/getuserinfo.css" rel="stylesheet" />
 }
 
 <nav class="ai-nav-bar">
@@ -179,16 +179,15 @@
                     {
                         @foreach (var item in Model.Draft)
                         {
-                            <div class="col">
-                                <div class="card h-100" data-guid="@item.Guid" onclick="goToDetails(this)">
-                                    <img src="../@item.ImageUrl/@item.FileName" class="card-img-top" alt="...">
-                                    <div class="card-body">
-                                        <h5 class="card-title">@item.RecipeName</h5>
-                                        <p class="card-text">@item.RecipeDescription</p>
-                                        <div class="details-btn">查看详情</div>
-                                    </div>
-                                </div>
+                    <div class="col">
+                        <div class="card h-100">
+                            <img src="images/gallery/2.jpg" class="card-img-top" alt="...">
+                            <div class="card-body">
+                                <h5 class="card-title">僧宝传</h5>
+                                <p class="card-text">禅宗自六祖以後，分而为二。一曰青原，其下为曹洞、云门、法眼；一曰南岳，其下为临济、沩仰。是为五宗。</p>
                             </div>
+                        </div>
+                    </div>
                         }
                     }
                     else

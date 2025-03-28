@@ -35,7 +35,6 @@
 
   <ItemGroup>
     <Folder Include="Images\" />
-    <Folder Include="wwwroot\js\LightYear\" />
   </ItemGroup>
 
   <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
