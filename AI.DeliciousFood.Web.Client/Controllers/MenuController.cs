@@ -1,6 +1,7 @@
 ﻿using AI.DeliciousFood.Core.Server;
 using AI.DeliciousFood.Web.Client.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace AI.DeliciousFood.Web.Client.Controllers
 {
@@ -11,6 +12,29 @@ namespace AI.DeliciousFood.Web.Client.Controllers
             ViewBag.CookingTechniques = globalConfig.CookingTechniquesList;
             ViewBag.FlavorsList = globalConfig.FlavorsList;
             ViewBag.KitchenToolsList = globalConfig.KitchenToolsList;
+
+           
+    //            // 创建 optgroup 分组
+    //            var foodGroup = new SelectListGroup { Name = "食物" };
+    //            var itemsGroup = new SelectListGroup { Name = "物品" };
+
+    //            // 创建选项，并指定它们属于哪个 optgroup
+    //            var cookingTechniques = new List<SelectListItem>
+    //{
+    //    new SelectListItem { Text = "零食", Value = "snacks", Group = foodGroup },
+    //    new SelectListItem { Text = "面包", Value = "bread", Group = foodGroup },
+    //    new SelectListItem { Text = "调料", Value = "seasoning", Group = foodGroup },
+
+    //    new SelectListItem { Text = "帐篷", Value = "tent", Group = itemsGroup },
+    //    new SelectListItem { Text = "手电筒", Value = "flashlight", Group = itemsGroup },
+    //    new SelectListItem { Text = "卫生纸", Value = "toiletpaper", Group = itemsGroup }
+    //};
+    //        }
+
+    //        @Html.DropDownList("CookingTechniques", new SelectList(cookingTechniques, "Value", "Text", null, "Group.Name"),
+    //            "没有选中任何项",
+    //            new { id = "taste", @class = "form-control selectpicker" })
+
             return View();
         }
 

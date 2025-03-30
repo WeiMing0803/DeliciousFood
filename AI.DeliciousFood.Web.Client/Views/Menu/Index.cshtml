@@ -6,12 +6,14 @@
 }
 
 @section Styles {
-    @* 图片上传 *@
+    <!-- 图片上传-->
     <link href="~/lib/bootstrap-fileinput/css/fileinput.min.css" rel="stylesheet" />
     <link href="~/lib/bootstrap-fileinput/themes/explorer-fa6/theme.min.css" rel="stylesheet" />
 
+    <!--引入下拉插件css-->
+    <link href="~/lib/bootstrap-select/bootstrap-select.min.css" rel="stylesheet" />
+
     <link href="~/css/radiogroup.css" rel="stylesheet" />
-    <link href="~/lib/multiple-select/dist/multiple-select.min.css" rel="stylesheet" />
     <link href="~/lib/wangeditor/editor/dist/css/style.css" rel="stylesheet" />
 
     <link href="~/css/menu/index.css" rel="stylesheet" asp-append-version="true" />
@@ -30,6 +32,7 @@
         </li>
     </ol>
 </nav>
+
 
 <hr />
 
@@ -66,44 +69,25 @@
                         </div>
                         <div class="mb-3">
                             <label for="productionDifficulty" class="form-label ai-textbold">制作难度</label>
-                            <fieldset tabindex="0" class='radioGroup'>
-                                <input id='g1o11' name="productionDifficulty" value="简单" checked type="radio">
-                                <label for='g1o11'>简单</label>
-                                <input id='g1o21' name="productionDifficulty" value="初级" type="radio">
-                                <label for='g1o21'>初级</label>
-                                <input id='g1o31' name="productionDifficulty" value="中级" type="radio">
-                                <label for='g1o31'>中级</label>
-                                <input id='g1o41' name="productionDifficulty" value="高级" type="radio">
-                                <label for='g1o41'>高级</label>
-                            </fieldset>
+                            <div class="radio-group">
+                                <input type="radio" id="simple" name="difficulty"><label for="simple">简单</label>
+                                <input type="radio" id="beginner" name="difficulty"><label for="beginner">初级</label>
+                                <input type="radio" id="intermediate" name="difficulty"><label for="intermediate">中级</label>
+                                <input type="radio" id="advanced" name="difficulty"><label for="advanced">高级</label>
+                            </div>
                         </div>
                         <div class="mb-3">
-                            <label for="needsTime" class="form-label ai-textbold">需要时间</label>
-                            <fieldset tabindex="0" class='radioGroup'>
-                                <input id='g1o1' name="needsTime" value="十分钟" checked type="radio">
-                                <label for='g1o1'>十分钟</label>
-                                <input id='g1o2' name="needsTime" value="二十分钟" type="radio">
-                                <label for='g1o2'>二十分钟</label>
-                                <input id='g1o3' name="needsTime" value="半小时" type="radio">
-                                <label for='g1o3'>半小时</label>
-                                <input id='g1o4' name="needsTime" value="三刻钟" type="radio">
-                                <label for='g1o4'>三刻钟</label>
-                                <input id='g1o5' name="needsTime" value="一小时" type="radio">
-                                <label for='g1o5'>一小时</label>
-                                <input id='g1o6' name="needsTime" value="数小时" type="radio">
-                                <label for='g1o6'>数小时</label>
-                                <input id='g1o7' name="needsTime" value="一天" type="radio">
-                                <label for='g1o7'>一天</label>
-                                <input id='g1o8' name="needsTime" value="数天" type="radio">
-                                <label for='g1o8'>数天</label>
-                            </fieldset>
+                            <label for="needsTimeRange" class="form-label ai-textbold">需要时间（分钟）</label>
+                            <input id="needsTimeRange" type="range" min="0" max="1440" step="5" value="0" class="form-range" oninput="timeOutput.value=this.value">
+                            <output id="timeOutput">0</output> 分钟
                         </div>
+
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="taste" class="form-label ai-textbold">口味</label>
                             </div>
                             <div class="form-group">
-                                @Html.DropDownList("CookingTechniques", new SelectList(cookingTechniques), "--请选择--", new { id = "taste" })
+                                @Html.DropDownList("CookingTechniques", new SelectList(cookingTechniques), "没有选中任何项", new { id = "taste", @class = "form-control selectpicker"})
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -111,7 +95,7 @@
                                 <label for="cookingCraft" class="form-label ai-textbold">烹饪工艺</label>
                             </div>
                             <div class="form-group">
-                                @Html.DropDownList("CookingTechniques", new SelectList(flavorsList), "--请选择--", new { id = "cookingCraft" })
+                                @Html.DropDownList("cookingCraft", new SelectList(flavorsList), "没有选中任何项", new { id = "cookingCraft", @class = "form-control selectpicker" })
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -119,7 +103,7 @@
                                 <label for="kitchenUtensils" class="form-label ai-textbold">使用厨具</label>
                             </div>
                             <div class="form-group">
-                                @Html.ListBox("CookingTechniques", new SelectList(kitchenToolsList), new { multiple = "multiple", id = "kitchenUtensils" })
+                                @Html.ListBox("kitchenUtensils", new SelectList(kitchenToolsList), new { multiple = "multiple", id = "kitchenUtensils", @class = "form-control selectpicker", data_actions_box = "true" })
                             </div>
                         </div>
                         <div class="mb-3">
@@ -179,12 +163,31 @@
     <script src="~/lib/bootstrap-fileinput/themes/explorer-fa6/theme.min.js"></script>
     <script src="~/lib/bootstrap-fileinput/themes/fa6/theme.min.js"></script>
 
-    <script src="~/lib/multiple-select/dist/multiple-select.min.js"></script>
+    <!--引入下拉插件js-->
+    <script src="~/lib/bootstrap-select/bootstrap-select.min.js"></script>
+    <script src="~/lib/bootstrap-select/i18n/defaults-zh_cn.min.js"></script>
+
     <script src="~/lib/wangeditor/editor/dist/index.js"></script>
-    <script src="~/js/menu/menu.js" asp-append-version="true"></script>
+    <script src="~/js/menu/menu.js"></script>
+
+
     <script>
-        $(function () {
-            $('select').multipleSelect();
+        // 获取选中的 radio 元素
+        const selectedRadio = document.querySelector('input[name="difficulty"]:checked');
+
+        //选中的值是： <input type=​"radio" id=​"advanced" name=​"difficulty">​
+
+        if (selectedRadio) {
+          console.log("选中的值是：", selectedRadio.value);
+        } else {
+          console.log("没有选中的 radio");
+        }
+
+        // 或者添加事件监听器，当选中状态改变时，获取选中状态
+        document.querySelectorAll('input[name="difficulty"]').forEach(radio => {
+          radio.addEventListener('change', (e) => {
+            console.log("当前选中的值：", e.target.value);
+          });
         });
     </script>
 }
