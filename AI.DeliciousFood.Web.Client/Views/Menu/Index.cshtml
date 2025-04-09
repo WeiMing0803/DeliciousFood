@@ -1,7 +1,7 @@
 ﻿@{
-    ViewData["Title"] = "发布菜谱";
-    string[] cookingTechniques = ViewBag.CookingTechniques;
-    string[] flavorsList = ViewBag.FlavorsList;
+    ViewData["Title"] = "发布菜谱";     
+    var cookingTechniques = ViewBag.CookingTechniques;
+    var flavorsList = ViewBag.FlavorsList;
     string[] kitchenToolsList = ViewBag.KitchenToolsList;
 }
 
@@ -12,8 +12,6 @@
 
     <!--引入下拉插件css-->
     <link href="~/lib/bootstrap-select/bootstrap-select.min.css" rel="stylesheet" />
-
-    <link href="~/css/radiogroup.css" rel="stylesheet" />
     <link href="~/lib/wangeditor/editor/dist/css/style.css" rel="stylesheet" />
 
     <link href="~/css/menu/index.css" rel="stylesheet" asp-append-version="true" />
@@ -87,7 +85,7 @@
                                 <label for="taste" class="form-label ai-textbold">口味</label>
                             </div>
                             <div class="form-group">
-                                @Html.DropDownList("CookingTechniques", new SelectList(cookingTechniques), "没有选中任何项", new { id = "taste", @class = "form-control selectpicker"})
+                              @Html.DropDownList("CookingTechniques", new SelectList(cookingTechniques, "Value", "Text", null, "Group.Name"), "没有选中任何项", new { id = "taste", @class = "form-control selectpicker" })
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -95,7 +93,7 @@
                                 <label for="cookingCraft" class="form-label ai-textbold">烹饪工艺</label>
                             </div>
                             <div class="form-group">
-                                @Html.DropDownList("cookingCraft", new SelectList(flavorsList), "没有选中任何项", new { id = "cookingCraft", @class = "form-control selectpicker" })
+                                @Html.DropDownList("cookingCraft", new SelectList(flavorsList, "Value", "Text", null, "Group.Name"), "没有选中任何项", new { id = "cookingCraft", @class = "form-control selectpicker" })
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -189,5 +187,11 @@
             console.log("当前选中的值：", e.target.value);
           });
         });
+
+
+        //获取下拉框的值
+        var selectedValue = $('#taste').val();
+        console.log(selectedValue); // 打印选中的 value 值
+
     </script>
 }

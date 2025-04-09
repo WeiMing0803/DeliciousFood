@@ -2,6 +2,8 @@
 using AI.DeliciousFood.Core.Data;
 using AI.DeliciousFood.Core.Model;
 using AI.DeliciousFood.Web.Client.Models;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
@@ -10,6 +12,8 @@ namespace AI.DeliciousFood.Core.Server;
 public interface IMenuRepository
 {
     Task SaveRecipeAsync(MenuDataModel menuData, UserInfo user, CancellationToken cancellationToken = default);
+
+    List<SelectListItem> GetBaseCategory(string baseCategoryName);
 }
 
 
@@ -71,5 +75,26 @@ public class MenuRepository(GenericRepository<FoodDbContext> dbContext, FoodDbCo
             // 可以根据需要抛出自定义异常，或者返回错误信息
             throw new ApplicationException("创建菜谱失败", ex);
         }
+    }
+
+
+    public List<SelectListItem> GetBaseCategory(string baseCategoryName)
+    {
+        List<SelectListItem> selectListItems = foodDbContext.BaseCategory
+            .Where(x => x.Name == baseCategoryName)
+            .Include(x => x.BaseCategoryItems)
+            .SelectMany(x => x.BaseCategoryItems)
+            .Select(x => new SelectListItem
+            {
+                Value = x.Guid.ToString(),
+                Text = x.Name,
+                Group = new SelectListGroup
+                {
+                    Name = x.Type
+                }
+            })
+            .ToList();
+
+        return selectListItems;
     }
 }
