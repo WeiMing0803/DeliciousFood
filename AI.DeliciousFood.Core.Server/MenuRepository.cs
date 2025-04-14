@@ -59,7 +59,7 @@ public class MenuRepository(GenericRepository<FoodDbContext> dbContext, FoodDbCo
             RecipeStatus recipeStatus = new()
             {
                 RecipeGuid = recipeGuid,
-                Status = StatusEnum.UnderReview,
+                Status = menuData.IsDraft ? StatusEnum.Draft : StatusEnum.UnderReview,
                 Approver = null
             };
             await dbContext.AddAsync(recipeStatus);

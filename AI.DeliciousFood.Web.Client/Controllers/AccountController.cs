@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AI.DeliciousFood.Web.Client.Controllers;
 
-public partial class AccountController(IAlipayRepository alipayRepository, IAccountRepository accountRepository) : CommonControllerBase
+public partial class AccountController(IAlipayRepository alipayRepository, IAccountRepository accountRepository, GlobalConfig globalConfig, IMenuRepository menuRepository) : CommonControllerBase
 {
     public async Task<IActionResult> GetUserInfo()
     {
@@ -61,6 +61,17 @@ public partial class AccountController(IAlipayRepository alipayRepository, IAcco
     [HttpGet]
     public async Task<IActionResult> GetRecipe(Guid recipeGuid)
     {
+        RecipeModel recipe = await accountRepository.GetRecipeAsync(recipeGuid);
+        return View(recipe);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> EditRecipe(Guid recipeGuid)
+    {
+        ViewBag.CookingTechniques = menuRepository.GetBaseCategory("口味");
+        ViewBag.FlavorsList = menuRepository.GetBaseCategory("烹饪工艺");
+        ViewBag.KitchenToolsList = globalConfig.KitchenToolsList;
+
         RecipeModel recipe = await accountRepository.GetRecipeAsync(recipeGuid);
         return View(recipe);
     }

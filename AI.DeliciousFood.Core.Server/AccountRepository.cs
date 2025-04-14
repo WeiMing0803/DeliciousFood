@@ -55,7 +55,7 @@ public class AccountRepository(GenericRepository<FoodDbContext> dbContextBase, F
                 x.Guid,
                 x.RecipeName,
                 x.RecipeDescription,
-                FileName = x.FileNames.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).First(),
+                FileName = x.FileNames.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).FirstOrDefault(),
                 x.ImageUrl,
                 Status = x.RecipeStatus.Status
             })

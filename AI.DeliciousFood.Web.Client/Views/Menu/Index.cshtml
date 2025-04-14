@@ -168,30 +168,4 @@
     <script src="~/lib/wangeditor/editor/dist/index.js"></script>
     <script src="~/js/menu/menu.js"></script>
 
-
-    <script>
-        // 获取选中的 radio 元素
-        const selectedRadio = document.querySelector('input[name="difficulty"]:checked');
-
-        //选中的值是： <input type=​"radio" id=​"advanced" name=​"difficulty">​
-
-        if (selectedRadio) {
-          console.log("选中的值是：", selectedRadio.value);
-        } else {
-          console.log("没有选中的 radio");
-        }
-
-        // 或者添加事件监听器，当选中状态改变时，获取选中状态
-        document.querySelectorAll('input[name="difficulty"]').forEach(radio => {
-          radio.addEventListener('change', (e) => {
-            console.log("当前选中的值：", e.target.value);
-          });
-        });
-
-
-        //获取下拉框的值
-        var selectedValue = $('#taste').val();
-        console.log(selectedValue); // 打印选中的 value 值
-
-    </script>
 }

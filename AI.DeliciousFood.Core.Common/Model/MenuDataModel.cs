@@ -4,6 +4,7 @@ namespace AI.DeliciousFood.Web.Client.Models
 {
     public class MenuDataModel
     {
+        public bool IsDraft { get; set; }
         public string RecipeName { get; set; }
         public string Description { get; set; }
         public string ProductionDifficulty { get; set; }

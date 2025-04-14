@@ -43,7 +43,7 @@
                 <header class="card-header d-flex justify-content-between">
                     <div class="card-title">菜谱信息</div>
                     <ul class="card-actions">
-                        <li><a href="#!" id="editIcon"><i class="mdi mdi-pen"></i></a></li>
+                        <li><a asp-controller="Account" asp-action="EditRecipe" asp-route-recipeGuid="@Model.RecipeGuid"><i class="mdi mdi-pen"></i></a></li>
                         <li><a href="#!" class="card-btn-slide"><i class="mdi mdi-chevron-up"></i></a></li>
                         <li><a href="#!" class="card-btn-fullscreen"><i class="mdi mdi-fullscreen"></i></a></li>
                     </ul>
@@ -116,7 +116,7 @@
                     <div class="mb-3 col-md-12 position-relative">
                         <div class="js-upload-images">
                             <ul id="file_list_more_pics" class="list-inline row lyear-uploads-pic mb-0">
-                                @foreach (var item in Model.FileNames.Split(","))
+                                @foreach (var item in Model.FileNames.Split(",", StringSplitOptions.RemoveEmptyEntries))
                                 {
                                     <li class="col-6 col-sm-3 col-md-2 list-images-item">
                                         <figure>

@@ -1,7 +1,6 @@
 ﻿using AI.DeliciousFood.Core.Server;
 using AI.DeliciousFood.Web.Client.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace AI.DeliciousFood.Web.Client.Controllers;
 
