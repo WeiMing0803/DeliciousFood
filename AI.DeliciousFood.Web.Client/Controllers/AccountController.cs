@@ -75,4 +75,10 @@ public partial class AccountController(IAlipayRepository alipayRepository, IAcco
         RecipeModel recipe = await accountRepository.GetRecipeAsync(recipeGuid);
         return View(recipe);
     }
+
+    [HttpPost]
+    public IActionResult FakeDelete(string key)
+    {
+        return Json(new { success = true });
+    }
 }

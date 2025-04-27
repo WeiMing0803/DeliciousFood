@@ -64,7 +64,14 @@
                         </div>
                         <div class="mb-3">
                             <label for="picture" class="mb-2 ai-textbold">图片上传</label>
-                            @* https://chatgpt.com/c/67fcff6d-c860-8005-8c4c-44b4d0af7d3a *@
+
+                            <div id="image-preview"
+                                 data-preview="@string.Join(",", Model.FileNames.Split(",", StringSplitOptions.RemoveEmptyEntries).Select(f => $"../{Model.ImageUrl}/{f}"))"
+                                 data-preview-config='@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(
+                                    Model.FileNames.Split(",", StringSplitOptions.RemoveEmptyEntries)
+                                       .Select(f => new { caption = f, key = f, url = "/Account/FakeDelete" })
+                                ))'>
+                            </div>
                             <div class="file-loading">
                                 <input id="input-ke-2" name="file" type="file" multiple>
                             </div>
@@ -186,6 +193,6 @@
     <script src="~/lib/bootstrap-select/i18n/defaults-zh_cn.min.js"></script>
 
     <script src="~/lib/wangeditor/editor/dist/index.js"></script>
-    <script src="~/js/menu/menu.js"></script>
+    <script src="~/js/account/menu.js"></script>
 
 }
