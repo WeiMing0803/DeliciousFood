@@ -183,6 +183,7 @@ public class MenuRepository(GenericRepository<FoodDbContext> dbContext, FoodDbCo
     public List<SelectListItem> GetBaseCategory(string baseCategoryName)
     {
         List<SelectListItem> selectListItems = foodDbContext.BaseCategory
+            .AsNoTracking()
             .Where(x => x.Name == baseCategoryName)
             .Include(x => x.BaseCategoryItems)
             .SelectMany(x => x.BaseCategoryItems)

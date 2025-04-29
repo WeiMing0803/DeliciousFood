@@ -15,6 +15,7 @@ public interface IAccountRepository
     Task<UserInfoModel> GetUserAsync(long userId, CancellationToken cancellationToken = default);
     Task<GetUserInfoModel> GetUserInfoAsync(long userId, CancellationToken cancellationToken = default);
     Task<RecipeModel> GetRecipeAsync(Guid recipeGuid, CancellationToken cancellationToken = default);
+    Task<EditRecipeViewModel> GetRecipeForEditAsync(Guid recipeGuid, CancellationToken cancellationToken = default);
     bool IsUserNameTaken(string userName, long userId);
     bool IsEmailTaken(string email, long userId);
     bool IsPhoneNumberTaken(string phoneNumber, long userId);
@@ -114,6 +115,50 @@ public class AccountRepository(GenericRepository<FoodDbContext> dbContextBase, F
                 Where(c => c.Guid == u.recipese.CookingCraft)
                 .Select(c => c.Name)
                 .FirstOrDefault(),
+            UseKitchenUtensils = u.recipese.UseKitchenUtensils,
+            Practice = u.recipese.Practice,
+            Tips = u.recipese.Tips,
+            CreateTime = u.recipese.CreateTime.ToString("yyyy-MM-dd HH:mm:ss.fff"),
+            UpdateTime = u.recipese.UpdateTime.ToString("yyyy-MM-dd HH:mm:ss.fff"),
+            FileNames = u.recipese.FileNames,
+            ImageUrl = u.recipese.ImageUrl,
+            Ingredients = JsonConvert.DeserializeObject<List<Ingredients>>(u.recipese.Ingredients)!,
+            RecipeStatus = u.recipeStatus.Status.GetDescription(),
+        })
+        .FirstAsync();
+
+        // 如果没有找到结果，抛出自定义异常，避免返回空值
+        if (recipe == null)
+        {
+            throw new KeyNotFoundException($"Recipe with Guid {recipeGuid} was not found.");
+        }
+
+        return recipe;
+    }
+
+    public async Task<EditRecipeViewModel> GetRecipeForEditAsync(Guid recipeGuid, CancellationToken cancellationToken = default)
+    {
+        EditRecipeViewModel recipe = await dbContext.Recipes
+        .AsNoTracking()
+        .Where(u => u.Guid == recipeGuid)
+        .Join(dbContext.FoodUsers,
+              recipese => recipese.UserId,
+              user => user.Id,
+              (recipese, user) => new { recipese, user })
+        .Join(dbContext.RecipeStatus,
+              joined => joined.recipese.Guid,
+              recipeStatus => recipeStatus.RecipeGuid,
+              (joined, recipeStatus) => new { joined.recipese, joined.user, recipeStatus })
+        .Select(u => new EditRecipeViewModel
+        {
+            RecipeGuid = u.recipese.Guid,
+            UserName = u.user.UserName!,
+            RecipeName = u.recipese.RecipeName,
+            RecipeDescription = u.recipese.RecipeDescription,
+            RoductionDifficulty = u.recipese.RoductionDifficulty,
+            TasksTime = u.recipese.TasksTime,
+            Flavors = u.recipese.Flavors,
+            CookingCraft = u.recipese.CookingCraft,
             UseKitchenUtensils = u.recipese.UseKitchenUtensils,
             Practice = u.recipese.Practice,
             Tips = u.recipese.Tips,

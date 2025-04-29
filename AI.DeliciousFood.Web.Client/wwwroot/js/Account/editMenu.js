@@ -232,7 +232,7 @@ function handleMenuSubmit(event, isDraft) {
         RecipeGuid: $('#recipeGuid').val(),
         RecipeName: $('#recipeName').val(),
         Description: $('#description').val(),
-        ProductionDifficulty: $('.radio-group input[name="difficulty"]:checked').next('label').text(),
+        ProductionDifficulty: $('.radio-group input[name="productionDifficulty"]:checked').next('label').text(),
         NeedsTime: $('#timeOutput').val(),
         Taste: $('#taste').val(),
         CookingCraft: $('#cookingCraft').val(),
