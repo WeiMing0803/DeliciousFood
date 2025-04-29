@@ -52,12 +52,12 @@ namespace AI.DeliciousFood.Core.Model
         /// <summary>
         /// 口味
         /// </summary>
-        public string Flavors { get; set; }
+        public Guid? Flavors { get; set; }
 
         /// <summary>
         /// 烹饪工艺
         /// </summary>
-        public string CookingCraft { get; set; }
+        public Guid? CookingCraft { get; set; }
 
         /// <summary>
         /// 使用厨具

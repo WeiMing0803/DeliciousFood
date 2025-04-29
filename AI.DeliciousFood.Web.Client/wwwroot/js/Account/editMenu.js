@@ -24,16 +24,9 @@ function getCurrentInitialFiles() {
     });
 }
 
-// 获取**当前所有占用的图片名**：未被删除的初始+“本次已上传未入库”
-function getCurrentAllFileNames() {
-    var files = new Set(getCurrentInitialFiles());
-    uploadedFiles.forEach(function (f) {
-        files.add(f.fileName);
-    });
-    return files;
-}
 
-//TODO: 这里有一个bug，当上传已经存在的图片时候，再次点击上传按钮进度条会在2%，然后js报错。
+//TODO: 这里有一个bug，当上传的图片和之前预显示的图片名称一样的时候会显示我自己提示的信息，然后再次点击上传按钮进度条会在2%，然后js报错。
+//所以在修改的时候，我将不显示上传按钮
 
 /*-----------------------图片上传------------------------------*/
 $("#input-ke-2").fileinput({
@@ -51,6 +44,7 @@ $("#input-ke-2").fileinput({
     uploadLabel: "上传附件",                         // 上传按钮内容
     browseLabel: '选择附件',                            // 浏览按钮内容
     showRemove: false,                                       // 显示移除按钮
+    showUpload: false,                                       // 显示上传按钮
     //browseClass: "layui-btn",                        // 浏览按钮样式
     //uploadClass: "layui-btn",                        // 上传按钮样式
     //uploadExtraData: { 'taskId': 1, 'createBy': 1, 'createByname': 1 },   // 上传数据
@@ -189,7 +183,9 @@ const editor = createEditor({
 
 //从数据库读取值进行赋值操作
 const content = document.querySelector('#editor-container').getAttribute('data-practice')
-editor.setHtml(content)
+if (content) {
+    editor.setHtml(content)
+}
 
 
 const toolbarConfig = {}
@@ -233,6 +229,7 @@ function handleMenuSubmit(event, isDraft) {
 
     var menuData = {
         IsDraft: isDraft,
+        RecipeGuid: $('#recipeGuid').val(),
         RecipeName: $('#recipeName').val(),
         Description: $('#description').val(),
         ProductionDifficulty: $('.radio-group input[name="difficulty"]:checked').next('label').text(),
@@ -244,6 +241,7 @@ function handleMenuSubmit(event, isDraft) {
         Steps: html,
         IngredientsDetails: getIngredients(),
         Files: uploadedFiles,
+        DeletedFiles: deletedInitialFiles
     }
 
     // 如果不是草稿，需要校验

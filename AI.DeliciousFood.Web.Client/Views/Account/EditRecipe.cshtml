@@ -58,6 +58,7 @@
 
                 <div class="card-body">
                     <form class="row g-3">
+                        <input id="recipeGuid" value="@Model.RecipeGuid" hidden/>
                         <div class="mb-3">
                             <label for="recipeName" class="form-label"></label>
                             <input type="text" class="form-control" id="recipeName" value="@Model.RecipeName"  placeholder="菜谱名称">
@@ -193,6 +194,6 @@
     <script src="~/lib/bootstrap-select/i18n/defaults-zh_cn.min.js"></script>
 
     <script src="~/lib/wangeditor/editor/dist/index.js"></script>
-    <script src="~/js/account/menu.js"></script>
+    <script src="~/js/account/editmenu.js"></script>
 
 }

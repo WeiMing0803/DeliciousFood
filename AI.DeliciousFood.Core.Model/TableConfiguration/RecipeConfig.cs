@@ -17,8 +17,8 @@ namespace AI.DeliciousFood.Core.Model.TableConfiguration
             builder.Property(b => b.RecipeDescription).HasColumnType("nvarchar(500)").IsRequired(false);
             builder.Property(b => b.RoductionDifficulty).HasColumnType("nvarchar(50)").IsRequired(false);
             builder.Property(b => b.TasksTime).HasColumnType("nvarchar(50)").IsRequired(false);
-            builder.Property(b => b.Flavors).HasColumnType("nvarchar(50)").IsRequired(false);
-            builder.Property(b => b.CookingCraft).HasColumnType("nvarchar(50)").IsRequired(false);
+            builder.Property(b => b.Flavors).HasColumnType("uniqueidentifier").IsRequired(false);
+            builder.Property(b => b.CookingCraft).HasColumnType("uniqueidentifier").IsRequired(false);
             builder.Property(b => b.UseKitchenUtensils).HasColumnType("nvarchar(50)").IsRequired(false);
             builder.Property(b => b.Ingredients).HasColumnType("nvarchar(max)").IsRequired(false);
             builder.Property(b => b.Practice).HasColumnType("nvarchar(max)").IsRequired(false);

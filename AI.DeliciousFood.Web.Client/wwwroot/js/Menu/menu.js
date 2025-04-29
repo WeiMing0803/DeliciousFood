@@ -93,8 +93,9 @@ const editor = createEditor({
 
 //从数据库读取值进行赋值操作
 const content = document.querySelector('#editor-container').getAttribute('data-practice')
-editor.setHtml(content)
-
+if (content) {
+    editor.setHtml(content)
+}
 
 const toolbarConfig = {}
 
@@ -137,6 +138,7 @@ function handleMenuSubmit(event, isDraft) {
 
     var menuData = {
         IsDraft: isDraft,
+        RecipeGuid: "",
         RecipeName: $('#recipeName').val(),
         Description: $('#description').val(),
         ProductionDifficulty: $('.radio-group input[name="difficulty"]:checked').next('label').text(),
@@ -148,6 +150,7 @@ function handleMenuSubmit(event, isDraft) {
         Steps: html,
         IngredientsDetails: getIngredients(),
         Files: uploadedFiles,
+        DeletedFiles: []
     }
 
     // 如果不是草稿，需要校验

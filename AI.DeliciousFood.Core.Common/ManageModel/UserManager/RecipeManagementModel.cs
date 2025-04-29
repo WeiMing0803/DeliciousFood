@@ -18,8 +18,8 @@ public class RecipeModel
     public required string RecipeDescription { get; set; }
     public required string RoductionDifficulty { get; set; }
     public required string TasksTime { get; set; }
-    public required string Flavors { get; set; }
-    public required string CookingCraft { get; set; }
+    public Guid? Flavors { get; set; }
+    public Guid? CookingCraft { get; set; }
     public required string UseKitchenUtensils { get; set; }
     public required string Practice { get; set; }
     public required string Tips { get; set; }

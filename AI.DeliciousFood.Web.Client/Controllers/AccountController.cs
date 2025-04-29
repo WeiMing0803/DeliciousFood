@@ -1,5 +1,6 @@
 ﻿using AI.DeliciousFood.Core.Common.Model.Account;
 using AI.DeliciousFood.Core.Server;
+using AI.DeliciousFood.Web.Client.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AI.DeliciousFood.Web.Client.Controllers;
@@ -74,6 +75,17 @@ public partial class AccountController(IAlipayRepository alipayRepository, IAcco
 
         RecipeModel recipe = await accountRepository.GetRecipeAsync(recipeGuid);
         return View(recipe);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> SaveEditRecipe([FromBody] MenuDataModel menuData)
+    {
+        await menuRepository.SaveRecipeAsync(menuData, UserInfo);
+        return Ok(new
+        {
+            success = true,
+            redirectUrl = Url.Action("Index", "Home")
+        });
     }
 
     [HttpPost]

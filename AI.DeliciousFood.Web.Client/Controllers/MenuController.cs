@@ -23,7 +23,7 @@ public class MenuController(GlobalConfig globalConfig, IMenuRepository menuRepos
         return Ok(new
         {
             success = true,
-            redirectUrl = Url.Action("Index", "Home")
+            redirectUrl = Url.Action("GetUserInfo", "Account")
         });
     }
 
