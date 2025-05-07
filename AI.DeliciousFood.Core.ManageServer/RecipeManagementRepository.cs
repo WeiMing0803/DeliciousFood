@@ -67,8 +67,14 @@ public class RecipeManagementRepository(GenericRepository<FoodDbContext> dbConte
              RecipeDescription = u.recipese.RecipeDescription,
              RoductionDifficulty = u.recipese.RoductionDifficulty,
              TasksTime = u.recipese.TasksTime,
-             Flavors = u.recipese.Flavors,
-             CookingCraft = u.recipese.CookingCraft,
+             Flavors = dbContext.BaseCategoryItem
+                .Where(c => c.Guid == u.recipese.Flavors)
+                .Select(c => c.Name)
+                .FirstOrDefault(),
+             CookingCraft = dbContext.BaseCategoryItem.
+                Where(c => c.Guid == u.recipese.CookingCraft)
+                .Select(c => c.Name)
+                .FirstOrDefault(),
              UseKitchenUtensils = u.recipese.UseKitchenUtensils,
              Practice = u.recipese.Practice,
              Tips = u.recipese.Tips,
