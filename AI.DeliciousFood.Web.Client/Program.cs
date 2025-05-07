@@ -1,3 +1,4 @@
+using AI.DeliciousFood.Core.Common.ClientHelper;
 using AI.DeliciousFood.Core.Data;
 using AI.DeliciousFood.Core.Model;
 using AI.DeliciousFood.Core.Server;
@@ -54,9 +55,12 @@ builder.Services.AddScoped(typeof(GenericRepository<>));
 builder.Services.AddScoped<IMenuRepository, MenuRepository>();
 builder.Services.AddScoped<IAlipayRepository, AlipayRepository>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
+builder.Services.AddScoped<IEmailRepository, EmailRepository>();
 
 builder.Services.Configure<AlipayConfigHelper>(builder.Configuration.GetSection("AlipayConfig"));
 builder.Services.AddSingleton(resolver => resolver.GetRequiredService<IOptions<AlipayConfigHelper>>().Value);
+builder.Services.Configure<EmailConfigHelper>(builder.Configuration.GetSection("SmtpSettings"));
+builder.Services.AddSingleton(resolver => resolver.GetRequiredService<IOptions<EmailConfigHelper>>().Value);
 
 builder.Host.UseSerilog((ctx, lc) => lc
     .WriteTo.Console()

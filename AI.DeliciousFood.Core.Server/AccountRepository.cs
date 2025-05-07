@@ -1,4 +1,5 @@
-﻿using AI.DeliciousFood.Core.Common.Extensions;
+﻿using AI.DeliciousFood.Core.Common.ClientHelper;
+using AI.DeliciousFood.Core.Common.Extensions;
 using AI.DeliciousFood.Core.Common.Model;
 using AI.DeliciousFood.Core.Common.Model.Account;
 using AI.DeliciousFood.Core.Data;
@@ -21,9 +22,10 @@ public interface IAccountRepository
     bool IsPhoneNumberTaken(string phoneNumber, long userId);
     bool IsValidEmail(string email);
     Task SaveUserInfoAsync(SaveUserInfoModel userInfo, CancellationToken cancellationToken = default);
+    string SendResetPasswordEmail(FoodUser user);
 }
 
-public class AccountRepository(GenericRepository<FoodDbContext> dbContextBase, FoodDbContext dbContext, UserManager<FoodUser> userManager) : IAccountRepository
+public class AccountRepository(GenericRepository<FoodDbContext> dbContextBase, FoodDbContext dbContext, UserManager<FoodUser> userManager, IEmailRepository emailRepository) : IAccountRepository
 {
 
     public async Task<UserInfoModel> GetUserAsync(long userId, CancellationToken cancellationToken = default)
@@ -223,5 +225,27 @@ public class AccountRepository(GenericRepository<FoodDbContext> dbContextBase, F
                .SetProperty(u => u.Email, userInfo.Email)
                .SetProperty(u => u.NormalizedEmail, userInfo.Email)
                .SetProperty(u => u.PhoneNumber, userInfo.PhoneNumber), cancellationToken);
+    }
+
+    public string SendResetPasswordEmail(FoodUser user)
+    {
+        string password = UserHelper.GeneratedPassword();
+        string emailBody = $@"
+        <html>
+            <body style='font-family: Arial, sans-serif; color: #333;'>
+                <h2>亲爱的用户，</h2>
+                <p>您正在重置 <strong>美食每客</strong> 的账户密码。</p>
+                <p>您的新密码为：</p>
+                <div style='padding: 10px; background-color: #f2f2f2; border-radius: 5px; display: inline-block;'>
+                    <strong>{password}</strong>
+                </div>
+                <p style='margin-top: 20px;'>请使用此密码登录，并在登录后及时修改密码以保障账户安全。</p>
+                <p>如果您未申请重置密码，请忽略此邮件。</p>
+                <p style='margin-top: 30px;'>—— 美食每客团队</p>
+            </body>
+        </html>";
+
+        emailRepository.SendEmail(user.Email!, "重置您的美食每客网站密码", emailBody);
+        return password;
     }
 }

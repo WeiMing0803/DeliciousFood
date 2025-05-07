@@ -3,10 +3,11 @@ using AI.DeliciousFood.Core.Common.Model;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using AI.DeliciousFood.Core.Common.Model.Logon;
+using AI.DeliciousFood.Core.Server;
 
 namespace AI.DeliciousFood.Web.Client.Controllers
 {
-    public class AccountLogonController(UserManager<FoodUser> _userManager, SignInManager<FoodUser> _signInManager) : CommonControllerBase
+    public class AccountLogonController(UserManager<FoodUser> _userManager, SignInManager<FoodUser> _signInManager, IAccountRepository accountRepository) : CommonControllerBase
     {
 
         #region 登录和注册
@@ -74,8 +75,9 @@ namespace AI.DeliciousFood.Web.Client.Controllers
                 return Json(new { success = false, errors = new { email = "该邮箱不存在" } });
             }
 
-            // 邮箱存在，可以进行发送邮件操作
-            // await _emailService.SendResetPasswordEmailAsync(user);
+            string newPassword = accountRepository.SendResetPasswordEmail(user);
+            string resetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
+            await _userManager.ResetPasswordAsync(user, resetToken, newPassword);
 
             return Json(new { success = true });
         }
