@@ -50,6 +50,7 @@ public class AccountRepository(GenericRepository<FoodDbContext> dbContextBase, F
     public async Task<GetUserInfoModel> GetUserInfoAsync(long userId, CancellationToken cancellationToken = default)
     {
         var recipes = await dbContext.Recipes
+            .Where(x => x.UserId == userId)
             .Include(x => x.RecipeStatus)
             .Select(x => new
             {

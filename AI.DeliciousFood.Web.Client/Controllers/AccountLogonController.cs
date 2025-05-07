@@ -48,7 +48,7 @@ namespace AI.DeliciousFood.Web.Client.Controllers
                     }
                     else
                     {
-                        ModelState.AddModelError(string.Empty, result.ToString());
+                        ModelState.AddModelError(string.Empty, "邮箱或者密码错误");
                     }
                 }
             }
@@ -57,8 +57,32 @@ namespace AI.DeliciousFood.Web.Client.Controllers
         }
 
         [HttpPost]
+        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                Dictionary<string, string> errors = ModelState.ToDictionary(
+                    kvp => kvp.Key.ToLower(),
+                    kvp => kvp.Value.Errors.FirstOrDefault()?.ErrorMessage
+                );
+                return Json(new { success = false, errors });
+            }
+
+            FoodUser user = await _userManager.FindByEmailAsync(model.Email);
+            if (user == null)
+            {
+                return Json(new { success = false, errors = new { email = "该邮箱不存在" } });
+            }
+
+            // 邮箱存在，可以进行发送邮件操作
+            // await _emailService.SendResetPasswordEmailAsync(user);
+
+            return Json(new { success = true });
+        }
+
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register(RegisterViewModel model)
+        public async Task<IActionResult> Register([Bind(Prefix = "RegisterModel")] RegisterViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -102,23 +126,6 @@ namespace AI.DeliciousFood.Web.Client.Controllers
             }
             ViewBag.ActiveForm = "register";
             return View("LogOn", new LogOnPageViewModel { RegisterModel = model });
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult ForgotPassword(ForgotPasswordViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                // 忘记密码逻辑
-                return null;
-            }
-            else
-            {
-                ViewBag.ActiveForm = "forgot";
-                return View("LogonPage", new LogOnPageViewModel { ForgotModel = model });
-            }
-            // ...
         }
 
         public async Task<IActionResult> LogOut()
