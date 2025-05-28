@@ -8,7 +8,7 @@ namespace AI.DeliciousFood.Core.ManageServer;
 
 public interface IUserManagementRepository
 {
-    Task<List<UserManagerModel>> GetUserListAsync(CancellationToken cancellationToken = default);
+    Task<List<UserManagerModel>> GetUserListAsync(string username, string roletype, CancellationToken cancellationToken = default);
     Task<IEnumerable<FoodRole>> GetRolestAsync(CancellationToken cancellationToken = default);
     Task SaveUser(SaveUserModel model, CancellationToken cancellationToken = default);
 
@@ -18,13 +18,16 @@ public class UserManagementRepository(GenericRepository<FoodDbContext> dbContext
 {
 
     public static IEnumerable<FoodRole> Roles = null;
-    public async Task<List<UserManagerModel>> GetUserListAsync(CancellationToken cancellationToken = default)
+    public async Task<List<UserManagerModel>> GetUserListAsync(string username, string roletype, CancellationToken cancellationToken = default)
     {
         List<UserManagerModel> users = await dbContext.Users
             .Join(dbContext.UserRoles,
                   user => user.Id,
                   userRole => userRole.UserId,
                   (user, userRole) => new { user, userRole })
+            .Where(u => 
+                     (string.IsNullOrWhiteSpace(username) || u.user.UserName.Contains(username!)) &&
+                     (string.IsNullOrWhiteSpace(roletype) || u.userRole.RoleId.ToString() == roletype))
             .OrderBy(u => u.user.Id)  // 确保有序，以支持分页
             .Select(u => new UserManagerModel
             {

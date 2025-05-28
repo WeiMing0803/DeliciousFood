@@ -76,15 +76,15 @@ const table = {
     // 是否显示所有的列
     showColumns: true,
     // 是否显示刷新按钮
-    showRefresh: true,
+    showRefresh: false,
     // 显示图标
     showButtonIcons: true,
     // 显示文本
     showButtonText: false,
     // 显示全屏
-    showFullscreen: true,
+    showFullscreen: false,
     // 开关控制分页
-    showPaginationSwitch: true,
+    showPaginationSwitch: false,
     // 总数字段
     totalField: 'total',
     // 当字段为 undefined 显示
@@ -159,7 +159,11 @@ $('table').bootstrapTable({
     ...table,
     // 自定义的查询参数
     queryParams: function (params) {
+        const recipeName = $('input[name="recipeName"]').val();
+        const username = $('select[name="username"]').val();
         return {
+            recipeName: recipeName,
+            username: username,
             // 每页数据量
             limit: params.limit,
             // sql语句起始索引

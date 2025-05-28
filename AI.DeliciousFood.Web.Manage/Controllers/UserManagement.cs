@@ -7,14 +7,16 @@ namespace AI.DeliciousFood.Web.Manage.Controllers;
 
 public class UserManagement(IUserManagementRepository userManagement) : Controller
 {
-    public IActionResult UserList()
+    public async Task<IActionResult> UserList()
     {
+        IEnumerable<FoodRole> result = await userManagement.GetRolestAsync();
+        ViewBag.Roles = result.ToList();
         return View();
     }
 
-    public async Task<IActionResult> GetUserList(int limit, int offset)
+    public async Task<IActionResult> GetUserList(string username, string roletype, int limit, int offset)
     {
-        List<UserManagerModel> userList = await userManagement.GetUserListAsync();
+        List<UserManagerModel> userList = await userManagement.GetUserListAsync(username, roletype);
 
         // 获取总数
         int total = userList.Count;

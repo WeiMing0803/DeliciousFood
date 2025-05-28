@@ -11,9 +11,14 @@ public class RecipeManagement(IRecipeManagementRepository recipeManagementReposi
         return View();
     }
 
-    public async Task<IActionResult> GetRecipeList(int limit, int offset)
+    public IActionResult ReviewRecipes()
     {
-        List<RecipeManagementModel> recipeList = await recipeManagementRepository.GetRecipeListAsync();
+        return View("RecipeList");
+    }
+
+    public async Task<IActionResult> GetRecipeList(string recipeName, string username, int limit, int offset)
+    {
+        List<RecipeManagementModel> recipeList = await recipeManagementRepository.GetRecipeListAsync(recipeName, username);
 
         // 获取总数
         int total = recipeList.Count;

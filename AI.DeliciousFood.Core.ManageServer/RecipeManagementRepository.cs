@@ -11,7 +11,7 @@ namespace AI.DeliciousFood.Core.ManageServer;
 
 public interface IRecipeManagementRepository
 {
-    Task<List<RecipeManagementModel>> GetRecipeListAsync(CancellationToken cancellationToken = default);
+    Task<List<RecipeManagementModel>> GetRecipeListAsync(string recipeName, string username, CancellationToken cancellationToken = default);
     Task<RecipeModel> GetRecipeAsync(Guid recipeGuid, CancellationToken cancellationToken = default);
     Task SaveRecipeComment(SaveRecipeCommentModel recipeComment, UserInfo user, CancellationToken cancellationToken = default);
 
@@ -20,7 +20,7 @@ public interface IRecipeManagementRepository
 public class RecipeManagementRepository(GenericRepository<FoodDbContext> dbContextBase, FoodDbContext dbContext, RoleManager<FoodRole> roleManager) : IRecipeManagementRepository
 {
 
-    public async Task<List<RecipeManagementModel>> GetRecipeListAsync(CancellationToken cancellationToken = default)
+    public async Task<List<RecipeManagementModel>> GetRecipeListAsync(string recipeName, string username, CancellationToken cancellationToken = default)
     {
         List<RecipeManagementModel> recipes = await dbContext.Recipes
             .AsNoTracking()
@@ -32,6 +32,9 @@ public class RecipeManagementRepository(GenericRepository<FoodDbContext> dbConte
                   joined => joined.recipese.Guid,
                   recipeStatus => recipeStatus.RecipeGuid,
                   (joined, recipeStatus) => new { joined.recipese, joined.user, recipeStatus })
+            .Where(u =>
+                     (string.IsNullOrWhiteSpace(recipeName) || u.recipese.RecipeName.Contains(recipeName!)) &&
+                     (string.IsNullOrWhiteSpace(username) || u.user.UserName.Contains(username)))
             .OrderByDescending(u => u.recipese.UpdateTime)  // 确保有序，以支持分页
             .Select(u => new RecipeManagementModel
             {
