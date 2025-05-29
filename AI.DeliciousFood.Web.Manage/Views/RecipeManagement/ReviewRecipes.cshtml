@@ -1,9 +1,4 @@
 ﻿@using AI.DeliciousFood.Core.Common.ManageModel.UserManager
-@using AI.DeliciousFood.Core.Common.Model
-@{
-    List<EnumOptionModel> recipeStatus = ViewBag.RecipeStatus;
-    string selectedValue = "Approved";
-}
 
 <!DOCTYPE html>
 <html lang="zh">
@@ -44,7 +39,7 @@
                         <div class="card-search mb-2-5">
                             <form class="search-form" method="get" action="#!" role="form">
                                 <div class="row g-3">
-                                    <div class="col-md-3">
+                                    <div class="col-md-4">
                                         <div class="row align-items-center">
                                             <label class="col-sm-4 col-form-label text-end">
                                                 菜谱名称
@@ -54,7 +49,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-3">
+                                    <div class="col-md-4">
                                         <div class="row align-items-center">
                                             <label class="col-sm-4 col-form-label text-end">
                                                 作者
@@ -64,26 +59,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-3">
-                                        <div class="row align-items-center">
-                                            <label class="col-sm-4 col-form-label text-end">
-                                                菜谱状态
-                                            </label>
-                                            <div class="col-sm-8">
-                                                <select name="recipeStatus" class="form-select">
-                                                    <option value="">请选择</option>
-                                                    @if (recipeStatus != null)
-                                                    {
-                                                        foreach (var role in recipeStatus)
-                                                        {
-                                                            <option value="@role.Value" selected="@(role.Value == selectedValue ? "selected" : null)">@role.Text</option>
-                                                        }
-                                                    }
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3 d-flex align-items-center">
+                                    <div class="col-md-4 d-flex align-items-center">
                                         <button type="submit" class="btn btn-primary" id="search-btn">搜索</button>
                                     </div>
                                 </div>
@@ -109,7 +85,7 @@
     <script src="~/js/bootstrap-table/bootstrap-table.js" asp-append-version="true"></script>
     <script src="~/js/bootstrap-table/locale/bootstrap-table-zh-CN.min.js" asp-append-version="true"></script>
     <!--分页相关的配置-->
-    <script src="~/viewjs/recipemanagement/pagination.js" asp-append-version="true"></script>
+    <script src="~/viewjs/recipemanagement/pagination_reviewrecipes.js"></script>
     <!--引入下拉插件js-->
     <script type="text/javascript" src="~/js/bootstrap-select/bootstrap-select.min.js"></script>
     <script type="text/javascript" src="~/js/bootstrap-select/i18n/defaults-zh_CN.min.js"></script>

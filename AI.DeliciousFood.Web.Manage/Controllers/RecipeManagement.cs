@@ -1,4 +1,6 @@
-﻿using AI.DeliciousFood.Core.Common.ManageModel.UserManager;
+﻿using AI.DeliciousFood.Core.Common.Extensions;
+using AI.DeliciousFood.Core.Common.ManageModel.UserManager;
+using AI.DeliciousFood.Core.Common.Model;
 using AI.DeliciousFood.Core.ManageServer;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,17 +10,19 @@ public class RecipeManagement(IRecipeManagementRepository recipeManagementReposi
 {
     public IActionResult RecipeList()
     {
+        List<EnumOptionModel> recipeStatus = EnumExtensions.GetEnumDropdownItems<StatusEnum>();
+        ViewBag.RecipeStatus = recipeStatus;
         return View();
     }
 
     public IActionResult ReviewRecipes()
     {
-        return View("RecipeList");
+        return View();
     }
 
-    public async Task<IActionResult> GetRecipeList(string recipeName, string username, int limit, int offset)
+    public async Task<IActionResult> GetRecipeList(string recipeName, string username, string recipeStatus, int limit, int offset)
     {
-        List<RecipeManagementModel> recipeList = await recipeManagementRepository.GetRecipeListAsync(recipeName, username);
+        List<RecipeManagementModel> recipeList = await recipeManagementRepository.GetRecipeListAsync(recipeName, username, recipeStatus);
 
         // 获取总数
         int total = recipeList.Count;

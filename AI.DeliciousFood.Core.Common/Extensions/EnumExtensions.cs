@@ -1,9 +1,18 @@
-﻿using System.ComponentModel;
+﻿using AI.DeliciousFood.Core.Common.Model;
+using System.ComponentModel;
 
 namespace AI.DeliciousFood.Core.Common.Extensions;
 
 public static class EnumExtensions
 {
+    public static List<EnumOptionModel> GetEnumDropdownItems<T>() where T : Enum
+    {
+        return Enum.GetValues(typeof(T))
+                   .Cast<T>()
+                   .Select(e => new EnumOptionModel(e.ToString(), GetDescription(e)))
+                   .ToList();
+    }
+
     public static string GetDescription<TEnum>(this TEnum enumValue) where TEnum : Enum
     {
         var fieldInfo = enumValue.GetType().GetField(enumValue.ToString());
