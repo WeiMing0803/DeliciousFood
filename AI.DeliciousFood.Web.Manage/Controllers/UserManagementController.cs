@@ -2,10 +2,12 @@
 using AI.DeliciousFood.Core.ManageServer;
 using AI.DeliciousFood.Core.Model;
 using AI.DeliciousFood.Web.Manage.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AI.DeliciousFood.Web.Manage.Controllers;
 
+[Authorize]
 public class UserManagementController(IUserManagementRepository userManagement) : Controller
 {
     public async Task<IActionResult> UserList()

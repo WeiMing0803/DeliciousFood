@@ -3,10 +3,12 @@ using AI.DeliciousFood.Core.Common.ManageModel.UserManager;
 using AI.DeliciousFood.Core.Common.Model;
 using AI.DeliciousFood.Core.ManageServer;
 using AI.DeliciousFood.Web.Manage.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AI.DeliciousFood.Web.Manage.Controllers;
 
+[Authorize]
 public class RecipeManagementController(IRecipeManagementRepository recipeManagementRepository, GlobalConfig globalConfig) : CommonControllerBase
 {
     public IActionResult RecipeList()

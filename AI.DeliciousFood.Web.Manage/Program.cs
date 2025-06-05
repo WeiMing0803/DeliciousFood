@@ -49,6 +49,12 @@ builder.Services.AddScoped(typeof(GenericRepository<>));
 builder.Services.AddScoped<IUserManagementRepository, UserManagementRepository>();
 builder.Services.AddScoped<IRecipeManagementRepository, RecipeManagementRepository>();
 
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/AccountLogon/Logon"; // 设置未登录时跳转的路径
+});
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

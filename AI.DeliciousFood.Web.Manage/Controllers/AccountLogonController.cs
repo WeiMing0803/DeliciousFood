@@ -8,8 +8,13 @@ namespace AI.DeliciousFood.Web.Manage.Controllers;
 public class AccountLogonController(SignInManager<FoodUser> signInManager, UserManager<FoodUser> userManager) : Controller
 {
     [HttpGet]
-    public IActionResult LogOn()
+    public async Task<IActionResult> LogOn()
     {
+        // 只有登录状态才登出
+        if (User.Identity.IsAuthenticated)
+        {
+            await signInManager.SignOutAsync();
+        }
         return View();
     }
 
