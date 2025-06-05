@@ -1,34 +1,30 @@
 ﻿using AI.DeliciousFood.Core.Common.ManageModel.UserManager;
 using AI.DeliciousFood.Core.ManageServer;
 using AI.DeliciousFood.Core.Model;
+using AI.DeliciousFood.Web.Manage.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AI.DeliciousFood.Web.Manage.Controllers;
 
-public class UserManagement(IUserManagementRepository userManagement) : Controller
+public class UserManagementController(IUserManagementRepository userManagement) : Controller
 {
     public async Task<IActionResult> UserList()
     {
-        IEnumerable<FoodRole> result = await userManagement.GetRolestAsync();
+        IEnumerable<FoodRole> result = await userManagement.GetRoleListAsync();
         ViewBag.Roles = result.ToList();
         return View();
     }
 
     public async Task<IActionResult> GetUserList(string username, string roletype, int limit, int offset)
     {
-        List<UserManagerModel> userList = await userManagement.GetUserListAsync(username, roletype);
+
+        List<UserManagerModel> userList = await userManagement.GetUserListAsync(username, roletype, offset, limit);
 
         // 获取总数
-        int total = userList.Count;
-
-        // 分页
-        var pagedResult = userList
-            .Skip(offset)
-            .Take(limit)
-            .ToList();
+        int total = await userManagement.GetUserListCountAsync(username, roletype);
 
         // 返回包含 total 和 rows 的对象
-        return Json(new { total, rows = pagedResult });
+        return Json(new PagedResult<UserManagerModel>{ Total = total, Rows = userList });
     }
 
     [HttpPost]
@@ -42,7 +38,7 @@ public class UserManagement(IUserManagementRepository userManagement) : Controll
     [HttpGet]
     public async Task<IActionResult> GetRoles()
     {
-        IEnumerable<FoodRole> result = await userManagement.GetRolestAsync();
+        IEnumerable<FoodRole> result = await userManagement.GetRoleListAsync();
         return Ok(new
         {
             success = true,

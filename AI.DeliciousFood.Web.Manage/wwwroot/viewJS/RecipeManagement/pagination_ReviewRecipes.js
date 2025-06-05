@@ -160,7 +160,8 @@ $('table').bootstrapTable({
     // 自定义的查询参数
     queryParams: function (params) {
         const recipeName = $('input[name="recipeName"]').val();
-        const recipeStatus = $('select[name="recipeStatus"]').val();
+        const username = $('select[name="username"]').val();
+        const recipeStatus = "UnderReview";
         return {
             recipeName: recipeName,
             username: username,

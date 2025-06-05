@@ -11,43 +11,68 @@ namespace AI.DeliciousFood.Core.ManageServer;
 
 public interface IRecipeManagementRepository
 {
-    Task<List<RecipeManagementModel>> GetRecipeListAsync(string recipeName, string username, string recipeStatus, CancellationToken cancellationToken = default);
+    Task<List<RecipeManagementModel>> GetRecipeListAsync(string recipeName, string username, string recipeStatus, int offset, int limit, CancellationToken cancellationToken = default);
+    Task<int> GetRecipeListCountAsync(string recipeName, string username, string recipeStatus, CancellationToken cancellationToken = default);
     Task<RecipeModel> GetRecipeAsync(Guid recipeGuid, CancellationToken cancellationToken = default);
     Task SaveRecipeComment(SaveRecipeCommentModel recipeComment, UserInfo user, CancellationToken cancellationToken = default);
 
 }
 
-public class RecipeManagementRepository(GenericRepository<FoodDbContext> dbContextBase, FoodDbContext dbContext, RoleManager<FoodRole> roleManager) : IRecipeManagementRepository
+public class RecipeManagementRepository(FoodDbContext dbContext) : IRecipeManagementRepository
 {
 
-    public async Task<List<RecipeManagementModel>> GetRecipeListAsync(string recipeName, string username, string recipeStatus, CancellationToken cancellationToken = default)
+    public async Task<List<RecipeManagementModel>> GetRecipeListAsync(string recipeName, string username, string recipeStatus, int offset, int limit, CancellationToken cancellationToken = default)
     {
-        List<RecipeManagementModel> recipes = await dbContext.Recipes
-            .AsNoTracking()
-            .Join(dbContext.FoodUsers,
-                  recipese => recipese.UserId,
-                  user => user.Id,
-                  (recipese, user) => new { recipese, user })
-            .Join(dbContext.RecipeStatus,
-                  joined => joined.recipese.Guid,
-                  recipeStatus => recipeStatus.RecipeGuid,
-                  (joined, recipeStatus) => new { joined.recipese, joined.user, recipeStatus })
-            .Where(u =>
-                     (string.IsNullOrWhiteSpace(recipeName) || u.recipese.RecipeName.Contains(recipeName!)) &&
-                     (string.IsNullOrWhiteSpace(username) || u.user.UserName.Contains(username)) &&
-                     (string.IsNullOrWhiteSpace(recipeStatus) || u.recipeStatus.Status.ToString() == recipeStatus))
-            .OrderByDescending(u => u.recipese.UpdateTime)  // 确保有序，以支持分页
+        var query = dbContext.Recipes
+         .AsNoTracking()
+         .Join(dbContext.FoodUsers,
+               recipe => recipe.UserId,
+               user => user.Id,
+               (recipe, user) => new { recipe, user })
+         .Join(dbContext.RecipeStatus,
+               joined => joined.recipe.Guid,
+               status => status.RecipeGuid,
+               (joined, status) => new { joined.recipe, joined.user, status })
+         .Where(u =>
+             (string.IsNullOrWhiteSpace(recipeName) || u.recipe.RecipeName.Contains(recipeName)) &&
+             (string.IsNullOrWhiteSpace(username) || u.user.UserName.Contains(username)) &&
+             (string.IsNullOrWhiteSpace(recipeStatus) || u.status.Status.ToString() == recipeStatus))
+         .OrderByDescending(u => u.recipe.UpdateTime);
+
+        List<RecipeManagementModel> pagedList = await query
+            .Skip(offset)
+            .Take(limit)
             .Select(u => new RecipeManagementModel
             {
-                RecipeGuid = u.recipese.Guid,
-                RecipeName = u.recipese.RecipeName,
+                RecipeGuid = u.recipe.Guid,
+                RecipeName = u.recipe.RecipeName,
                 UserName = u.user.UserName!,
-                CreateTime = u.recipese.CreateTime.ToString("yyyy-MM-dd HH:mm:ss.fff"),
-                UpdateTime = u.recipese.UpdateTime.ToString("yyyy-MM-dd HH:mm:ss.fff"),
-                RecipeStatus = u.recipeStatus.Status.GetDescription()
+                CreateTime = u.recipe.CreateTime.ToString("yyyy-MM-dd HH:mm:ss.fff"),
+                UpdateTime = u.recipe.UpdateTime.ToString("yyyy-MM-dd HH:mm:ss.fff"),
+                RecipeStatus = u.status.Status.GetDescription()
             })
             .ToListAsync(cancellationToken);
-        return recipes;
+
+        return pagedList;
+    }
+
+    public async Task<int> GetRecipeListCountAsync(string recipeName, string username, string recipeStatus, CancellationToken cancellationToken = default)
+    {
+        var query = dbContext.Recipes
+            .Join(dbContext.FoodUsers,
+                  recipe => recipe.UserId,
+                  user => user.Id,
+                  (recipe, user) => new { recipe, user })
+            .Join(dbContext.RecipeStatus,
+                  joined => joined.recipe.Guid,
+                  status => status.RecipeGuid,
+                  (joined, status) => new { joined.recipe, joined.user, status })
+            .Where(u =>
+                (string.IsNullOrWhiteSpace(recipeName) || u.recipe.RecipeName.Contains(recipeName)) &&
+                (string.IsNullOrWhiteSpace(username) || u.user.UserName.Contains(username)) &&
+                (string.IsNullOrWhiteSpace(recipeStatus) || u.status.Status.ToString() == recipeStatus));
+
+        return await query.CountAsync(cancellationToken);
     }
 
     public async Task<RecipeModel> GetRecipeAsync(Guid recipeGuid, CancellationToken cancellationToken = default)

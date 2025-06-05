@@ -2,11 +2,12 @@
 using AI.DeliciousFood.Core.Common.ManageModel.UserManager;
 using AI.DeliciousFood.Core.Common.Model;
 using AI.DeliciousFood.Core.ManageServer;
+using AI.DeliciousFood.Web.Manage.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AI.DeliciousFood.Web.Manage.Controllers;
 
-public class RecipeManagement(IRecipeManagementRepository recipeManagementRepository, GlobalConfig globalConfig) : CommonControllerBase
+public class RecipeManagementController(IRecipeManagementRepository recipeManagementRepository, GlobalConfig globalConfig) : CommonControllerBase
 {
     public IActionResult RecipeList()
     {
@@ -22,19 +23,13 @@ public class RecipeManagement(IRecipeManagementRepository recipeManagementReposi
 
     public async Task<IActionResult> GetRecipeList(string recipeName, string username, string recipeStatus, int limit, int offset)
     {
-        List<RecipeManagementModel> recipeList = await recipeManagementRepository.GetRecipeListAsync(recipeName, username, recipeStatus);
+        List<RecipeManagementModel> recipeList = await recipeManagementRepository.GetRecipeListAsync(recipeName, username, recipeStatus, offset, limit);
 
-        // 获取总数
-        int total = recipeList.Count;
-
-        // 分页
-        var pagedResult = recipeList
-            .Skip(offset)
-            .Take(limit)
-            .ToList();
+        // 查询总数
+        int total = await recipeManagementRepository.GetRecipeListCountAsync(recipeName, username, recipeStatus);
 
         // 返回包含 total 和 rows 的对象
-        return Json(new { total, rows = pagedResult });
+        return Json(new PagedResult<RecipeManagementModel> { Total = total, Rows = recipeList });
     }
 
     public async Task<IActionResult> GetRecipe(Guid recipeGuid)
