@@ -22,84 +22,122 @@
     @await RenderSectionAsync("Styles", required: false)
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"><img src="~/images/logo.png" width="150"/></a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <!-- 左侧导航 -->
-                    <ul class="navbar-nav">
-                        <li class="nav-item">
-                            <a class="nav-link" href="/">首页</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">菜谱分类</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Menu" asp-action="Index">发布菜谱</a>
-                        </li>
-                    </ul>
-
-                    <!-- 中间空白部分可以用来占位 -->
-                    <div class="flex-grow-1"></div>
-
-                    <!-- 搜索框 -->
-                    <form class="ai-search" action="/action_page.php">
-                        <div class="input-group">
-                            <input type="text" class="form-control" placeholder="Search">
-                            <div class="input-group-btn submit-box">
-                                <button class="btn btn-default" type="submit">
-                                    <i class="bi bi-search"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-
-                    <!-- 用户登录/注册部分 -->
-                    <ul class="navbar-nav">
-                        @if (SignInManager.IsSignedIn(User))
-                        {
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle user-dropdown" href="#" role="button" data-bs-toggle="dropdown">Hello @User.Identity?.Name!</a>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" asp-controller="account" asp-action="GetUserInfo">个人信息</a></li>
-                                    <li class="dropdown-item" data-bs-toggle="modal" data-bs-target="#vipModal">开通/续费Vip</li>
-                                    <li><a class="dropdown-item" asp-controller="accountLogon" asp-action="logout">退出</a></li>
-                                </ul>
-                            </li>
-                        }
-                        else
-                        {
+    <div class="site-wrapper">
+        <header>
+            <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+                <div class="container-fluid">
+                    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"><img src="~/images/logo.png" width="150" /></a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                        <!-- 左侧导航 -->
+                        <ul class="navbar-nav">
                             <li class="nav-item">
-                                <a asp-area="" asp-controller="accountLogon" asp-action="logon" class="nav-link">登录 | 注册</a>
+                                <a class="nav-link" href="/">首页</a>
                             </li>
-                        }
-                    </ul>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">菜谱分类</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Menu" asp-action="Index">发布菜谱</a>
+                            </li>
+                        </ul>
+
+                        <!-- 中间空白部分可以用来占位 -->
+                        <div class="flex-grow-1"></div>
+
+                        <!-- 搜索框 -->
+                        <form class="ai-search" action="/action_page.php">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Search">
+                                <div class="input-group-btn submit-box">
+                                    <button class="btn btn-default" type="submit">
+                                        <i class="bi bi-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+
+                        <!-- 用户登录/注册部分 -->
+                        <ul class="navbar-nav">
+                            @if (SignInManager.IsSignedIn(User))
+                            {
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle user-dropdown" href="#" role="button" data-bs-toggle="dropdown">Hello @User.Identity?.Name!</a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" asp-controller="account" asp-action="GetUserInfo">个人信息</a></li>
+                                        <li class="dropdown-item" data-bs-toggle="modal" data-bs-target="#vipModal">开通/续费Vip</li>
+                                        <li><a class="dropdown-item" asp-controller="accountLogon" asp-action="logout">退出</a></li>
+                                    </ul>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="nav-item">
+                                    <a asp-area="" asp-controller="accountLogon" asp-action="logon" class="nav-link">登录 | 注册</a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
                 </div>
+            </nav>
+        </header>
+        <main class="site-main flex-fill">
+            <div class="container">
+                @await Html.PartialAsync("GraphModalPartial")
+                <main role="main" class="pb-3">
+                    @RenderBody()
+                </main>
+
+                <button id="backToTop" class="back-to-top">
+                    <i class="mdi mdi-arrow-up"></i>
+                </button>
             </div>
-        </nav>
-    </header>
-    <div class="container">
-        @await Html.PartialAsync("GraphModalPartial")
-        <main role="main" class="pb-3">            
-            @RenderBody()
         </main>
 
-        <button id="backToTop" class="back-to-top">
-            <i class="mdi mdi-arrow-up"></i>
-        </button>
+        <footer class="footer-main border-top">
+            <div class="footer-top">
+                <div class="footer-left">
+                    <p class="footer-logo-img">
+                        <img src="~/Images/logo.png" width="120" height="35" />
+                    </p>
+                    <p>
+                        <span class="footer-text-color">500万+</span>美食菜谱；
+                        <span class="footer-text-color">2000万+</span>互动内容；
+                        <span class="footer-text-color">3000+</span>美食课堂；
+                        <span class="footer-text-color">5000万+</span>用户每天都有新分享
+                    </p>
+                </div>
+                <div class="footer-right">
+                    <p class="footer-qun-img">扫码二维码，加入官方粉丝群：</p>
+                    <img src="~/Images/share.png" width="100" height="100" class="footer-qun-img1" />
+                    <p class="footer-qun-img2">美时每客</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p class="fonter-weibu-text">关于豆果 · 在豆果工作 · 意见反馈 · 菜谱大全</p>
+                <p class="fonter-weibu-text2">
+                    湘公网安备 11010502038268号 | 湘ICP备1101032号
+                </p>
+                <p class="fonter-weibu-text2">
+                    食品经营许可证：SP1101061510252413 | 网络文化经营许可证：湘网文【2017】6954-770号
+                </p>
+                <p class="fonter-weibu-text2">
+                    增值电信业务经营许可证：B2-2023xxxxxx | 互联网药品信息服务资格证书（国）-经营性-2022-0000
+                </p>
+                <p class="fonter-weibu-text2">
+                    本站所有内容仅供美食分享与交流，转载请注明出处。如有侵权请联系我们删除。
+                </p>
+                <p class="footer-copyright">
+                    &copy; @DateTime.Now.Year - 美食每客 -
+                    <a asp-area="" asp-controller="Home" asp-action="AboutUs">关于我们</a>
+                </p>
+            </div>
+        </footer>
     </div>
-
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; @DateTime.Now.Year - 美食每客 - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>    
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/js/layout.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)

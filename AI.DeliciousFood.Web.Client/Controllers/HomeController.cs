@@ -20,6 +20,12 @@ public class HomeController(IAlipayRepository accountRepository,
         return View();
     }
     
+    public IActionResult AboutUs()
+    {
+        return View();
+    }
+
+
     [HttpGet("/ws")]
     public async Task Get()
     {
