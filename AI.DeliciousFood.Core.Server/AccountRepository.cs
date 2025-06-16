@@ -28,7 +28,7 @@ public interface IAccountRepository
 public class AccountRepository(GenericRepository<FoodDbContext> dbContextBase, FoodDbContext dbContext, UserManager<FoodUser> userManager, IEmailRepository emailRepository) : IAccountRepository
 {
 
-    public async Task<UserInfoModel> GetUserAsync(long userId, CancellationToken cancellationToken = default)
+    public async Task<UserInfoModel> GetUserAsync(long userId, CancellationToken cancellationToken)
     {
         UserInfoModel userInfo = await dbContext.Users
                    .Where(u => u.Id == userId)
@@ -49,7 +49,7 @@ public class AccountRepository(GenericRepository<FoodDbContext> dbContextBase, F
         return userInfo;
     }
 
-    public async Task<GetUserInfoModel> GetUserInfoAsync(long userId, CancellationToken cancellationToken = default)
+    public async Task<GetUserInfoModel> GetUserInfoAsync(long userId, CancellationToken cancellationToken)
     {
         var recipes = await dbContext.Recipes
             .Where(x => x.UserId == userId)
@@ -89,7 +89,7 @@ public class AccountRepository(GenericRepository<FoodDbContext> dbContextBase, F
     }
 
 
-    public async Task<RecipeModel> GetRecipeAsync(Guid recipeGuid, CancellationToken cancellationToken = default)
+    public async Task<RecipeModel> GetRecipeAsync(Guid recipeGuid, CancellationToken cancellationToken)
     {
         RecipeModel recipe = await dbContext.Recipes
         .AsNoTracking()
@@ -139,7 +139,7 @@ public class AccountRepository(GenericRepository<FoodDbContext> dbContextBase, F
         return recipe;
     }
 
-    public async Task<EditRecipeViewModel> GetRecipeForEditAsync(Guid recipeGuid, CancellationToken cancellationToken = default)
+    public async Task<EditRecipeViewModel> GetRecipeForEditAsync(Guid recipeGuid, CancellationToken cancellationToken)
     {
         EditRecipeViewModel recipe = await dbContext.Recipes
         .AsNoTracking()
@@ -215,7 +215,7 @@ public class AccountRepository(GenericRepository<FoodDbContext> dbContextBase, F
         }
     }
 
-    public async Task SaveUserInfoAsync(SaveUserInfoModel userInfo, CancellationToken cancellationToken = default)
+    public async Task SaveUserInfoAsync(SaveUserInfoModel userInfo, CancellationToken cancellationToken)
     {
         await dbContext.FoodUsers
            .Where(x => x.Id == userInfo.Id)

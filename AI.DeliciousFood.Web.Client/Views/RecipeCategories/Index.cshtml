@@ -1,0 +1,73 @@
+﻿@using AI.DeliciousFood.Core.Common.Model.RecipeCategories
+@model RecipeCategoriesIndexViewModel
+@{
+    ViewBag.Title = "菜谱分类";
+    var grouped = Model.Categories.GroupBy(x => x.Category)
+            .OrderBy(g => g.Key);
+}
+
+@section Styles {
+    <link href="~/css/recipecategories/index.css" rel="stylesheet" />
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <!-- 左侧分类导航 -->
+        <div class="col-3">
+            <div class="list-group" id="category-list" style="max-height:80vh;overflow-y:auto;">
+                <a href="#" class="list-group-item list-group-item-action category-link active" data-id="">
+                    全部
+                </a>
+                @foreach (var group in grouped)
+                {
+                    <div class="mb-2">
+                        <div class="fw-bold text-secondary small ps-2 py-1">@group.Key</div>
+                        @foreach (var cat in group)
+                        {
+                            <a href="#" class="list-group-item list-group-item-action category-link"
+                               data-id="@cat.Guid">
+                                @cat.Name
+                            </a>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+        <!-- 右侧菜谱列表 -->
+        <div class="col-9 d-flex flex-column" style="min-height: 580px;">
+            <div class="flex-grow-1" id="recipe-content">
+                <!-- 这里加载菜单列表 -->
+                @await Html.PartialAsync("_RecipeList", Model.RecipeList)
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(function() {
+            $('#category-list').on('click', '.category-link', function(e){
+                e.preventDefault();
+                $('#category-list .category-link').removeClass('active');
+                $(this).addClass('active');
+                var cid = $(this).data('id');
+                loadRecipes(cid || null, 1);
+            });
+            $('#recipe-content').on('click', '.page-link-btn', function(e){
+                e.preventDefault();
+                var page = $(this).data('page');
+                var cid = $('#category-list .category-link.active').data('id');
+                loadRecipes(cid || null, page);
+            });
+
+            function loadRecipes(categoryId, page){
+                $('#recipe-content').html('<div class="text-secondary text-center p-5">加载中...</div>');
+                $.get('@Url.Action("List", "RecipeCategories")', {categoryId: categoryId, page: page||1}, function(html){
+                    $('#recipe-content').html(html);
+                });
+            }
+            // 默认页不点击，已显示全部；如果要默认高亮“全部”：
+            $('#category-list .category-link').first().addClass('active');
+        });
+    </script>
+}

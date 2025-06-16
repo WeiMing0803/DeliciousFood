@@ -21,7 +21,7 @@ public interface IRecipeManagementRepository
 public class RecipeManagementRepository(FoodDbContext dbContext) : IRecipeManagementRepository
 {
 
-    public async Task<List<RecipeManagementModel>> GetRecipeListAsync(string recipeName, string username, string recipeStatus, int offset, int limit, CancellationToken cancellationToken = default)
+    public async Task<List<RecipeManagementModel>> GetRecipeListAsync(string recipeName, string username, string recipeStatus, int offset, int limit, CancellationToken cancellationToken)
     {
         var query = dbContext.Recipes
          .AsNoTracking()
@@ -56,7 +56,7 @@ public class RecipeManagementRepository(FoodDbContext dbContext) : IRecipeManage
         return pagedList;
     }
 
-    public async Task<int> GetRecipeListCountAsync(string recipeName, string username, string recipeStatus, CancellationToken cancellationToken = default)
+    public async Task<int> GetRecipeListCountAsync(string recipeName, string username, string recipeStatus, CancellationToken cancellationToken)
     {
         var query = dbContext.Recipes
             .Join(dbContext.FoodUsers,
@@ -75,7 +75,7 @@ public class RecipeManagementRepository(FoodDbContext dbContext) : IRecipeManage
         return await query.CountAsync(cancellationToken);
     }
 
-    public async Task<RecipeModel> GetRecipeAsync(Guid recipeGuid, CancellationToken cancellationToken = default)
+    public async Task<RecipeModel> GetRecipeAsync(Guid recipeGuid, CancellationToken cancellationToken)
     {
         RecipeModel recipe = await dbContext.Recipes
          .AsNoTracking()
@@ -125,7 +125,7 @@ public class RecipeManagementRepository(FoodDbContext dbContext) : IRecipeManage
         return recipe;
     }
 
-    public async Task SaveRecipeComment(SaveRecipeCommentModel recipeComment, UserInfo user, CancellationToken cancellationToken = default)
+    public async Task SaveRecipeComment(SaveRecipeCommentModel recipeComment, UserInfo user, CancellationToken cancellationToken)
     {
         await dbContext.RecipeStatus
                .Where(u => u.RecipeGuid == recipeComment.RecipeGuid)

@@ -16,6 +16,7 @@ public class FoodDbContext : IdentityDbContext<FoodUser, FoodRole, long>
     public DbSet<MemberPrice> MemberPrice { get; set; }
     public DbSet<BaseCategory> BaseCategory { get; set; }
     public DbSet<BaseCategoryItem> BaseCategoryItem { get; set; }
+    public DbSet<RecipeCategories> RecipeCategories { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

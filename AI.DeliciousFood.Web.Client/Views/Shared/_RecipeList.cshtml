@@ -1,0 +1,40 @@
+﻿@using AI.DeliciousFood.Core.Common.Model.RecipeCategories
+@model RecipeListViewModel
+<div class="d-flex flex-column h-100" style="min-height: 420px;">
+    <div class="flex-grow-1">
+        <!-- 卡片列表区域 -->
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+            @foreach (var r in Model.Recipes)
+            {
+                <div class="col">
+                    <div class="card h-100">
+                        <img src="@r.ImageUrl" class="card-img-top" style="height:170px;object-fit:cover;">
+                        <div class="card-body">
+                            <div class="card-title">@r.Name</div>
+                            <p class="card-text">@r.Description</p>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        @if (!Model.Recipes.Any())
+        {
+            <div class="alert alert-warning my-5 text-center">当前分类下暂无菜谱</div>
+        }
+    </div>
+
+    <!-- 分页栏，始终靠底部 -->
+    <nav class="mt-4">
+        <ul class="pagination justify-content-center mb-0">
+            @{
+                int totalPages = (int)Math.Ceiling((double)Model.Total / Model.PageSize);
+                for (int i = 1; i <= totalPages; i++)
+                {
+                    <li class="page-item @(i == Model.Page ? "active" : "")">
+                        <a class="page-link page-link-btn" href="#" data-page="@i">@i</a>
+                    </li>
+                }
+            }
+        </ul>
+    </nav>
+</div>

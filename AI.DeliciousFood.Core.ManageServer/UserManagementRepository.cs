@@ -20,7 +20,7 @@ public class UserManagementRepository(FoodDbContext dbContext, RoleManager<FoodR
 
     public static IEnumerable<FoodRole> Roles = null;
 
-    public async Task<List<UserManagerModel>> GetUserListAsync(string username, string roleType, int offset, int limit, CancellationToken cancellationToken = default)
+    public async Task<List<UserManagerModel>> GetUserListAsync(string username, string roleType, int offset, int limit, CancellationToken cancellationToken)
     {
         var query = dbContext.Users
             .Join(dbContext.UserRoles,
@@ -51,7 +51,7 @@ public class UserManagementRepository(FoodDbContext dbContext, RoleManager<FoodR
         return pagedList;
     }
 
-    public async Task<int> GetUserListCountAsync(string username, string roleType, CancellationToken cancellationToken = default)
+    public async Task<int> GetUserListCountAsync(string username, string roleType, CancellationToken cancellationToken)
     {
         var query = dbContext.Users
             .Join(dbContext.UserRoles,
@@ -66,7 +66,7 @@ public class UserManagementRepository(FoodDbContext dbContext, RoleManager<FoodR
     }
 
 
-    public async Task<IEnumerable<FoodRole>> GetRoleListAsync(CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<FoodRole>> GetRoleListAsync(CancellationToken cancellationToken)
     {
         if (Roles == null)
             Roles = await roleManager.Roles.ToListAsync(cancellationToken);
@@ -74,7 +74,7 @@ public class UserManagementRepository(FoodDbContext dbContext, RoleManager<FoodR
         return Roles;
     }
 
-    public async Task SaveUser(SaveUserModel model, CancellationToken cancellationToken = default)
+    public async Task SaveUser(SaveUserModel model, CancellationToken cancellationToken)
     {
         if (model.MembershipExpireAt != DateOnly.MinValue)
             await dbContext.FoodUsers
