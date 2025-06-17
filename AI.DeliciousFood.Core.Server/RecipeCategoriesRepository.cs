@@ -2,7 +2,7 @@
 using AI.DeliciousFood.Core.Common.Model.RecipeCategories;
 using AI.DeliciousFood.Core.Model;
 using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace AI.DeliciousFood.Core.Server;
 
@@ -13,18 +13,28 @@ public interface IRecipeCategoriesRepository
     Task<int> GetRecipesCount(string category, CancellationToken cancellationToken = default);
 }
 
-public class RecipeCategoriesRepository(FoodDbContext foodDbContext) : IRecipeCategoriesRepository
+public class RecipeCategoriesRepository(FoodDbContext foodDbContext, IMemoryCache memoryCache) : IRecipeCategoriesRepository
 {
+    private const string cacheKey = "RecipeCategoriesCache";
+
     public async Task<List<RecipeCategory>> GetAllCategories(CancellationToken cancellationToken)
-    {
-        List<RecipeCategory> result = await foodDbContext.RecipeCategories
-            .AsNoTracking()
-            .Select(rc => new RecipeCategory(
-                rc.Guid.ToString(),
-                rc.Name,
-                rc.Category))
-            .ToListAsync(cancellationToken);
-        return result;
+    {        
+        if (!memoryCache.TryGetValue(cacheKey, out List<RecipeCategory> result))
+        {
+            result = await foodDbContext.RecipeCategories
+                .AsNoTracking()
+                .Select(rc => new RecipeCategory(
+                    rc.Guid.ToString(),
+                    rc.Name,
+                    rc.Category))
+                .ToListAsync(cancellationToken);
+
+            // 设置缓存，过期时间可自定义
+            var cacheEntryOptions = new MemoryCacheEntryOptions()
+                .SetSlidingExpiration(TimeSpan.FromDays(1)); // 可改为绝对过期
+            memoryCache.Set(cacheKey, result, cacheEntryOptions);
+        }
+        return result!;
     }
 
     public async Task<List<RecipeModel>> GetRecipes(string category, int offset, int limit, CancellationToken cancellationToken)
@@ -35,7 +45,7 @@ public class RecipeCategoriesRepository(FoodDbContext foodDbContext) : IRecipeCa
             .Where(r => (string.IsNullOrEmpty(category) || 1 == 1) &&
                    r.RecipeStatus.Status == StatusEnum.Approved)
             .OrderByDescending(r => r.CreateTime)
-            .Skip(offset)
+            .Skip(offset - 1)
             .Take(limit)
             .Select(r => new RecipeModel
             {

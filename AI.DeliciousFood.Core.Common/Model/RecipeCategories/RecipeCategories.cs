@@ -1,4 +1,5 @@
-﻿using AI.DeliciousFood.Core.Model;
+﻿using AI.DeliciousFood.Core.Common.Common;
+using AI.DeliciousFood.Core.Model;
 
 namespace AI.DeliciousFood.Core.Common.Model.RecipeCategories;
 
@@ -13,9 +14,7 @@ public class RecipeCategoriesIndexViewModel
 public class RecipeListViewModel
 {
     public List<RecipeModel> Recipes { get; set; }
-    public int Page { get; set; }
-    public int PageSize { get; set; }
-    public int Total { get; set; }
+    public PaginationModel pagination { get; set; }
 }
 
 public class RecipeModel

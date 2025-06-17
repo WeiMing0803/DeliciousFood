@@ -6,22 +6,62 @@ namespace AI.DeliciousFood.Web.Client.Controllers;
 
 public class RecipeCategoriesController(IRecipeCategoriesRepository recipeCategoriesRepository) : Controller
 {
-    public async Task<IActionResult> Index(string category = null, int offset = 0, int limit = 12)
+    public async Task<IActionResult> Index(string category = null, int offset = 1, int limit = 12)
     {
         List<RecipeCategory> categories = await recipeCategoriesRepository.GetAllCategories();
         List<RecipeModel> recipes = await recipeCategoriesRepository.GetRecipes(category, offset, limit);
+        if (recipes.Count > 0)
+        {
+            var oneRecipe = recipes[0];
+            var hundredRecipes = Enumerable.Repeat(oneRecipe, 12).ToList();
+            recipes = hundredRecipes;
+        }
         int total = await recipeCategoriesRepository.GetRecipesCount(category);
+        total = 100;
         RecipeCategoriesIndexViewModel vm = new RecipeCategoriesIndexViewModel
         {
             Categories = categories,
             RecipeList = new RecipeListViewModel
             {
                 Recipes = recipes,
-                Page = 1,
-                PageSize = 12,
-                Total = total
+                pagination = new()
+                {
+                    ActionName = "Index",
+                    ControllerName = "RecipeCategories",
+                    CurrentPage = offset,
+                    PageSize = limit,
+                    TotalCount = total,
+                    TotalPages = (int)Math.Ceiling((double)total / limit)
+                }
             }
         };
         return View(vm);
+    }
+
+    public async Task<IActionResult> GetRecipeList(string category = null, int offset = 1, int limit = 12)
+    {
+        List<RecipeCategory> categories = await recipeCategoriesRepository.GetAllCategories();
+        List<RecipeModel> recipes = await recipeCategoriesRepository.GetRecipes(category, offset, limit);
+        if (recipes.Count > 0)
+        {
+            var oneRecipe = recipes[0];
+            var hundredRecipes = Enumerable.Repeat(oneRecipe, 12).ToList();
+            recipes = hundredRecipes;
+        }
+        int total = await recipeCategoriesRepository.GetRecipesCount(category);
+        RecipeListViewModel RecipeList = new()
+        {
+            Recipes = recipes,
+            pagination = new()
+            {
+                ActionName = "GetRecipeList",
+                ControllerName = "RecipeCategories",
+                CurrentPage = offset,
+                PageSize = limit,
+                TotalCount = total,
+                TotalPages = (int)Math.Ceiling((double)total / limit)
+            }
+        };
+        return PartialView("_RecipeList", RecipeList);
     }
 }

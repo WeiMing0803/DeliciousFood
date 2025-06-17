@@ -60,9 +60,9 @@
                 loadRecipes(cid || null, page);
             });
 
-            function loadRecipes(categoryId, page){
+            function loadRecipes(category, page){
                 $('#recipe-content').html('<div class="text-secondary text-center p-5">加载中...</div>');
-                $.get('@Url.Action("List", "RecipeCategories")', {categoryId: categoryId, page: page||1}, function(html){
+                $.get('@Url.Action("GetRecipeList", "RecipeCategories")', {category: category, offset: page||1}, function(html){
                     $('#recipe-content').html(html);
                 });
             }
