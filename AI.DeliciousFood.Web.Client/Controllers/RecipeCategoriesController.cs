@@ -19,8 +19,8 @@ public class RecipeCategoriesController(IRecipeCategoriesRepository recipeCatego
                 Recipes = recipes,
                 pagination = new()
                 {
-                    ActionName = "Index",
-                    ControllerName = "RecipeCategories",
+                    ActionName = "",
+                    ControllerName = "",
                     CurrentPage = offset,
                     PageSize = limit,
                     TotalCount = total,
@@ -41,8 +41,8 @@ public class RecipeCategoriesController(IRecipeCategoriesRepository recipeCatego
             Recipes = recipes,
             pagination = new()
             {
-                ActionName = "GetRecipeList",
-                ControllerName = "RecipeCategories",
+                ActionName = "",
+                ControllerName = "",
                 CurrentPage = offset,
                 PageSize = limit,
                 TotalCount = total,

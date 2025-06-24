@@ -48,9 +48,9 @@
                         <div class="flex-grow-1"></div>
 
                         <!-- 搜索框 -->
-                        <form class="ai-search" action="/action_page.php">
+                        <form class="ai-search" asp-action="Index" asp-controller="Search" method="get">
                             <div class="input-group">
-                                <input type="text" class="form-control" placeholder="Search">
+                                <input type="text" class="form-control" placeholder="Search" name="searchQuery">
                                 <div class="input-group-btn submit-box">
                                     <button class="btn btn-default" type="submit">
                                         <i class="bi bi-search"></i>

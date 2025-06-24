@@ -1,5 +1,4 @@
 ﻿using AI.DeliciousFood.Core.Common.Common;
-using AI.DeliciousFood.Core.Model;
 
 namespace AI.DeliciousFood.Core.Common.Model.RecipeCategories;
 

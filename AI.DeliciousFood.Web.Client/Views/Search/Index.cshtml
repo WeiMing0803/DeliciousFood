@@ -1,0 +1,32 @@
+﻿@using AI.DeliciousFood.Core.Common.Model.RecipeCategories
+@model RecipeListViewModel
+
+@{
+    ViewBag.Title = "菜谱搜索";
+    string searchQuery = ViewBag.SearchQuery;
+}
+
+
+<h5 style="color: rgb(0,123,255)"><strong>## @searchQuery ##</strong></h5>
+<div class="flex-grow-1" id="recipe-content">
+    <!-- 这里加载菜单列表 -->
+    @await Html.PartialAsync("_SearchRecipeList", Model)
+</div>
+
+@section Scripts {
+    <script>
+        $(function() {
+            $('#recipe-content').on('click', '.page-link-btn', function(e){
+                e.preventDefault();
+                var page = $(this).data('page');
+                loadRecipes('@searchQuery'|| null, page);
+            });
+
+            function loadRecipes(searchQuery, page){
+                $.get('@Url.Action("GetRecipeList", "Search")', {searchQuery: searchQuery, offset: page||1}, function(html){
+                    $('#recipe-content').html(html);
+                });
+            }
+        });
+    </script>
+}
