@@ -10,14 +10,7 @@ public class RecipeCategoriesController(IRecipeCategoriesRepository recipeCatego
     {
         List<RecipeCategory> categories = await recipeCategoriesRepository.GetAllCategories();
         List<RecipeModel> recipes = await recipeCategoriesRepository.GetRecipes(category, offset, limit);
-        if (recipes.Count > 0)
-        {
-            var oneRecipe = recipes[0];
-            var hundredRecipes = Enumerable.Repeat(oneRecipe, 12).ToList();
-            recipes = hundredRecipes;
-        }
         int total = await recipeCategoriesRepository.GetRecipesCount(category);
-        total = 100;
         RecipeCategoriesIndexViewModel vm = new RecipeCategoriesIndexViewModel
         {
             Categories = categories,
@@ -42,12 +35,6 @@ public class RecipeCategoriesController(IRecipeCategoriesRepository recipeCatego
     {
         List<RecipeCategory> categories = await recipeCategoriesRepository.GetAllCategories();
         List<RecipeModel> recipes = await recipeCategoriesRepository.GetRecipes(category, offset, limit);
-        if (recipes.Count > 0)
-        {
-            var oneRecipe = recipes[0];
-            var hundredRecipes = Enumerable.Repeat(oneRecipe, 12).ToList();
-            recipes = hundredRecipes;
-        }
         int total = await recipeCategoriesRepository.GetRecipesCount(category);
         RecipeListViewModel RecipeList = new()
         {

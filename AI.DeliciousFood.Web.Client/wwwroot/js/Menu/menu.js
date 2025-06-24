@@ -145,6 +145,7 @@ function handleMenuSubmit(event, isDraft) {
         NeedsTime: $('#timeOutput').val(),
         Taste: $('#taste').val(),
         CookingCraft: $('#cookingCraft').val(),
+        RecipeCategories: $('#RecipeCategories').val(),
         KitchenUtensils: $('#kitchenUtensils').val(),
         Tips: $('#tips').val(),
         Steps: html,
@@ -214,6 +215,7 @@ function validateMenuData(menu) {
         { condition: !menu.Description, message: "请输入菜品描述" },
         { condition: !menu.Taste, message: "请选择口味" },
         { condition: !menu.CookingCraft, message: "请选择烹饪工艺" },
+        { condition: !menu.RecipeCategories, message: "请选择菜谱类别" },
         { condition: !menu.KitchenUtensils || menu.KitchenUtensils.length === 0, message: "请选择使用厨具" },
         {
             condition: !menu.IngredientsDetails ||

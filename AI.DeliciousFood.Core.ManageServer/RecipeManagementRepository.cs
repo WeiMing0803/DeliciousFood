@@ -104,6 +104,10 @@ public class RecipeManagementRepository(FoodDbContext dbContext) : IRecipeManage
                 Where(c => c.Guid == u.recipese.CookingCraft)
                 .Select(c => c.Name)
                 .FirstOrDefault(),
+             Categories = dbContext.RecipeCategories
+                .Where(c => c.Guid == u.recipese.Categories)
+                .Select(c => c.Name)
+                .FirstOrDefault(),
              UseKitchenUtensils = u.recipese.UseKitchenUtensils,
              Practice = u.recipese.Practice,
              Tips = u.recipese.Tips,

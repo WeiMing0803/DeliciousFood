@@ -42,7 +42,7 @@ public class RecipeCategoriesRepository(FoodDbContext foodDbContext, IMemoryCach
         List<RecipeModel> result = await foodDbContext.Recipes
             .Include(r => r.RecipeStatus)
             .AsNoTracking()
-            .Where(r => (string.IsNullOrEmpty(category) || 1 == 1) &&
+            .Where(r => (string.IsNullOrEmpty(category) || r.Categories.ToString() == category) &&
                    r.RecipeStatus.Status == StatusEnum.Approved)
             .OrderByDescending(r => r.CreateTime)
             .Skip(offset - 1)
@@ -63,7 +63,7 @@ public class RecipeCategoriesRepository(FoodDbContext foodDbContext, IMemoryCach
     {
         int count = await foodDbContext.Recipes
             .AsNoTracking()
-            .Where(r => (string.IsNullOrEmpty(category) || 1 == 1) &&
+            .Where(r => (string.IsNullOrEmpty(category) || r.Categories.ToString() == category) &&
                    r.RecipeStatus.Status == StatusEnum.Approved)
             .CountAsync(cancellationToken);
         return count;

@@ -14,6 +14,7 @@ public interface IMenuRepository
     Task SaveRecipeAsync(MenuDataModel menuData, UserInfo user, CancellationToken cancellationToken = default);
 
     List<SelectListItem> GetBaseCategory(string baseCategoryName);
+    List<SelectListItem> GetRecipeCategories();
 }
 
 
@@ -90,6 +91,7 @@ public class MenuRepository(GenericRepository<FoodDbContext> dbContext, FoodDbCo
         recipe.TasksTime = menuData.NeedsTime;
         recipe.Flavors = menuData.Taste;
         recipe.CookingCraft = menuData.CookingCraft;
+        recipe.Categories = menuData.RecipeCategories;
         recipe.UseKitchenUtensils = string.Join(',', menuData.KitchenUtensils);
         recipe.Ingredients = JsonConvert.SerializeObject(menuData.IngredientsDetails);
         recipe.Practice = menuData.Steps;
@@ -194,6 +196,24 @@ public class MenuRepository(GenericRepository<FoodDbContext> dbContext, FoodDbCo
                 Group = new SelectListGroup
                 {
                     Name = x.Type
+                }
+            })
+            .ToList();
+
+        return selectListItems;
+    }
+
+    public List<SelectListItem> GetRecipeCategories()
+    {
+        List<SelectListItem> selectListItems = foodDbContext.RecipeCategories
+            .AsNoTracking()
+            .Select(x => new SelectListItem
+            {
+                Value = x.Guid.ToString(),
+                Text = x.Name,
+                Group = new SelectListGroup
+                {
+                    Name = x.Category
                 }
             })
             .ToList();

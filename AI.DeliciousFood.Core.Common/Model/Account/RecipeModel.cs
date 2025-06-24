@@ -10,6 +10,7 @@ public class RecipeModel
     public required string TasksTime { get; set; }
     public string? Flavors { get; set; }
     public string? CookingCraft { get; set; }
+    public string? Categories { get; set; }
     public required string UseKitchenUtensils { get; set; }
     public required string Practice { get; set; }
     public required string Tips { get; set; }

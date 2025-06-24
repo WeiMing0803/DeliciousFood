@@ -1,8 +1,9 @@
 ﻿@{
     ViewData["Title"] = "发布菜谱";     
-    var cookingTechniques = ViewBag.CookingTechniques;
-    var flavorsList = ViewBag.FlavorsList;
+    List<SelectListItem> cookingTechniques = ViewBag.CookingTechniques;
+    List<SelectListItem> flavorsList = ViewBag.FlavorsList;
     string[] kitchenToolsList = ViewBag.KitchenToolsList;
+    List<SelectListItem> recipeCategories = ViewBag.RecipeCategories;
 }
 
 @section Styles {
@@ -78,6 +79,15 @@
                             <label for="needsTimeRange" class="form-label ai-textbold">需要时间（分钟）</label>
                             <input id="needsTimeRange" type="range" min="0" max="1440" step="5" value="0" class="form-range" oninput="timeOutput.value=this.value">
                             <output id="timeOutput">0</output> 分钟
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="form-group">
+                                <label for="taste" class="form-label ai-textbold">菜谱类别</label>
+                            </div>
+                            <div class="form-group">
+                                @Html.DropDownList("RecipeCategories", new SelectList(recipeCategories, "Value", "Text", null, "Group.Name"), "没有选中任何项", new { id = "taste", @class = "form-control selectpicker" })
+                            </div>
                         </div>
 
                         <div class="col-md-4">

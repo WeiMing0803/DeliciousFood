@@ -60,6 +60,11 @@ namespace AI.DeliciousFood.Core.Model
         public Guid? CookingCraft { get; set; }
 
         /// <summary>
+        /// 菜谱分类
+        /// </summary>
+        public Guid? Categories { get; set; }
+
+        /// <summary>
         /// 使用厨具
         /// </summary>
         public string UseKitchenUtensils { get; set; }

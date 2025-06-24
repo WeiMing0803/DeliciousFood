@@ -12,6 +12,7 @@ public class MenuDataModel
     public string? NeedsTime { get; set; }
     public Guid? Taste { get; set; }
     public Guid? CookingCraft { get; set; }
+    public Guid? RecipeCategories { get; set; }
     public string[] KitchenUtensils { get; set; }
     public string? Tips { get; set; }
     public string? Steps { get; set; }
