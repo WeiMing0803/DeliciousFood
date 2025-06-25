@@ -32,6 +32,7 @@ public class EditRecipeViewModel
     public required string TasksTime { get; set; }
     public Guid? Flavors { get; set; }
     public Guid? CookingCraft { get; set; }
+    public Guid? Categories { get; set; }
     public required string UseKitchenUtensils { get; set; }
     public required string Practice { get; set; }
     public required string Tips { get; set; }

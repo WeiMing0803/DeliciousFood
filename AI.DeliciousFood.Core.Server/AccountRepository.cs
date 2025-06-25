@@ -166,6 +166,7 @@ public class AccountRepository(GenericRepository<FoodDbContext> dbContextBase, F
             TasksTime = u.recipese.TasksTime,
             Flavors = u.recipese.Flavors,
             CookingCraft = u.recipese.CookingCraft,
+            Categories = u.recipese.Categories,
             UseKitchenUtensils = u.recipese.UseKitchenUtensils,
             Practice = u.recipese.Practice,
             Tips = u.recipese.Tips,

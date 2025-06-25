@@ -1,3 +1,4 @@
+var currentValue = 2;
 var uploadedFiles = [];     // 新上传[本次上传但未入库]
 var deletedInitialFiles = [];   // 记录被删的“初始图片”文件名
 var html;
@@ -206,7 +207,8 @@ $(document).on('click', '.icon', function (e) {
     }
     if (currentId === 'ai-add') {
         var current_page_div = $(this).parents('.row').eq(1).attr('id');
-        $('#' + current_page_div).after(`<div class="row mb-1 ai-ingredientsDetails"><div class="col-md-6"><input type="text" class="form-control" placeholder="食材名称"></div><div class="col-md-2"><input type="text" class="form-control" placeholder="用量"></div><div class="col-md-2"><div class="row"><div class="col-md-2"><svg t="1697177914495" class="icon" id="ai-reduce" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="15671" width="32" height="32"><path d="M960.031235 159.921913v703.656418c0 52.974134-42.979014 95.953148-95.953148 95.953148h-703.656418c-52.974134 0-95.953148-42.979014-95.953148-95.953148v-703.656418c0-52.974134 42.979014-95.953148 95.953148-95.953148h703.656418c52.974134 0 95.953148 42.979014 95.953148 95.953148z m-831.593949-159.921913C57.771791 0 0.499756 57.272035 0.499756 127.937531v767.625183c0 70.665495 57.272035 127.937531 127.93753 127.93753h767.625183c70.665495 0 127.937531-57.272035 127.937531-127.93753v-767.625183c0-70.665495-57.272035-127.937531-127.937531-127.937531h-767.625183z" p-id="15672" fill="#d81e06"></path><path d="M799.609566 544.234261H223.890678c-17.691362 0-31.984383-14.293021-31.984382-31.984383s14.293021-31.984383 31.984382-31.984383h575.718888c17.691362 0 31.984383 14.293021 31.984382 31.984383s-14.293021 31.984383-31.984382 31.984383z" p-id="15673" fill="#d81e06"></path></svg></div><div class="col-md-2"><svg t="1697178067934" class="icon" id="ai-add" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="18351" width="32" height="32"><path d="M960.031235 159.921913v703.656418c0 52.974134-42.979014 95.953148-95.953148 95.953148h-703.656418c-52.974134 0-95.953148-42.979014-95.953148-95.953148v-703.656418c0-52.974134 42.979014-95.953148 95.953148-95.953148h703.656418c52.974134 0 95.953148 42.979014 95.953148 95.953148z m-831.593949-159.921913C57.771791 0 0.499756 57.272035 0.499756 127.937531v767.625183c0 70.665495 57.272035 127.937531 127.93753 127.93753h767.625183c70.665495 0 127.937531-57.272035 127.937531-127.93753v-767.625183c0-70.665495-57.272035-127.937531-127.937531-127.937531h-767.625183z" p-id="18352" fill="#3b7bff"></path><path d="M831.593948 513.149439c-0.499756 17.391508-15.192582 31.084822-32.684041 31.084822H559.726696c-8.795705 0-15.992191 7.196486-15.992191 15.992191v239.183211c0 17.391508-13.693314 32.184285-31.084822 32.684041-18.091166 0.499756-32.883943-13.993167-32.883944-31.984382V560.226452c0-8.795705-7.196486-15.992191-15.992191-15.992191H224.590337c-17.391508 0-32.184285-13.693314-32.684041-31.084822-0.499756-18.091166 13.993167-32.883943 31.984382-32.883944h239.88287c8.795705 0 15.992191-7.196486 15.992191-15.992191V225.090093c0-17.391508 13.693314-32.184285 31.084822-32.684041 18.091166-0.499756 32.883943 13.993167 32.883944 31.984382v239.88287c0 8.795705 7.196486 15.992191 15.992191 15.992191h239.88287c17.991215 0 32.484139 14.792777 31.984382 32.883944z" p-id="18353" fill="#3b7bff"></path></svg></div></div></div></div>`);
+        $('#' + current_page_div).after(`<div class="row mb-1 ai-ingredientsDetails" id="box_${currentValue}"><div class="col-md-6"><input type="text" class="form-control" placeholder="食材名称"/></div><div class="col-md-2"><input type="text" class="form-control" placeholder="用量"/></div><div class="col-md-2"><div class="row"><div class="col-md-2"><svg t="1697177914495" class="icon" id="ai-reduce" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="15671" width="32" height="32"><path d="M960.031235 159.921913v703.656418c0 52.974134-42.979014 95.953148-95.953148 95.953148h-703.656418c-52.974134 0-95.953148-42.979014-95.953148-95.953148v-703.656418c0-52.974134 42.979014-95.953148 95.953148-95.953148h703.656418c52.974134 0 95.953148 42.979014 95.953148 95.953148z m-831.593949-159.921913C57.771791 0 0.499756 57.272035 0.499756 127.937531v767.625183c0 70.665495 57.272035 127.937531 127.93753 127.93753h767.625183c70.665495 0 127.937531-57.272035 127.937531-127.93753v-767.625183c0-70.665495-57.272035-127.937531-127.937531-127.937531h-767.625183z" p-id="15672" fill="#d81e06"></path><path d="M799.609566 544.234261H223.890678c-17.691362 0-31.984383-14.293021-31.984382-31.984383s14.293021-31.984383 31.984382-31.984383h575.718888c17.691362 0 31.984383 14.293021 31.984382 31.984383s-14.293021 31.984383-31.984382 31.984383z" p-id="15673" fill="#d81e06"></path></svg></div><div class="col-md-2"><svg t="1697178067934" class="icon" id="ai-add" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="18351" width="32" height="32"><path d="M960.031235 159.921913v703.656418c0 52.974134-42.979014 95.953148-95.953148 95.953148h-703.656418c-52.974134 0-95.953148-42.979014-95.953148-95.953148v-703.656418c0-52.974134 42.979014-95.953148 95.953148-95.953148h703.656418c52.974134 0 95.953148 42.979014 95.953148 95.953148z m-831.593949-159.921913C57.771791 0 0.499756 57.272035 0.499756 127.937531v767.625183c0 70.665495 57.272035 127.937531 127.93753 127.93753h767.625183c70.665495 0 127.937531-57.272035 127.937531-127.93753v-767.625183c0-70.665495-57.272035-127.937531-127.937531-127.937531h-767.625183z" p-id="18352" fill="#3b7bff"></path><path d="M831.593948 513.149439c-0.499756 17.391508-15.192582 31.084822-32.684041 31.084822H559.726696c-8.795705 0-15.992191 7.196486-15.992191 15.992191v239.183211c0 17.391508-13.693314 32.184285-31.084822 32.684041-18.091166 0.499756-32.883943-13.993167-32.883944-31.984382V560.226452c0-8.795705-7.196486-15.992191-15.992191-15.992191H224.590337c-17.391508 0-32.184285-13.693314-32.684041-31.084822-0.499756-18.091166 13.993167-32.883943 31.984382-32.883944h239.88287c8.795705 0 15.992191-7.196486 15.992191-15.992191V225.090093c0-17.391508 13.693314-32.184285 31.084822-32.684041 18.091166-0.499756 32.883943 13.993167 32.883944 31.984382v239.88287c0 8.795705 7.196486 15.992191 15.992191 15.992191h239.88287c17.991215 0 32.484139 14.792777 31.984382 32.883944z" p-id="18353" fill="#3b7bff"></path></svg></div></div></div></div>`);
+        currentValue++;
     } else if (currentId === 'ai-reduce') {
         $(this).parents('.row').eq(1).remove();
     }
@@ -227,6 +229,22 @@ $('#saveDraft').on('click', function (event) {
 function handleMenuSubmit(event, isDraft) {
     event.preventDefault(); // 阻止表单默认提交行为
 
+    // 当前“未被删除的初始图片”集合（文件名），用于校验
+    const retainedInitialFileNames = getCurrentInitialFiles();
+    // 对应结构补全，用于校验
+    const retainedFiles = initialPreviewConfig
+        .filter(item => retainedInitialFileNames.includes(item.key))
+        .map(item => ({
+            fileName: item.key,
+            isInitial: true,
+            previewUrl: item.url
+        }));
+    // 合并成现在页面存在的全部图片，仅用于校验
+    const allFilesForValidate = [
+        ...retainedFiles,
+        ...uploadedFiles
+    ];
+
     var menuData = {
         IsDraft: isDraft,
         RecipeGuid: $('#recipeGuid').val(),
@@ -234,9 +252,9 @@ function handleMenuSubmit(event, isDraft) {
         Description: $('#description').val(),
         ProductionDifficulty: $('.radio-group input[name="productionDifficulty"]:checked').next('label').text(),
         NeedsTime: $('#timeOutput').val(),
-        Taste: $('#taste').val(),
-        CookingCraft: $('#cookingCraft').val(),
-        RecipeCategories: $('#RecipeCategories').val(),
+        Taste: $('#taste').val() || null,
+        CookingCraft: $('#cookingCraft').val() || null,
+        RecipeCategories: $('#recipeCategories').val() || null,
         KitchenUtensils: $('#kitchenUtensils').val(),
         Tips: $('#tips').val(),
         Steps: html,
@@ -251,7 +269,7 @@ function handleMenuSubmit(event, isDraft) {
             var errorMessage = `<ul><li>请输入菜谱名称</li></ul>`
         }            
     } else {
-        var errorMessage = validateMenuData(menuData);
+        var errorMessage = validateMenuData(menuData, allFilesForValidate.length);
     }
 
     if (errorMessage) {
@@ -299,10 +317,10 @@ $(document).on('click', '#recipeName, #description, #taste, #cookingCraft, #kitc
     $(this).css('border-color', '');
 });
 
-function validateMenuData(menu) {
+function validateMenuData(menu, currentPicCount) {
     const checks = [
         { condition: !menu.RecipeName, message: "请输入菜谱名称" },
-        { condition: menu.Files == null || menu.Files.length === 0, message: "请上传图片" },
+        { condition: !currentPicCount || currentPicCount === 0, message: "请上传图片" },
         { condition: !menu.Description, message: "请输入菜品描述" },
         { condition: !menu.Taste, message: "请选择口味" },
         { condition: !menu.CookingCraft, message: "请选择烹饪工艺" },

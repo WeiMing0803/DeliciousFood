@@ -72,6 +72,7 @@ public partial class AccountController(IAlipayRepository alipayRepository, IAcco
         ViewBag.CookingTechniques = menuRepository.GetBaseCategory("口味");
         ViewBag.FlavorsList = menuRepository.GetBaseCategory("烹饪工艺");
         ViewBag.KitchenToolsList = globalConfig.KitchenToolsList;
+        ViewBag.RecipeCategories = menuRepository.GetRecipeCategories();
 
         EditRecipeViewModel recipe = await accountRepository.GetRecipeForEditAsync(recipeGuid);
         return View(recipe);

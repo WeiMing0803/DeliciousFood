@@ -2,9 +2,10 @@
 @model EditRecipeViewModel
 @{
     ViewData["Title"] = "编辑菜谱";
-    var cookingTechniques = ViewBag.CookingTechniques;
-    var flavorsList = ViewBag.FlavorsList;
+    List<SelectListItem> cookingTechniques = ViewBag.CookingTechniques;
+    List<SelectListItem> flavorsList = ViewBag.FlavorsList;
     string[] kitchenToolsList = ViewBag.KitchenToolsList;
+    List<SelectListItem> recipeCategories = ViewBag.RecipeCategories;
 }
 
 @section Styles {
@@ -105,6 +106,15 @@
                             <output id="timeOutput">@Model.TasksTime</output> 分钟
                         </div>
 
+                        <div class="mb-3">
+                            <div class="form-group">
+                                <label for="taste" class="form-label ai-textbold">菜谱类别</label>
+                            </div>
+                            <div class="form-group">
+                                @Html.DropDownList("RecipeCategories", new SelectList(recipeCategories, "Value", "Text", Model.Categories, "Group.Name"), "没有选中任何项", new { id = "recipeCategories", @class = "form-control selectpicker" })
+                            </div>
+                        </div>
+
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="taste" class="form-label ai-textbold">口味</label>
@@ -133,7 +143,7 @@
                             <label for="ingredientsDetails" class="mb-2 ai-textbold">食材明细</label>
                             @for (int i = 0; i < Model.Ingredients.Count(); i++)
                             {
-                                <div class="row mb-1 ai-ingredientsDetails">
+                                <div class="row mb-1 ai-ingredientsDetails" id="box_@(i+1)">
                                     <div class="col-md-6">
                                         <input type="text" class="form-control" placeholder="食材名称" value=@Model.Ingredients[i].Name>
                                     </div>
