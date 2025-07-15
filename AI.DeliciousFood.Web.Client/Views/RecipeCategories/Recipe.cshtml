@@ -1,0 +1,277 @@
+﻿@using AI.DeliciousFood.Core.Common.Model.Account
+@model RecipeModel
+@{
+    ViewBag.Title = "菜谱详情";
+    string[] photo = @Model.FileNames.Split(',', StringSplitOptions.RemoveEmptyEntries);
+}
+
+<style>
+    body {
+        background: #f7f8fb;
+    }
+
+    .detail-page-main {
+        max-width: 740px;
+        margin: 28px auto 0 auto;
+        padding: 30px 40px 40px 40px;
+        background: #fff;
+        border-radius: 20px;
+        box-shadow: 0 10px 36px 0 rgba(52,79,134,0.09), 0 1.5px 4px #edf3ff;
+        transition: box-shadow .2s;
+        position: relative;
+    }
+
+    .detail-title {
+        font-size: 34px;
+        font-weight: bold;
+        color: #293a5b;
+        text-align: center;
+        letter-spacing: 2px;
+        margin-bottom: 18px;
+        margin-top: 0;
+        position: relative;
+    }
+
+        .detail-title::after {
+            content: "";
+            display: block;
+            width: 54px;
+            height: 4px;
+            border-radius: 2px;
+            background: linear-gradient(90deg, #42CBA5 0%, #5a82fa 100%);
+            margin: 12px auto 0 auto;
+        }
+
+    .detail-section-title {
+        margin-top: 38px;
+        margin-bottom: 8px;
+        font-size: 21px;
+        font-weight: 700;
+        color: #295da1;
+        display: flex;
+        align-items: center;
+        letter-spacing: 1px;
+        gap: 10px;
+    }
+
+        .detail-section-title:before {
+            content: "🍽️";
+            font-size: 1.15em;
+            margin-right: 4px;
+            opacity: .74;
+        }
+
+        .detail-section-title.tips:before {
+            content: "💡";
+            color: #eec504;
+        }
+
+        .detail-section-title.steps:before {
+            content: "📝";
+            color: #68bbff;
+        }
+
+    .detail-description {
+        color: #526075;
+        font-size: 16px;
+        line-height: 2;
+        background: #f9fbfd;
+        margin-bottom: 15px;
+        text-align: center;
+        border-radius: 12px;
+        padding: 13px 3px 9px 3px;
+        border-left: 5px solid #4fd6972e;
+        box-shadow: 0 2px 8px #e4f6ef4a;
+    }
+
+    .detail-info-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px 22px;
+        color: #576273;
+        font-size: 15px;
+        margin-bottom: 0.5rem;
+        justify-content: center;
+        background: #e7f2fa26;
+        padding: 10px 0;
+        border-radius: 9px;
+    }
+
+        .detail-info-list span {
+            min-width: 108px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            border-radius: 4px;
+            font-weight: 500;
+            padding: 3px 10px;
+            transition: background 0.2s;
+        }
+
+            .detail-info-list span i {
+                font-style: normal;
+                font-weight: bold;
+                opacity: .78;
+                margin-right: 4px;
+            }
+
+            .detail-info-list span:nth-child(1)::before {
+                content: "⭐";
+            }
+
+            .detail-info-list span:nth-child(2)::before {
+                content: "⏱️";
+            }
+
+            .detail-info-list span:nth-child(3)::before {
+                content: "👅";
+            }
+
+            .detail-info-list span:nth-child(4)::before {
+                content: "🔪";
+            }
+
+            .detail-info-list span:nth-child(5)::before {
+                content: "🍳";
+            }
+
+    .material-table {
+        width: 100%;
+        background: #f8fbfd;
+        border-radius: 13px;
+        box-shadow: 0 2px 8px #c9defa17;
+        padding: 18px 16px 10px 16px;
+        margin-top: 8px;
+        margin-bottom: 24px;
+        box-sizing: border-box;
+        overflow: hidden;
+    }
+
+    .material-table-header {
+        display: flex;
+        font-weight: bold;
+        margin-bottom: 14px;
+        color: #229368;
+        font-size: 16px;
+    }
+
+        .material-table-header span {
+            flex: 1;
+            text-align: center;
+        }
+
+    .material-table-row {
+        display: flex;
+        margin-bottom: 4px;
+        border-radius: 6px;
+        transition: background 0.18s;
+    }
+
+        .material-table-row:nth-child(even) {
+            background: #e9f5fa3b;
+        }
+
+        .material-table-row:hover {
+            background: #e9fde4;
+            box-shadow: 0 1px 8px #9ce5b533;
+        }
+
+    .material-table-cell {
+        flex: 1;
+        padding: 8px 0;
+        font-size: 15.6px;
+        color: #116274;
+        text-align: center;
+        border-radius: 6px;
+    }
+
+    .detail-step-box {
+        background: linear-gradient(105deg, #f2f8ff 79%, #e4fff8 100%);
+        border-radius: 11px;
+        padding: 20px 23px;
+        margin-bottom: 16px;
+        color: #425566;
+        line-height: 2;
+        border-left: 6px solid #60aaff;
+        box-shadow: 0 2px 12px #acf2ff1c;
+    }
+
+    .detail-tips-box {
+        background: #fffbe8;
+        border-radius: 11px;
+        padding: 18px 23px;
+        color: #7c5c19;
+        margin-bottom: 16px;
+        line-height: 1.85;
+        border-left: 5px solid #ffe943;
+        box-shadow: 0 2px 8px #ffe94321;
+        position: relative;
+    }
+
+    .detail-upload-time {
+        color: #7c8c97;
+        font-size: 13.5px;
+        margin-top: 30px;
+        text-align: right;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        background: #f8fafd;
+        padding: 6px 13px;
+        border-radius: 22px;
+        width: max-content;
+        margin-left: auto;
+        margin-bottom: -16px;
+        box-shadow: 0 2px 7px #c8d8ea11;
+    }
+
+        .detail-upload-time:before {
+            content: "🕓";
+            font-size: 1.08em;
+            margin-right: 4px;
+            opacity: .73;
+        }
+
+</style>
+
+<div class="detail-page-main">
+    @* <p><img src="../@Model.ImageUrl/@Model.FileNames.Split(',', StringSplitOptions.RemoveEmptyEntries)?.First()" class="detail-photo" /></p> *@
+    <div class="detail-title">@Model.RecipeName</div>
+
+    <div class="detail-section-title">描述</div>
+    <div class="detail-description">@Model.RecipeDescription</div>
+
+    <div class="detail-info-list">
+        <span>难度：@Model.RoductionDifficulty</span>
+        <span>用时：@Model.TasksTime</span>
+        <span>口味：@Model.Flavors</span>
+        <span>工艺：@Model.CookingCraft</span>
+        <span>厨具：@Model.UseKitchenUtensils</span>
+    </div>
+
+    <div class="detail-section-title">“@Model.RecipeName”的用料</div>
+    <div class="material-table">
+        <div class="material-table-header">
+            <span>食材</span>
+            <span>用量</span>
+        </div>
+        @foreach (var items in Model.Ingredients ?? Enumerable.Empty<Ingredients>())
+        {
+            <div class="material-table-row">
+                <div class="material-table-cell">@items.Name</div>
+                <div class="material-table-cell">@items.Quantity</div>
+            </div>
+        }
+    </div>
+
+    <div class="detail-section-title steps">“@Model.RecipeName”的做法</div>
+    <div class="detail-step-box">@Html.Raw(Model.Practice)</div>
+
+    @if (!string.IsNullOrWhiteSpace(Model.Tips))
+    {
+        <div class="detail-section-title tips">小贴士</div>
+        <div class="detail-tips-box">@Model.Tips</div>
+    }
+
+    <div class="detail-upload-time">上传时间: @Model.UpdateTime</div>
+</div>

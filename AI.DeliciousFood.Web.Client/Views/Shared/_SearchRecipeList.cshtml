@@ -7,13 +7,15 @@
             @foreach (var r in Model.Recipes)
             {
                 <div class="col">
-                    <div class="card h-100">
-                        <img src="@r.ImageUrl" class="card-img-top" style="height:170px;object-fit:cover;">
-                        <div class="card-body">
-                            <div class="card-title">@r.Name</div>
-                            <p class="card-text">@r.Description</p>
+                    <a asp-controller="RecipeCategories" asp-action="GetRecipe" asp-route-recipeGuid="@r.Id">
+                        <div class="card h-100">
+                            <img src="@r.ImageUrl" class="card-img-top" style="height:170px;object-fit:cover;">
+                            <div class="card-body">
+                                <div class="card-title">@r.Name</div>
+                                <p class="card-text">@r.Description</p>
+                            </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
             }
         </div>

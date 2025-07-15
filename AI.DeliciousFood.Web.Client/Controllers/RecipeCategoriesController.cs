@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AI.DeliciousFood.Web.Client.Controllers;
 
-public class RecipeCategoriesController(IRecipeCategoriesRepository recipeCategoriesRepository) : Controller
+public class RecipeCategoriesController(IRecipeCategoriesRepository recipeCategoriesRepository, IAccountRepository accountRepository) : Controller
 {
     public async Task<IActionResult> Index(string category = null, int offset = 1, int limit = 12)
     {
@@ -50,5 +50,12 @@ public class RecipeCategoriesController(IRecipeCategoriesRepository recipeCatego
             }
         };
         return PartialView("_RecipeList", RecipeList);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetRecipe(Guid recipeGuid)
+    {
+        Core.Common.Model.Account.RecipeModel recipe = await accountRepository.GetRecipeAsync(recipeGuid);
+        return View("Recipe", recipe);
     }
 }

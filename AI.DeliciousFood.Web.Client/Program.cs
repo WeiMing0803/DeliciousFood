@@ -82,9 +82,11 @@ app.UseSerilogRequestLogging();
 app.UseStaticFiles();
 
 //配置根目录下的 Images 文件夹为静态资源，提供给Manage项目使用
+string imagesPath = Path.Combine(app.Environment.ContentRootPath, "Images");
+Directory.CreateDirectory(imagesPath);
 app.UseStaticFiles(new StaticFileOptions
 {
-    FileProvider = new PhysicalFileProvider(Path.Combine(app.Environment.ContentRootPath, "Images")),
+    FileProvider = new PhysicalFileProvider(imagesPath),
     RequestPath = "/Images"
 });
 
