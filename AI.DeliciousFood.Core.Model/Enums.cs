@@ -19,3 +19,11 @@ public enum StatusEnum
     [Description("审核未通过")]
     NotApproved = 4
 }
+
+public enum RecommendType
+{
+    [Description("热榜推荐")]
+    HotList = 1,
+    [Description("每月推荐")]
+    Monthly = 2
+}
