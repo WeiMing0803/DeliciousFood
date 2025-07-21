@@ -7,7 +7,7 @@
 }
 
 @section Styles {
-    <link href="~/css/recipecategories/index.css" rel="stylesheet" />
+    <link href="~/css/RecipeCategories/index.css" rel="stylesheet" asp-append-version="false" />
 }
 
 <div class="container mt-4">
@@ -44,30 +44,5 @@
 </div>
 
 @section Scripts {
-    <script>
-        $(function() {
-            $('#category-list').on('click', '.category-link', function(e){
-                e.preventDefault();
-                $('#category-list .category-link').removeClass('active');
-                $(this).addClass('active');
-                var cid = $(this).data('id');
-                loadRecipes(cid || null, 1);
-            });
-            $('#recipe-content').on('click', '.page-link-btn', function(e){
-                e.preventDefault();
-                var page = $(this).data('page');
-                var cid = $('#category-list .category-link.active').data('id');
-                loadRecipes(cid || null, page);
-            });
-
-            function loadRecipes(category, page){
-                $('#recipe-content').html('<div class="text-secondary text-center p-5">加载中...</div>');
-                $.get('@Url.Action("GetRecipeList", "RecipeCategories")', {category: category, offset: page||1}, function(html){
-                    $('#recipe-content').html(html);
-                });
-            }
-            // 默认页不点击，已显示全部；如果要默认高亮“全部”：
-            $('#category-list .category-link').first().addClass('active');
-        });
-    </script>
+    <script src="~/js/RecipeCategories/index.js" asp-append-version="false"></script>
 }

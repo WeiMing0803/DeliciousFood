@@ -31,6 +31,7 @@ public class RecipeCategoriesController(IRecipeCategoriesRepository recipeCatego
         return View(vm);
     }
 
+    [HttpGet]
     public async Task<IActionResult> GetRecipeList(string category = null, int offset = 1, int limit = 12)
     {
         List<RecipeCategory> categories = await recipeCategoriesRepository.GetAllCategories();

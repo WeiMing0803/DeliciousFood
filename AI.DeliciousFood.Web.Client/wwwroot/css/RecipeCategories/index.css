@@ -83,6 +83,15 @@
     font-weight: bold;
 }
 
+.card-text {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-height: 4.8em;
+}
+
 .card-subtitle {
     font-size: .97rem;
     margin-top: 4px;

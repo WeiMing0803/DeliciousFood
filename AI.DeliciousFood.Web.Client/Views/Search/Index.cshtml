@@ -6,6 +6,24 @@
     string searchQuery = ViewBag.SearchQuery;
 }
 
+@section Styles{
+    <style>
+        .card-title {
+            font-size: 1.13rem;
+            color: #49515a;
+            font-family: "Microsoft YaHei",微软雅黑,sans-serif;
+            font-weight: bold;
+        }
+        .card-text {
+            display: -webkit-box;
+            -webkit-line-clamp: 5;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            min-height: 4.8em;
+        }
+    </style>
+}
 
 <h5 style="color: rgb(0,123,255)"><strong>## @searchQuery ##</strong></h5>
 <div class="flex-grow-1" id="recipe-content">
