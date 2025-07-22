@@ -56,7 +56,7 @@ const icon = {
 const table = {
     classes: 'table table-bordered table-hover table-striped lyear-table',
     // 请求地址
-    url: '/RecipeManagement/GetRecipeList',
+    url: '/FrontPageManagement/GetRecommendedRecipeList',
     // 唯一ID字段
     uniqueId: 'id',
     // 每行的唯一标识字段
@@ -105,7 +105,7 @@ const columns = [{
     width: 5,
     widthUnit: 'rem'
 }, {
-    field: 'recipeGuid',
+    field: 'guid',
     title: '编号',
     align: 'center',
     sortable: true,
@@ -124,17 +124,17 @@ const columns = [{
     align: 'center',
     title: '作者',
 }, {
-    field: 'createTime',
+    field: 'startTime',
     align: 'center',
-    title: '创建时间'
+    title: '开始时间'
 }, {
-    field: 'updateTime',
+    field: 'endTime',
     align: 'center',
-    title: '提交时间'
+    title: '结束时间'
 }, {
-    field: 'recipeStatus',
+    field: 'type',
     align: 'center',
-    title: '状态',
+    title: '类型',
     formatter: function (value, row, index) {
         return `<span class="badge bg-success">${value}</span>`;
     }
@@ -159,13 +159,9 @@ $('table').bootstrapTable({
     ...table,
     // 自定义的查询参数
     queryParams: function (params) {
-        const recipeName = $('input[name="recipeName"]').val();
-        const username = $('select[name="username"]').val();
-        const recipeStatus = $('select[name="recipeStatus"]').val();
+        const recommendType = $('select[name="recommendType"]').val();
         return {
-            recipeName: recipeName,
-            username: username,
-            recipeStatus: recipeStatus,
+            type: recommendType,
             // 每页数据量
             limit: params.limit,
             // sql语句起始索引

@@ -48,6 +48,7 @@ builder.Services.AddSingleton<GlobalConfig>();
 builder.Services.AddScoped(typeof(GenericRepository<>));
 builder.Services.AddScoped<IUserManagementRepository, UserManagementRepository>();
 builder.Services.AddScoped<IRecipeManagementRepository, RecipeManagementRepository>();
+builder.Services.AddScoped<IFrontPageManagementRepository, FrontPageManagementRepository>();
 
 builder.Services.ConfigureApplicationCookie(options =>
 {

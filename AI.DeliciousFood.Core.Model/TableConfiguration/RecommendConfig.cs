@@ -15,6 +15,11 @@ namespace AI.DeliciousFood.Core.Model.TableConfiguration
             builder.Property(b => b.EndTime).HasColumnType("datetime").IsRequired(false);
             builder.Property(b => b.Type).HasColumnType("varchar(20)").IsRequired();
             builder.Property(b => b.IsActive).HasColumnType("bit").IsRequired();
+
+            builder.HasOne(b => b.Recipe)
+                .WithOne()
+                .HasForeignKey<Recommend>(b => b.RecipeGuid)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

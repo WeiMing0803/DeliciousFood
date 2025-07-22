@@ -33,4 +33,6 @@ public class Recommend
     /// 是否推荐
     /// </summary>
     public bool IsActive { get; set; }
+
+    public Recipe Recipe { get; set; } = null!;
 }
