@@ -56,7 +56,7 @@ const icon = {
 const table = {
     classes: 'table table-bordered table-hover table-striped lyear-table',
     // 请求地址
-    url: '/FrontPageManagement/GetRecommendedRecipeList',
+    url: '/RecipeManagement/GetRecipeList',
     // 唯一ID字段
     uniqueId: 'id',
     // 每行的唯一标识字段
@@ -105,7 +105,7 @@ const columns = [{
     width: 5,
     widthUnit: 'rem'
 }, {
-    field: 'guid',
+    field: 'recipeGuid',
     title: '编号',
     align: 'center',
     sortable: true,
@@ -124,17 +124,17 @@ const columns = [{
     align: 'center',
     title: '作者',
 }, {
-    field: 'startTime',
+    field: 'createTime',
     align: 'center',
-    title: '开始时间'
+    title: '创建时间'
 }, {
-    field: 'endTime',
+    field: 'updateTime',
     align: 'center',
-    title: '结束时间'
+    title: '提交时间'
 }, {
-    field: 'type',
+    field: 'recipeStatus',
     align: 'center',
-    title: '类型',
+    title: '状态',
     formatter: function (value, row, index) {
         return `<span class="badge bg-success">${value}</span>`;
     }
@@ -149,19 +149,28 @@ const columns = [{
 
 // 自定义操作按钮
 function btnGroup(row) {
-    let html =
-        `<a href="#!" class="js-create-tab" data-title="${row.recipeName}" data-url="/RecipeManagement/GetRecipe?recipeGuid=${row.recipeGuid}"><i class="mdi mdi-pencil"></i></a>`;
+        let linkHtml = `<a href="#!" 
+                            class="js-open-offcanvas" 
+                            data-title="${row.recipeName}" 
+                            data-url="/RecipeManagement/GetRecipe?recipeGuid=${row.recipeGuid}">
+                            <i class="mdi mdi-eye"></i>
+                        </a>`;
+        //`<a href="#!" class="js-create-tab" data-title="${row.recipeName}" data-url="/RecipeManagement/GetRecipe?recipeGuid=${row.recipeGuid}"><i class="mdi mdi-eye"></i></a>`;
         //+ '<a href="#!" class="btn btn-sm btn-default del-btn" title="删除" data-bs-toggle="tooltip"><i class="mdi mdi-window-close"></i></a>'
-    return html;
+    return linkHtml;
 }
 
-$('#recommend-table').bootstrapTable({
+$('table').bootstrapTable({
     ...table,
     // 自定义的查询参数
     queryParams: function (params) {
-        const recommendType = $('select[name="recommendType"]').val();
+        const recipeName = $('input[name="recipeName"]').val();
+        const username = $('input[name="username"]').val();
+        const recipeStatus = null;
         return {
-            type: recommendType,
+            recipeName: recipeName,
+            username: username,
+            recipeStatus: recipeStatus,
             // 每页数据量
             limit: params.limit,
             // sql语句起始索引

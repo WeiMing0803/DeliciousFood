@@ -29,6 +29,9 @@
 <body>
     <div class="container-fluid">
 
+        @await Html.PartialAsync("~/Views/Partial/GetRecipeListModal.cshtml")
+        @await Html.PartialAsync("~/Views/Canvas/DisplayRecipeCanvas.cshtml")
+
         <div class="row">
             <div class="col-lg-12">
                 <div class="card">
@@ -59,13 +62,13 @@
                                         </div>
                                     </div>
                                     <div class="col-md-9 d-flex align-items-lg-end justify-content-end">
-                                        <button type="button" class="btn btn-success me-3" id="search-btn">新增推荐</button>
-                                        <button type="button" class="btn btn-danger" id="search-btn">批量删除</button>
+                                        <button type="button" class="btn btn-success me-3" id="recommend-btn">新增推荐</button>
+                                        <button type="button" class="btn btn-danger" id="delete-btn">批量删除</button>
                                     </div>
                                 </div>
                             </form>
 
-                            <table id="table"></table>
+                            <table id="recommend-table"></table>
 
                         </div>
                     </div>
@@ -85,9 +88,14 @@
     <script src="~/js/bootstrap-table/bootstrap-table.js" asp-append-version="true"></script>
     <script src="~/js/bootstrap-table/locale/bootstrap-table-zh-CN.min.js" asp-append-version="true"></script>
     <!--分页相关的配置-->
-    <script src="~/viewjs/frontpage/pagination.js" asp-append-version="true"></script>
+    <script type="module" src="~/viewjs/frontpage/pagination.js" asp-append-version="true"></script>
 
-    <script src="~/viewjs/frontpage/recipelist.js"></script>
+    <script src="~/viewjs/frontpage/recommendedRecipes.js" asp-append-version="true"></script>
+
+
+    <!--菜谱列表模态框分页相关的配置-->
+    <script type="module" src="~/viewjs/frontpage/partial/partialpagination.js" asp-append-version="true"></script>
+    <script src="~/viewjs/frontpage/partial/partialrecipelist.js" asp-append-version="true"></script>
 </body>
 
 </html>
