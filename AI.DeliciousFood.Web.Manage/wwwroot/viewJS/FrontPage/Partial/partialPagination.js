@@ -56,7 +56,7 @@ const icon = {
 const table = {
     classes: 'table table-bordered table-hover table-striped lyear-table',
     // 请求地址
-    url: '/RecipeManagement/GetRecipeList',
+    url: '/FrontPageManagement/GetRecipeList',
     // 唯一ID字段
     uniqueId: 'id',
     // 每行的唯一标识字段
@@ -166,7 +166,7 @@ $('table').bootstrapTable({
     queryParams: function (params) {
         const recipeName = $('input[name="recipeName"]').val();
         const username = $('input[name="username"]').val();
-        const recipeStatus = null;
+        const recipeStatus = "Approved";
         return {
             recipeName: recipeName,
             username: username,

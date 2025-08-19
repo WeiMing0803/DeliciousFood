@@ -62,7 +62,7 @@ const table = {
     // 每行的唯一标识字段
     idField: 'id',
     // 是否启用点击选中行
-    clickToSelect: true,
+    clickToSelect: false,
     // 是否显示详细视图和列表视图的切换按钮(clickToSelect同时设置为true时点击会报错)
     // showToggle: true,
     // 请求得到的数据类型
@@ -115,6 +115,10 @@ const columns = [{
     widthUnit: 'rem',
     visible: false
 }, {
+    field: 'recipeGuid',
+    align: 'center',
+    visible: false
+}, {
     field: 'recipeName',
     align: 'center',
     title: '菜谱名称',
@@ -149,10 +153,22 @@ const columns = [{
 
 // 自定义操作按钮
 function btnGroup(row) {
-    let html =
-        `<a href="#!" class="js-create-tab" data-title="${row.recipeName}" data-url="/RecipeManagement/GetRecipe?recipeGuid=${row.recipeGuid}"><i class="mdi mdi-pencil"></i></a>`;
-        //+ '<a href="#!" class="btn btn-sm btn-default del-btn" title="删除" data-bs-toggle="tooltip"><i class="mdi mdi-window-close"></i></a>'
-    return html;
+    return `
+        <div class="btn-group" role="group">
+            <button type="button" 
+                    class="btn btn-outline-primary btn-sm js-open-offcanvas"
+                    data-title="${row.recipeName}" 
+                    data-url="/RecipeManagement/GetRecipe?recipeGuid=${row.recipeGuid}">
+                <i class="mdi mdi-eye"></i> 查看
+            </button>
+            &nbsp;&nbsp;
+            <button type="button" 
+                    class="btn btn-outline-danger btn-sm js-cancel-recommend" 
+                    data-guid="${row.guid}">
+                <i class="mdi mdi-close-circle-outline"></i> 取消推荐
+            </button>
+        </div>
+    `;
 }
 
 $('#recommend-table').bootstrapTable({

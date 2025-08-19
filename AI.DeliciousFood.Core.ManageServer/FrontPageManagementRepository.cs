@@ -13,7 +13,10 @@ public interface IFrontPageManagementRepository
     Task<List<FrontPageManagementModel>> GetRecommendedRecipeList(string type, int offset, int limit, CancellationToken cancellationToken = default);
     Task<int> GetRecipeListCountAsync(string type, CancellationToken cancellationToken = default);
     Task<RecipeModel> GetRecipeAsync(Guid recipeGuid, CancellationToken cancellationToken = default);
-    Task SaveRecipeComment(SaveRecipeCommentModel recipeComment, UserInfo user, CancellationToken cancellationToken = default);
+    Task AddRecommendedRecipe(List<SaveFrontPageRecipeModel> model, CancellationToken cancellationToken = default);
+    Task CancelRecommendedRecipe(Guid guid, CancellationToken cancellationToken = default);
+    Task<List<RecipeManagementModel>> GetRecipeListAsync(string recipeName, string username, string recipeStatus, int offset, int limit, CancellationToken cancellationToken = default);
+    Task<int> GetRecipeListCountAsync(string recipeName, string username, string recipeStatus, CancellationToken cancellationToken = default);
 
 }
 
@@ -112,14 +115,92 @@ public class FrontPageManagementRepository(FoodDbContext dbContext) : IFrontPage
         return recipe;
     }
 
-    public async Task SaveRecipeComment(SaveRecipeCommentModel recipeComment, UserInfo user, CancellationToken cancellationToken)
+    public Task AddRecommendedRecipe(List<SaveFrontPageRecipeModel> models, CancellationToken cancellationToken = default)
     {
-        await dbContext.RecipeStatus
-               .Where(u => u.RecipeGuid == recipeComment.RecipeGuid)
+        DateTime now = DateTime.Now;
+        List<Recommend> recommends = new List<Recommend>(models.Count);
+
+        foreach (SaveFrontPageRecipeModel item in models)
+        {
+            recommends.Add(new Recommend
+            {
+                Guid = Guid.NewGuid(),
+                RecipeGuid = item.RecipeGuid,
+                StartTime = now,
+                EndTime = null,
+                Type = Enum.Parse<RecommendType>(item.Type),
+                IsActive = true
+            });
+        }
+
+        dbContext.Recommends.AddRange(recommends);
+        return dbContext.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task CancelRecommendedRecipe(Guid guid, CancellationToken cancellationToken = default)
+    {
+        await dbContext.Recommends
+               .Where(u => u.Guid == guid)
                .ExecuteUpdateAsync(setters => setters
-                   .SetProperty(u => u.Comment, recipeComment.Comment)
-                   .SetProperty(u => u.Status, recipeComment.Approval ? StatusEnum.Approved : StatusEnum.NotApproved)
-                   .SetProperty(u => u.UpdateTime, DateTime.Now)
-                   .SetProperty(u => u.Approver, user.UserId), cancellationToken);
+                   .SetProperty(u => u.IsActive, false)
+                   .SetProperty(u => u.EndTime, DateTime.Now), cancellationToken);
+    }
+
+    public async Task<List<RecipeManagementModel>> GetRecipeListAsync(string recipeName, string username, string recipeStatus, int offset, int limit, CancellationToken cancellationToken)
+    {
+        var query = dbContext.Recipes
+         .AsNoTracking()
+         .Join(dbContext.FoodUsers,
+               recipe => recipe.UserId,
+               user => user.Id,
+               (recipe, user) => new { recipe, user })
+         .Join(dbContext.RecipeStatus,
+               joined => joined.recipe.Guid,
+               status => status.RecipeGuid,
+               (joined, status) => new { joined.recipe, joined.user, status })
+         .Where(u =>
+             (string.IsNullOrWhiteSpace(recipeName) || u.recipe.RecipeName.Contains(recipeName)) &&
+             (string.IsNullOrWhiteSpace(username) || u.user.UserName.Contains(username)) &&
+             (string.IsNullOrWhiteSpace(recipeStatus) || u.status.Status.ToString() == recipeStatus) &&
+             // 这个条件：排除出现在 Recommends 中并且 IsActive == true 的配方
+             !dbContext.Recommends.Any(r => r.RecipeGuid == u.recipe.Guid && r.IsActive))
+         .OrderByDescending(u => u.recipe.UpdateTime);
+
+        List<RecipeManagementModel> pagedList = await query
+            .Skip(offset)
+            .Take(limit)
+            .Select(u => new RecipeManagementModel
+            {
+                RecipeGuid = u.recipe.Guid,
+                RecipeName = u.recipe.RecipeName,
+                UserName = u.user.UserName!,
+                CreateTime = u.recipe.CreateTime.ToString("yyyy-MM-dd HH:mm:ss.fff"),
+                UpdateTime = u.recipe.UpdateTime.ToString("yyyy-MM-dd HH:mm:ss.fff"),
+                RecipeStatus = u.status.Status.GetDescription()
+            })
+            .ToListAsync(cancellationToken);
+
+        return pagedList;
+    }
+
+    public async Task<int> GetRecipeListCountAsync(string recipeName, string username, string recipeStatus, CancellationToken cancellationToken)
+    {
+        var query = dbContext.Recipes
+            .Join(dbContext.FoodUsers,
+                  recipe => recipe.UserId,
+                  user => user.Id,
+                  (recipe, user) => new { recipe, user })
+            .Join(dbContext.RecipeStatus,
+                  joined => joined.recipe.Guid,
+                  status => status.RecipeGuid,
+                  (joined, status) => new { joined.recipe, joined.user, status })
+            .Where(u =>
+                (string.IsNullOrWhiteSpace(recipeName) || u.recipe.RecipeName.Contains(recipeName)) &&
+                (string.IsNullOrWhiteSpace(username) || u.user.UserName.Contains(username)) &&
+                (string.IsNullOrWhiteSpace(recipeStatus) || u.status.Status.ToString() == recipeStatus) &&
+                // 这个条件：排除出现在 Recommends 中并且 IsActive == true 的配方
+                !dbContext.Recommends.Any(r => r.RecipeGuid == u.recipe.Guid && r.IsActive));
+
+        return await query.CountAsync(cancellationToken);
     }
 }

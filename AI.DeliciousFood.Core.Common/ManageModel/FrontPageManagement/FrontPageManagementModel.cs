@@ -11,3 +11,9 @@ public class FrontPageManagementModel
     public required string Type { get; set; }
     public required bool IsActive { get; set; }
 }
+
+public class SaveFrontPageRecipeModel
+{
+    public Guid RecipeGuid { get; set; }
+    public required string Type { get; set; }
+}
