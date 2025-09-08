@@ -186,5 +186,7 @@ $('table').bootstrapTable({
     onLoadSuccess: function (data) {
         //console.log(data); // 调试输出返回的数据
         $("[data-bs-toggle='tooltip']").tooltip();
+
+        initRecommendCounter('#table', '#modalRecommendCount');
     }
 });

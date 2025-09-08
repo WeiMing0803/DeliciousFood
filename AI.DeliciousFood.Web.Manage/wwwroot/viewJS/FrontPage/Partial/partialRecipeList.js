@@ -33,8 +33,19 @@ $('#saveRecommendation').on('click', function () {
     // 获取选中行的数据
     var rows = $('#table').bootstrapTable('getSelections');
     if (rows.length === 0) {
-        alert("请先选择至少一条数据");
+        layer.msg('请先选择至少一条数据', { icon: 1, time: 1500 });
         return;
+    }
+
+    // 判断勾选的数据不能超过最大限制数量
+    var countText = $('#modalRecommendCount').text().trim(); // e.g. "3 / 8"
+    var parts = countText.split('/');
+    var currentCount = parseInt(parts[0], 10); // 左边数字
+    var maxCount = parseInt(parts[1], 10);     // 右边数字
+
+    if (currentCount > maxCount) {
+        layer.msg('推荐数量已超上限，请先取消部分已选推荐', { icon: 2, time: 2000 });
+        return; // 中断后续执行
     }
 
     var recommendType = $('select[name="recommendType"]').val();
@@ -58,12 +69,12 @@ $('#saveRecommendation').on('click', function () {
                 $('#recommend-table').bootstrapTable('refresh');
                 $('#table').bootstrapTable('refresh');
             } else {
-                alert("操作失败：" + (res.message || ""));
+                layer.msg("操作失败：" + (res.message || ""), { icon: 2, time: 1500 });
             }
         },
         error: function (err) {
             console.error(err);
-            alert("请求出错，请稍后重试");
+            layer.msg("请求出错，请稍后重试", { icon: 2, time: 1500 });
         }
     });
 

@@ -193,5 +193,33 @@ $('#recommend-table').bootstrapTable({
     onLoadSuccess: function (data) {
         //console.log(data); // 调试输出返回的数据
         $("[data-bs-toggle='tooltip']").tooltip();
+
+        updateRecommendCount(data);
     }
 });
+
+
+/**
+* 初始化推荐数量统计
+*/
+function updateRecommendCount(data) {
+    const recommendType = $('select[name="recommendType"]').val();
+    let totalConfig = 0;
+    let typeClass = '';
+
+    switch (recommendType) {
+        case "HotList":
+            totalConfig = $('#hotListTotal').val();
+            typeClass = 'hotlist';
+            break;
+        case "Monthly":
+            totalConfig = $('#monthlyTotal').val();
+            typeClass = 'monthly';
+            break;
+    }
+
+    $('#recommendCount')
+        .removeClass('hotlist monthly')
+        .addClass(typeClass)
+        .text(`${data.total} / ${totalConfig}`);
+}
