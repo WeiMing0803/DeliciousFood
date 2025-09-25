@@ -58,6 +58,7 @@ builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<IEmailRepository, EmailRepository>();
 builder.Services.AddScoped<IRecipeCategoriesRepository, RecipeCategoriesRepository>();
 builder.Services.AddScoped<ISearchRepository, SearchRepository>();
+builder.Services.AddScoped<IHomeRepository, HomeRepository>();
 
 builder.Services.Configure<AlipayConfigHelper>(builder.Configuration.GetSection("AlipayConfig"));
 builder.Services.AddSingleton(resolver => resolver.GetRequiredService<IOptions<AlipayConfigHelper>>().Value);

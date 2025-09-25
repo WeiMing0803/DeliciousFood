@@ -1,5 +1,6 @@
-﻿@section Styles{
-    <link href="~/css/home/index.css" rel="stylesheet" />
+﻿@model AI.DeliciousFood.Core.Common.Model.Home.RecommendCollectionViewModel
+@section Styles{
+    <link href="~/css/home/index.css" rel="stylesheet"/>
 }
 
 @{
@@ -45,5 +46,60 @@
         <span class="visually-hidden">Next</span>
     </button>
 </div>
+
+<div class="recommend-section">
+    <h2 class="section-title decorated-title">本月推荐</h2>
+    <div class="recommend-list">
+        @foreach (var item in Model.Monthly)
+        {
+            <div class="recommend-card fade-in">
+                <img src="../@item.ImageUrl/@item.FileName" alt="@item.RecipeName" class="recommend-img" />
+                <div class="recommend-info">
+                    <h5 class="recommend-title">@item.RecipeName</h5>
+                    <p class="recommend-desc">@item.RecipeDescription</p>
+                    <span class="recommend-user-alt">
+                        <span class="user-avatar-alt">
+                            <i class="bi bi-person-circle"></i>
+                        </span>
+                        <span class="user-label-alt">作者</span>
+                        <span class="user-name-alt">@item.UserName</span>
+                    </span>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<div class="recommend-section">
+    <h2 class="section-title decorated-title hot-title">热门榜单</h2>
+    <div class="recommend-list">
+        @foreach (var item in Model.HotList)
+        {
+            <div class="recommend-card fade-in">
+                <img src="../@item.ImageUrl/@item.FileName" alt="@item.RecipeName" class="recommend-img" />
+                <div class="recommend-info">
+                    <h5 class="recommend-title">@item.RecipeName</h5>
+                    <p class="recommend-desc">@item.RecipeDescription</p>
+                    <span class="recommend-user-alt">
+                        <span class="user-avatar-alt">
+                            <i class="bi bi-person-circle"></i>
+                        </span>
+                        <span class="user-label-alt">作者</span>
+                        <span class="user-name-alt">@item.UserName</span>
+                    </span>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
 @section Scripts{
+    <script>
+        // 简单的淡入动画
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll('.fade-in').forEach(function (el, i) {
+                setTimeout(() => el.classList.add('show'), i * 150);
+            });
+        });
+    </script>
 }

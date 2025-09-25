@@ -1,25 +1,27 @@
-﻿using AI.DeliciousFood.Core.Server;
+﻿using AI.DeliciousFood.Core.Common.Model;
+using AI.DeliciousFood.Core.Server;
 using AI.DeliciousFood.Web.Client.Helper;
 using AI.DeliciousFood.Web.Client.Models;
 using Microsoft.AspNetCore.Mvc;
+using AI.DeliciousFood.Core.Common.Model.Home;
 
 namespace AI.DeliciousFood.Web.Client.Controllers;
 
-public class HomeController(IAlipayRepository accountRepository,
-    GlobalConfig globalConfig, 
-    WebSocketManagerHelper webSocketManager,
-    AlipayConfigHelper alipayConfigHelper
-    ) : CommonControllerBase
+public class HomeController(GlobalConfig globalConfig, WebSocketManagerHelper webSocketManager, IHomeRepository homeRepository) : CommonControllerBase
 {
 
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
-        //Log.Error("Hello World");
-        //await webSocketManager.BroadcastMessage("支付成功");
-
-        return View();
+        List<RecommendViewModel> monthly = await homeRepository.GetRecommend(RecommendType.Monthly);
+        List<RecommendViewModel> hotList = await homeRepository.GetRecommend(RecommendType.HotList);
+        RecommendCollectionViewModel viewModel = new()
+        {
+            Monthly = monthly,
+            HotList = hotList
+        };
+        return View(viewModel);
     }
-    
+
     public IActionResult AboutUs()
     {
         return View();
