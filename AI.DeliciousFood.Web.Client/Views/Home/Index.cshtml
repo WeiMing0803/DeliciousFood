@@ -52,20 +52,22 @@
     <div class="recommend-list">
         @foreach (var item in Model.Monthly)
         {
-            <div class="recommend-card fade-in">
-                <img src="../@item.ImageUrl/@item.FileName" alt="@item.RecipeName" class="recommend-img" />
-                <div class="recommend-info">
-                    <h5 class="recommend-title">@item.RecipeName</h5>
-                    <p class="recommend-desc">@item.RecipeDescription</p>
-                    <span class="recommend-user-alt">
-                        <span class="user-avatar-alt">
-                            <i class="bi bi-person-circle"></i>
+            <a href="/RecipeCategories/GetRecipe?recipeGuid=@item.RecipeGuid" class="recommend-link" style="text-decoration:none;color:inherit;">
+                <div class="recommend-card fade-in">
+                    <img src="../@item.ImageUrl/@item.FileName" alt="@item.RecipeName" class="recommend-img" />
+                    <div class="recommend-info">
+                        <h5 class="recommend-title">@item.RecipeName</h5>
+                        <p class="recommend-desc">@item.RecipeDescription</p>
+                        <span class="recommend-user-alt">
+                            <span class="user-avatar-alt">
+                                <i class="bi bi-person-circle"></i>
+                            </span>
+                            <span class="user-label-alt">作者</span>
+                            <span class="user-name-alt">@item.UserName</span>
                         </span>
-                        <span class="user-label-alt">作者</span>
-                        <span class="user-name-alt">@item.UserName</span>
-                    </span>
+                    </div>
                 </div>
-            </div>
+            </a>
         }
     </div>
 </div>
@@ -75,24 +77,25 @@
     <div class="recommend-list">
         @foreach (var item in Model.HotList)
         {
-            <div class="recommend-card fade-in">
-                <img src="../@item.ImageUrl/@item.FileName" alt="@item.RecipeName" class="recommend-img" />
-                <div class="recommend-info">
-                    <h5 class="recommend-title">@item.RecipeName</h5>
-                    <p class="recommend-desc">@item.RecipeDescription</p>
-                    <span class="recommend-user-alt">
-                        <span class="user-avatar-alt">
-                            <i class="bi bi-person-circle"></i>
+            <a href="/RecipeCategories/GetRecipe?recipeGuid=@item.RecipeGuid" class="recommend-link" style="text-decoration:none;color:inherit;">
+                <div class="recommend-card fade-in">
+                    <img src="../@item.ImageUrl/@item.FileName" alt="@item.RecipeName" class="recommend-img" />
+                    <div class="recommend-info">
+                        <h5 class="recommend-title">@item.RecipeName</h5>
+                        <p class="recommend-desc">@item.RecipeDescription</p>
+                        <span class="recommend-user-alt">
+                            <span class="user-avatar-alt">
+                                <i class="bi bi-person-circle"></i>
+                            </span>
+                            <span class="user-label-alt">作者</span>
+                            <span class="user-name-alt">@item.UserName</span>
                         </span>
-                        <span class="user-label-alt">作者</span>
-                        <span class="user-name-alt">@item.UserName</span>
-                    </span>
+                    </div>
                 </div>
-            </div>
+            </a>
         }
     </div>
 </div>
-
 @section Scripts{
     <script>
         // 简单的淡入动画
