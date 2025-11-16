@@ -55,6 +55,12 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.LoginPath = "/AccountLogon/Logon"; // 设置未登录时跳转的路径
 });
 
+//应用启动或运行时检查依赖注册是否正确
+builder.Host.UseDefaultServiceProvider(options =>
+{
+    options.ValidateScopes = true; // 在开发环境下默认开启
+    options.ValidateOnBuild = true; // 启动时立即验证
+});
 
 var app = builder.Build();
 

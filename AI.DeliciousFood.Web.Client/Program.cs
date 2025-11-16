@@ -71,6 +71,13 @@ builder.Host.UseSerilog((ctx, lc) => lc
 
 builder.Services.AddMemoryCache();
 
+//应用启动或运行时检查依赖注册是否正确
+builder.Host.UseDefaultServiceProvider(options =>
+{
+    options.ValidateScopes = true; // 在开发环境下默认开启
+    options.ValidateOnBuild = true; // 启动时立即验证
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
