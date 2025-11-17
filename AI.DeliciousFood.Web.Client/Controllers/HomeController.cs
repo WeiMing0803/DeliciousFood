@@ -48,4 +48,10 @@ public class HomeController(GlobalConfig globalConfig, WebSocketManagerHelper we
     {
         return View(new ErrorViewModel { RequestId = System.Diagnostics.Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
+
+    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+    public IActionResult NotFoundHtml()
+    {
+        return View();
+    }
 }

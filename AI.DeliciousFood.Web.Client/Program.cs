@@ -85,6 +85,8 @@ if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
 }
+
+app.UseMiddleware<ErrorHandlingMiddleware>();
 app.UseSerilogRequestLogging();
 
 app.UseStaticFiles();
