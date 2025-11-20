@@ -21,6 +21,8 @@ jobs:
     steps:
     - name: 检出代码
       uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # 获取完整历史，确保能正确比较变更
       
     - name: 检测文件变更
       uses: dorny/paths-filter@v3
@@ -38,10 +40,12 @@ jobs:
             - 'AI.DeliciousFood.Core.Model/**'
             - 'AI.DeliciousFood.Core.Data/**'
             - '*.sln'
+        base: ${{ github.event.before }}
 
   # ========== Job 1: 在 GitHub 云端构建 ==========
   build:
     needs: detect-changes
+    if: needs.detect-changes.outputs.client-changed == 'true' || needs.detect-changes.outputs.manage-changed == 'true' || needs.detect-changes.outputs.common-changed == 'true'
     runs-on: windows-latest  # 使用 GitHub 提供的快速云端 Runner
     
     steps:
@@ -63,10 +67,18 @@ jobs:
       
     - name: 显示变更检测结果
       run: |
-        Write-Host "变更检测结果:"
+        Write-Host "========== 变更检测结果 =========="
         Write-Host "Client 变更: ${{ needs.detect-changes.outputs.client-changed }}"
         Write-Host "Manage 变更: ${{ needs.detect-changes.outputs.manage-changed }}"
         Write-Host "Common 变更: ${{ needs.detect-changes.outputs.common-changed }}"
+        Write-Host "=================================="
+        
+        if ("${{ needs.detect-changes.outputs.client-changed }}" -ne "true" -and 
+            "${{ needs.detect-changes.outputs.manage-changed }}" -ne "true" -and 
+            "${{ needs.detect-changes.outputs.common-changed }}" -ne "true") {
+          Write-Host "⚠️ 没有检测到任何项目代码变更，可能只是修改了配置文件或文档"
+          Write-Host "跳过构建步骤..."
+        }
 
     - name: 构建解决方案
       run: dotnet build AI.DeliciousFood.sln --configuration ${{ env.BUILD_CONFIGURATION }} --no-restore
@@ -127,6 +139,7 @@ jobs:
   # ========== Job 2: 在你的服务器上部署 ==========
   deploy:
     needs: [build, detect-changes]  # 等待构建 job 完成,同时获取变更检测结果
+    if: needs.detect-changes.outputs.client-changed == 'true' || needs.detect-changes.outputs.manage-changed == 'true' || needs.detect-changes.outputs.common-changed == 'true'
     runs-on: self-hosted  # 在你的 IIS 服务器本机运行
     env:
       NODE_OPTIONS: --max-old-space-size=1024  # 限制为 1GB，避免占用过多内存
