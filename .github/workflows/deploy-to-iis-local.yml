@@ -71,15 +71,27 @@ jobs:
       NODE_OPTIONS: --max-old-space-size=1024  # 限制为 1GB，避免占用过多内存
     
     steps:
-    # 临时停止 SQL Server 释放内存
+    # 临时停止 SQL Server 释放内存（可选）
     - name: 停止 SQL Server（释放内存）
       shell: powershell
+      continue-on-error: true  # 即使失败也继续执行
       run: |
         [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
         Write-Host "Stopping SQL Server to free memory..."
-        Stop-Service -Name "MSSQLSERVER" -Force -ErrorAction SilentlyContinue
-        Stop-Service -Name "SQLSERVERAGENT" -Force -ErrorAction SilentlyContinue
-        Start-Sleep -Seconds 5
+        
+        # 增加超时时间到 60 秒
+        $service = Get-Service -Name "MSSQLSERVER" -ErrorAction SilentlyContinue
+        if ($service -and $service.Status -eq 'Running') {
+          $service.Stop()
+          $service.WaitForStatus('Stopped', '00:01:00')  # 等待最多 60 秒
+        }
+        
+        $agentService = Get-Service -Name "SQLSERVERAGENT" -ErrorAction SilentlyContinue
+        if ($agentService -and $agentService.Status -eq 'Running') {
+          $agentService.Stop()
+          $agentService.WaitForStatus('Stopped', '00:00:30')  # 等待最多 30 秒
+        }
+        
         Write-Host "SQL Server stopped successfully"
     
     # 下载构建产物(比完整代码库小很多)
