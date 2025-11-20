@@ -1,0 +1,160 @@
+name: Deploy to IIS Server (Local)
+
+on:
+  push:
+    branches:
+      - feature/Iframe
+
+env:
+  DOTNET_VERSION: '10.0.x'
+  BUILD_CONFIGURATION: 'Release'
+
+jobs:
+  build-and-deploy:
+    runs-on: self-hosted  # 在 IIS 服务器本机运行
+    
+    steps:
+    - name: 检出代码
+      uses: actions/checkout@v4
+      
+    # Self-hosted Runner 上已安装 .NET SDK,无需再次设置
+    
+    - name: 验证 .NET 版本
+      run: |
+        Write-Host "当前 .NET 版本:"
+        dotnet --version
+        
+    - name: 还原依赖项
+      run: dotnet restore AI.DeliciousFood.sln
+      
+    - name: 构建解决方案
+      run: dotnet build AI.DeliciousFood.sln --configuration ${{ env.BUILD_CONFIGURATION }} --no-restore
+      
+    - name: 发布 Web.Client
+      run: dotnet publish AI.DeliciousFood.Web.Client/AI.DeliciousFood.Web.Client.csproj --configuration ${{ env.BUILD_CONFIGURATION }} --output ./publish/client --no-build
+      
+    - name: 发布 Web.Manage
+      run: dotnet publish AI.DeliciousFood.Web.Manage/AI.DeliciousFood.Web.Manage.csproj --configuration ${{ env.BUILD_CONFIGURATION }} --output ./publish/manage --no-build
+      
+    - name: 移除配置文件
+      run: |
+        Remove-Item -Path "./publish/client/appsettings.json" -Force -ErrorAction SilentlyContinue
+        Remove-Item -Path "./publish/client/appsettings.Development.json" -Force -ErrorAction SilentlyContinue
+        Remove-Item -Path "./publish/manage/appsettings.json" -Force -ErrorAction SilentlyContinue
+        Remove-Item -Path "./publish/manage/appsettings.Development.json" -Force -ErrorAction SilentlyContinue
+        Write-Host "✅ 已移除 appsettings.json 文件,请在服务器上手动配置"
+      
+    - name: 部署到本机 IIS
+      shell: pwsh
+      env:
+        CLIENT_DEPLOY_PATH: ${{ secrets.CLIENT_DEPLOY_PATH }}
+        MANAGE_DEPLOY_PATH: ${{ secrets.MANAGE_DEPLOY_PATH }}
+        CLIENT_SITE_NAME: ${{ secrets.CLIENT_SITE_NAME }}
+        MANAGE_SITE_NAME: ${{ secrets.MANAGE_SITE_NAME }}
+      run: |
+        Import-Module WebAdministration
+        
+        Write-Host "开始部署到本机 IIS..."
+        
+        # ========== 部署 Client ==========
+        Write-Host "`n📦 部署 Client 站点..."
+        
+        # 停止站点
+        Write-Host "停止站点: $env:CLIENT_SITE_NAME"
+        Stop-WebSite -Name $env:CLIENT_SITE_NAME -ErrorAction SilentlyContinue
+        Stop-WebAppPool -Name $env:CLIENT_SITE_NAME -ErrorAction SilentlyContinue
+        Start-Sleep -Seconds 3
+        
+        # 备份旧文件
+        $clientBackupPath = "$env:CLIENT_DEPLOY_PATH-backup-$(Get-Date -Format 'yyyyMMddHHmmss')"
+        if (Test-Path $env:CLIENT_DEPLOY_PATH) {
+          Write-Host "备份到: $clientBackupPath"
+          Copy-Item -Path $env:CLIENT_DEPLOY_PATH -Destination $clientBackupPath -Recurse -Force
+        }
+        
+        # 确保目录存在
+        if (-not (Test-Path $env:CLIENT_DEPLOY_PATH)) {
+          New-Item -Path $env:CLIENT_DEPLOY_PATH -ItemType Directory -Force
+        }
+        
+        # 清理旧文件(保留 appsettings.json)
+        Write-Host "清理旧文件..."
+        Get-ChildItem -Path $env:CLIENT_DEPLOY_PATH -Exclude "appsettings*.json" | Remove-Item -Recurse -Force -ErrorAction SilentlyContinue
+        
+        # 复制新文件
+        Write-Host "复制新文件到: $env:CLIENT_DEPLOY_PATH"
+        Copy-Item -Path "./publish/client/*" -Destination $env:CLIENT_DEPLOY_PATH -Recurse -Force
+        
+        # 启动站点
+        Write-Host "启动站点: $env:CLIENT_SITE_NAME"
+        Start-WebAppPool -Name $env:CLIENT_SITE_NAME -ErrorAction SilentlyContinue
+        Start-WebSite -Name $env:CLIENT_SITE_NAME -ErrorAction SilentlyContinue
+        
+        Write-Host "✅ Client 部署完成!"
+        
+        # ========== 部署 Manage ==========
+        Write-Host "`n📦 部署 Manage 站点..."
+        
+        # 停止站点
+        Write-Host "停止站点: $env:MANAGE_SITE_NAME"
+        Stop-WebSite -Name $env:MANAGE_SITE_NAME -ErrorAction SilentlyContinue
+        Stop-WebAppPool -Name $env:MANAGE_SITE_NAME -ErrorAction SilentlyContinue
+        Start-Sleep -Seconds 3
+        
+        # 备份旧文件
+        $manageBackupPath = "$env:MANAGE_DEPLOY_PATH-backup-$(Get-Date -Format 'yyyyMMddHHmmss')"
+        if (Test-Path $env:MANAGE_DEPLOY_PATH) {
+          Write-Host "备份到: $manageBackupPath"
+          Copy-Item -Path $env:MANAGE_DEPLOY_PATH -Destination $manageBackupPath -Recurse -Force
+        }
+        
+        # 确保目录存在
+        if (-not (Test-Path $env:MANAGE_DEPLOY_PATH)) {
+          New-Item -Path $env:MANAGE_DEPLOY_PATH -ItemType Directory -Force
+        }
+        
+        # 清理旧文件(保留 appsettings.json)
+        Write-Host "清理旧文件..."
+        Get-ChildItem -Path $env:MANAGE_DEPLOY_PATH -Exclude "appsettings*.json" | Remove-Item -Recurse -Force -ErrorAction SilentlyContinue
+        
+        # 复制新文件
+        Write-Host "复制新文件到: $env:MANAGE_DEPLOY_PATH"
+        Copy-Item -Path "./publish/manage/*" -Destination $env:MANAGE_DEPLOY_PATH -Recurse -Force
+        
+        # 启动站点
+        Write-Host "启动站点: $env:MANAGE_SITE_NAME"
+        Start-WebAppPool -Name $env:MANAGE_SITE_NAME -ErrorAction SilentlyContinue
+        Start-WebSite -Name $env:MANAGE_SITE_NAME -ErrorAction SilentlyContinue
+        
+        Write-Host "✅ Manage 部署完成!"
+        
+        # ========== 清理旧备份 ==========
+        Write-Host "`n🧹 清理旧备份(保留最近5个)..."
+        
+        # 清理 Client 旧备份
+        Get-ChildItem -Path (Split-Path $env:CLIENT_DEPLOY_PATH) -Filter "*Client-backup-*" -Directory | 
+          Sort-Object Name -Descending | 
+          Select-Object -Skip 5 | 
+          ForEach-Object {
+            Write-Host "删除旧备份: $($_.FullName)"
+            Remove-Item -Path $_.FullName -Recurse -Force
+          }
+        
+        # 清理 Manage 旧备份
+        Get-ChildItem -Path (Split-Path $env:MANAGE_DEPLOY_PATH) -Filter "*Manage-backup-*" -Directory | 
+          Sort-Object Name -Descending | 
+          Select-Object -Skip 5 | 
+          ForEach-Object {
+            Write-Host "删除旧备份: $($_.FullName)"
+            Remove-Item -Path $_.FullName -Recurse -Force
+          }
+        
+        Write-Host "`n🎉 部署全部完成!"
+        
+    - name: 验证部署
+      if: success()
+      run: |
+        Write-Host "`n✅ 部署成功完成！"
+        Write-Host "Client 站点: ${{ secrets.CLIENT_SITE_NAME }}"
+        Write-Host "Manage 站点: ${{ secrets.MANAGE_SITE_NAME }}"
+        Write-Host "`n⚠️  请检查 appsettings.json 配置是否正确"

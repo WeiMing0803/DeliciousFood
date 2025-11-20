@@ -4,7 +4,20 @@
 
 ## 📋 前置要求
 
-### 1. IIS 服务器配置要求
+### 1. 设置 Self-hosted Runner ⚠️ **重要**
+
+由于 IIS 服务器通常在内网环境,GitHub Actions 的云端 Runner 无法直接访问,因此**必须设置 Self-hosted Runner**。
+
+**设置步骤**:
+1. 进入 GitHub 仓库 `Settings` → `Actions` → `Runners` → `New self-hosted runner`
+2. 选择 **Windows** 系统
+3. 在 **IIS 服务器**上以管理员身份打开 PowerShell
+4. **复制** GitHub 页面上显示的命令并执行(包含下载、配置和启动 Runner)
+5. 返回 GitHub 确认 Runner 状态显示为 **Idle** (绿色) ✅
+
+💡 **提示**: GitHub 会为你生成带有临时 token 的命令,直接复制执行即可,非常简单!
+
+### 2. IIS 服务器配置要求
 
 在你的 IIS 服务器上需要完成以下配置:
 
@@ -22,28 +35,6 @@
 - 托管管道模式: 集成
 - 启用 32 位应用程序: False
 
-#### C. 配置 PowerShell 远程管理 (WinRM 方式)
-
-如果使用 WinRM 部署方式,需要在服务器上执行:
-
-```powershell
-# 启用 PowerShell 远程管理
-Enable-PSRemoting -Force
-
-# 配置受信任的主机 (允许 GitHub Actions runners 连接)
-Set-Item WSMan:\localhost\Client\TrustedHosts -Value "*" -Force
-
-# 确保 WinRM 服务正在运行
-Start-Service WinRM
-Set-Service WinRM -StartupType Automatic
-
-# 配置防火墙规则
-New-NetFirewallRule -Name "WinRM-HTTP" -DisplayName "Windows Remote Management (HTTP-In)" -Enabled True -Direction Inbound -Protocol TCP -LocalPort 5985
-
-# 可选: 配置 HTTPS (推荐用于生产环境)
-New-NetFirewallRule -Name "WinRM-HTTPS" -DisplayName "Windows Remote Management (HTTPS-In)" -Enabled True -Direction Inbound -Protocol TCP -LocalPort 5986
-```
-
 ## 🔐 GitHub Secrets 配置
 
 在 GitHub 仓库中配置以下 Secrets:
@@ -54,9 +45,6 @@ New-NetFirewallRule -Name "WinRM-HTTPS" -DisplayName "Windows Remote Management 
 
 | Secret 名称 | 说明 | 示例值 |
 |------------|------|--------|
-| `IIS_SERVER_HOST` | IIS 服务器地址 | `192.168.1.100` 或 `server.example.com` |
-| `IIS_SERVER_USERNAME` | 服务器管理员用户名 | `Administrator` 或 `DOMAIN\username` |
-| `IIS_SERVER_PASSWORD` | 服务器管理员密码 | `YourStrongPassword123!` |
 | `CLIENT_DEPLOY_PATH` | Client 部署路径 | `C:\inetpub\wwwroot\DeliciousFood.Client` |
 | `MANAGE_DEPLOY_PATH` | Manage 部署路径 | `C:\inetpub\wwwroot\DeliciousFood.Manage` |
 | `CLIENT_SITE_NAME` | Client IIS 站点名称 | `DeliciousFood.Client` |
@@ -68,13 +56,13 @@ New-NetFirewallRule -Name "WinRM-HTTPS" -DisplayName "Windows Remote Management 
 
 ### 1. GitHub Actions 工作流文件
 
-#### `.github/workflows/deploy-to-iis.yml`
-使用 WinRM 部署到 IIS 的工作流。特点:
-- ✅ 自动停止/启动 IIS 站点
-- ✅ 自动备份旧版本
-- ✅ 直接通过 PowerShell Remoting 部署
-- ✅ 自动排除 appsettings.json 文件(需在服务器手动配置)
-- ⚠️ 需要配置 WinRM
+#### `.github/workflows/deploy-to-iis-local.yml`
+本地部署工作流。特点:
+- ✅ 自动停止/启动 IIS 站点和应用程序池
+- ✅ 自动备份旧版本(保留最近5个)
+- ✅ 本地直接部署,无需网络配置
+- ✅ 自动排除 appsettings.json 文件(保留服务器上的配置)
+- ✅ 自动清理旧备份
 
 ### 2. 本地部署脚本
 
@@ -109,17 +97,7 @@ New-NetFirewallRule -Name "WinRM-HTTPS" -DisplayName "Windows Remote Management 
 
 ### 常见问题
 
-#### 1. WinRM 连接失败
-```
-错误: New-PSSession: Connecting to remote server failed
-```
-
-解决方案:
-- 检查服务器防火墙是否开放 5985 端口
-- 确认 WinRM 服务正在运行
-- 验证服务器地址和凭据是否正确
-
-#### 2. 权限不足
+#### 1. 权限不足
 ```
 错误: Access Denied
 ```
@@ -170,12 +148,11 @@ New-NetFirewallRule -Name "WinRM-HTTPS" -DisplayName "Windows Remote Management 
 
 ## 🔒 安全建议
 
-1. **使用强密码**: 确保服务器密码足够复杂
-2. **限制访问**: 在服务器防火墙中限制只允许 GitHub Actions IP 访问
-3. **使用 HTTPS**: 配置 WinRM 使用 HTTPS (端口 5986)
-4. **定期轮换密码**: 定期更新 GitHub Secrets 中的密码
-5. **最小权限原则**: 为部署创建专门的服务账户,只授予必要权限
-6. **监控日志**: 定期检查部署日志和服务器访问日志
+1. **Runner 服务账户权限**: Self-hosted Runner 服务应使用具有 IIS 管理权限的账户运行
+2. **保护 GitHub Secrets**: 定期检查和更新 Secrets 中的配置
+3. **备份管理**: 定期检查备份文件夹,确保有足够的磁盘空间
+4. **监控日志**: 定期检查部署日志和 IIS 日志
+5. **Runner 安全**: 保持 Runner 机器的操作系统和软件更新
 
 ## 📞 测试部署
 
