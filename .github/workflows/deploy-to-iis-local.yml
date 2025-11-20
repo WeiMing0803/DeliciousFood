@@ -126,14 +126,15 @@ jobs:
 
   # ========== Job 2: 在你的服务器上部署 ==========
   deploy:
-    needs: build  # 等待构建 job 完成
+    needs: [build, detect-changes]  # 等待构建 job 完成,同时获取变更检测结果
     runs-on: self-hosted  # 在你的 IIS 服务器本机运行
     env:
       NODE_OPTIONS: --max-old-space-size=1024  # 限制为 1GB，避免占用过多内存
     
     steps:
-    # 临时停止 SQL Server 释放内存（可选）
+    # 临时停止 SQL Server 释放内存（可选）- 仅在需要部署时执行
     - name: 停止 SQL Server（释放内存）
+      if: needs.detect-changes.outputs.client-changed == 'true' || needs.detect-changes.outputs.manage-changed == 'true' || needs.detect-changes.outputs.common-changed == 'true'
       shell: pwsh
       continue-on-error: true  # 即使失败也继续执行
       run: |
@@ -198,8 +199,12 @@ jobs:
         Stop-WebAppPool -Name $env:CLIENT_SITE_NAME -ErrorAction SilentlyContinue
         Start-Sleep -Seconds 3
         
-        # 备份旧文件
-        $clientBackupPath = "$env:CLIENT_DEPLOY_PATH-backup-$(Get-Date -Format 'yyyyMMddHHmmss')"
+        # 备份旧文件到 C:\inetpub\wwwroot\backups 文件夹
+        $backupFolder = "C:\inetpub\wwwroot\backups"
+        if (-not (Test-Path $backupFolder)) {
+          New-Item -Path $backupFolder -ItemType Directory -Force | Out-Null
+        }
+        $clientBackupPath = Join-Path $backupFolder "Client-backup-$(Get-Date -Format 'yyyyMMddHHmmss')"
         if (Test-Path $env:CLIENT_DEPLOY_PATH) {
           Write-Host "备份到: $clientBackupPath"
           Copy-Item -Path $env:CLIENT_DEPLOY_PATH -Destination $clientBackupPath -Recurse -Force
@@ -238,8 +243,12 @@ jobs:
         Stop-WebAppPool -Name $env:MANAGE_SITE_NAME -ErrorAction SilentlyContinue
         Start-Sleep -Seconds 3
         
-        # 备份旧文件
-        $manageBackupPath = "$env:MANAGE_DEPLOY_PATH-backup-$(Get-Date -Format 'yyyyMMddHHmmss')"
+        # 备份旧文件到 C:\inetpub\wwwroot\backups 文件夹
+        $backupFolder = "C:\inetpub\wwwroot\backups"
+        if (-not (Test-Path $backupFolder)) {
+          New-Item -Path $backupFolder -ItemType Directory -Force | Out-Null
+        }
+        $manageBackupPath = Join-Path $backupFolder "Manage-backup-$(Get-Date -Format 'yyyyMMddHHmmss')"
         if (Test-Path $env:MANAGE_DEPLOY_PATH) {
           Write-Host "备份到: $manageBackupPath"
           Copy-Item -Path $env:MANAGE_DEPLOY_PATH -Destination $manageBackupPath -Recurse -Force
@@ -271,29 +280,32 @@ jobs:
         # ========== 清理旧备份 ==========
         Write-Host "`n清理旧备份（保留最近5个）..."
         
-        # 清理 Client 旧备份
-        Get-ChildItem -Path (Split-Path $env:CLIENT_DEPLOY_PATH) -Filter "*Client-backup-*" -Directory | 
-          Sort-Object Name -Descending | 
-          Select-Object -Skip 5 | 
-          ForEach-Object {
-            Write-Host "删除旧备份: $($_.FullName)"
-            Remove-Item -Path $_.FullName -Recurse -Force
-          }
-        
-        # 清理 Manage 旧备份
-        Get-ChildItem -Path (Split-Path $env:MANAGE_DEPLOY_PATH) -Filter "*Manage-backup-*" -Directory | 
-          Sort-Object Name -Descending | 
-          Select-Object -Skip 5 | 
-          ForEach-Object {
-            Write-Host "删除旧备份: $($_.FullName)"
-            Remove-Item -Path $_.FullName -Recurse -Force
-          }
+        $backupFolder = "C:\inetpub\wwwroot\backups"
+        if (Test-Path $backupFolder) {
+          # 清理 Client 旧备份
+          Get-ChildItem -Path $backupFolder -Filter "Client-backup-*" -Directory | 
+            Sort-Object Name -Descending | 
+            Select-Object -Skip 5 | 
+            ForEach-Object {
+              Write-Host "删除旧备份: $($_.FullName)"
+              Remove-Item -Path $_.FullName -Recurse -Force
+            }
+          
+          # 清理 Manage 旧备份
+          Get-ChildItem -Path $backupFolder -Filter "Manage-backup-*" -Directory | 
+            Sort-Object Name -Descending | 
+            Select-Object -Skip 5 | 
+            ForEach-Object {
+              Write-Host "删除旧备份: $($_.FullName)"
+              Remove-Item -Path $_.FullName -Recurse -Force
+            }
+        }
         
         Write-Host "`n部署全部完成！"
         
-    # 重启 SQL Server
+    # 重启 SQL Server - 仅在之前停止时才重启
     - name: 重启 SQL Server
-      if: always()  # 无论部署成功或失败都要重启
+      if: always() && (needs.detect-changes.outputs.client-changed == 'true' || needs.detect-changes.outputs.manage-changed == 'true' || needs.detect-changes.outputs.common-changed == 'true')
       shell: pwsh
       run: |
         Write-Host "正在重启 SQL Server..."
