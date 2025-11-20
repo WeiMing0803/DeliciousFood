@@ -12,10 +12,89 @@
 1. 进入 GitHub 仓库 `Settings` → `Actions` → `Runners` → `New self-hosted runner`
 2. 选择 **Windows** 系统
 3. 在 **IIS 服务器**上以管理员身份打开 PowerShell
-4. **复制** GitHub 页面上显示的命令并执行(包含下载、配置和启动 Runner)
-5. 返回 GitHub 确认 Runner 状态显示为 **Idle** (绿色) ✅
+4. **复制** GitHub 页面上显示的命令并执行配置:
+   ```powershell
+   # 创建目录并下载 Runner
+   mkdir actions-runner; cd actions-runner
+   # 下载 Runner (GitHub 会提供具体命令)
+   # 配置 Runner
+   ./config.cmd --url https://github.com/WeiMing0803/DeliciousFood --token XXXXXX
+   ```
+5. **将 Runner 安装为 Windows 服务** (推荐):
+   
+   以**管理员身份**运行 PowerShell（右键 PowerShell → "以管理员身份运行"），然后进入 Runner 目录执行:
+   
+   ```powershell
+   # 进入 Runner 目录
+   cd C:\Users\Administrator\actions-runner  # 修改为你的实际路径
+   
+   # 安装为 Windows 服务
+   .\run.cmd install
+   
+   # 启动服务
+   .\run.cmd start
+   ```
+   
+   **如果上述命令不工作**，使用以下 PowerShell 脚本创建服务：
+   
+   ```powershell
+   # 以管理员身份运行 PowerShell
+   
+   # 设置 Runner 路径（修改为你的实际路径）
+   $runnerPath = "C:\Users\Administrator\actions-runner"
+   $serviceName = "GitHubActionsRunner"
+   
+   # 创建 Windows 服务
+   New-Service -Name $serviceName `
+       -BinaryPathName "$runnerPath\bin\RunnerService.exe" `
+       -DisplayName "GitHub Actions Runner (DeliciousFood)" `
+       -Description "GitHub Actions self-hosted runner for DeliciousFood" `
+       -StartupType Automatic
+   
+   # 启动服务
+   Start-Service -Name $serviceName
+   
+   # 验证服务状态
+   Get-Service -Name $serviceName
+   ```
+   
+   安装成功后，你会在 Windows 服务管理器（`services.msc`）中看到 `GitHub Actions Runner` 服务。
 
-💡 **提示**: GitHub 会为你生成带有临时 token 的命令,直接复制执行即可,非常简单!
+6. 返回 GitHub 确认 Runner 状态显示为 **Idle** (绿色) ✅
+
+💡 **提示**: 
+- GitHub 会为你生成带有临时 token 的命令，直接复制执行即可，非常简单！
+- **强烈建议**将 Runner 安装为 Windows 服务，这样可以：
+  - ✅ 后台持续运行，无需保持 PowerShell 窗口打开
+  - ✅ 系统重启后自动启动
+  - ✅ 更加稳定可靠
+  - ✅ 可以在 Windows 服务管理器中管理
+
+**Windows 服务管理命令**:
+
+```powershell
+# 方法 1：使用 PowerShell 管理服务
+Get-Service -Name "GitHubActionsRunner"           # 查看服务状态
+Stop-Service -Name "GitHubActionsRunner"          # 停止服务
+Start-Service -Name "GitHubActionsRunner"         # 启动服务
+Remove-Service -Name "GitHubActionsRunner"        # 删除服务（PowerShell 6.0+）
+
+# 方法 2：使用 sc 命令管理服务
+sc query GitHubActionsRunner                      # 查看服务状态
+sc stop GitHubActionsRunner                       # 停止服务
+sc start GitHubActionsRunner                      # 启动服务
+sc delete GitHubActionsRunner                     # 删除服务
+
+# 方法 3：使用服务管理器（图形界面）
+services.msc                                      # 打开服务管理器
+```
+
+**运行方式对比**:
+
+| 方法 | 优点 | 缺点 | 适用场景 |
+|-----|------|------|---------|
+| **Windows 服务** (推荐) | ✅ 后台运行<br>✅ 自动启动<br>✅ 稳定可靠 | ⚠️ 需要管理员权限 | 生产环境、长期使用 |
+| **手动运行** `.\run.cmd` | ✅ 无需管理员权限<br>✅ 方便调试 | ❌ 需要保持窗口打开<br>❌ 关闭窗口后停止 | 临时测试、开发调试 |
 
 ### 2. IIS 服务器配置要求
 
@@ -58,11 +137,23 @@
 
 #### `.github/workflows/deploy-to-iis-local.yml`
 本地部署工作流。特点:
+- ✅ **智能变更检测**: 自动识别哪些项目被修改，只构建和部署有变更的项目
 - ✅ 自动停止/启动 IIS 站点和应用程序池
 - ✅ 自动备份旧版本(保留最近5个)
 - ✅ 本地直接部署,无需网络配置
 - ✅ 自动排除 appsettings.json 文件(保留服务器上的配置)
 - ✅ 自动清理旧备份
+
+**智能部署说明**:
+- 只修改了 `AI.DeliciousFood.Web.Client` 或 `AI.DeliciousFood.Core.Server` → 只部署 Client 站点
+- 只修改了 `AI.DeliciousFood.Web.Manage` 或 `AI.DeliciousFood.Core.ManageServer` → 只部署 Manage 站点
+- 修改了 `AI.DeliciousFood.Core.Common`、`AI.DeliciousFood.Core.Model` 或 `AI.DeliciousFood.Core.Data` → 同时部署两个站点（因为是共享库）
+- 修改了 `.sln` 文件 → 同时部署两个站点
+
+这样可以:
+- 🚀 **节省时间**: 避免不必要的构建和部署
+- 💰 **节省资源**: 减少 GitHub Actions 运行时间
+- 🎯 **降低风险**: 只更新有变化的部分，减少潜在问题
 
 ### 2. 本地部署脚本
 

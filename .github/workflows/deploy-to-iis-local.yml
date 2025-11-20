@@ -10,8 +10,38 @@ env:
   BUILD_CONFIGURATION: 'Release'
 
 jobs:
+  # ========== Job 0: 检测变更 ==========
+  detect-changes:
+    runs-on: ubuntu-latest  # 使用轻量级 Linux Runner 更快
+    outputs:
+      client-changed: ${{ steps.filter.outputs.client }}
+      manage-changed: ${{ steps.filter.outputs.manage }}
+      common-changed: ${{ steps.filter.outputs.common }}
+    
+    steps:
+    - name: 检出代码
+      uses: actions/checkout@v4
+      
+    - name: 检测文件变更
+      uses: dorny/paths-filter@v3
+      id: filter
+      with:
+        filters: |
+          client:
+            - 'AI.DeliciousFood.Web.Client/**'
+            - 'AI.DeliciousFood.Core.Server/**'
+          manage:
+            - 'AI.DeliciousFood.Web.Manage/**'
+            - 'AI.DeliciousFood.Core.ManageServer/**'
+          common:
+            - 'AI.DeliciousFood.Core.Common/**'
+            - 'AI.DeliciousFood.Core.Model/**'
+            - 'AI.DeliciousFood.Core.Data/**'
+            - '*.sln'
+
   # ========== Job 1: 在 GitHub 云端构建 ==========
   build:
+    needs: detect-changes
     runs-on: windows-latest  # 使用 GitHub 提供的快速云端 Runner
     
     steps:
@@ -31,25 +61,55 @@ jobs:
     - name: 还原依赖项
       run: dotnet restore AI.DeliciousFood.sln
       
+    - name: 显示变更检测结果
+      run: |
+        Write-Host "变更检测结果:"
+        Write-Host "Client 变更: ${{ needs.detect-changes.outputs.client-changed }}"
+        Write-Host "Manage 变更: ${{ needs.detect-changes.outputs.manage-changed }}"
+        Write-Host "Common 变更: ${{ needs.detect-changes.outputs.common-changed }}"
+
     - name: 构建解决方案
       run: dotnet build AI.DeliciousFood.sln --configuration ${{ env.BUILD_CONFIGURATION }} --no-restore
       
     - name: 发布 Web.Client
+      if: needs.detect-changes.outputs.client-changed == 'true' || needs.detect-changes.outputs.common-changed == 'true'
       run: dotnet publish AI.DeliciousFood.Web.Client/AI.DeliciousFood.Web.Client.csproj --configuration ${{ env.BUILD_CONFIGURATION }} --output ./publish/client --no-build
       
     - name: 发布 Web.Manage
+      if: needs.detect-changes.outputs.manage-changed == 'true' || needs.detect-changes.outputs.common-changed == 'true'
       run: dotnet publish AI.DeliciousFood.Web.Manage/AI.DeliciousFood.Web.Manage.csproj --configuration ${{ env.BUILD_CONFIGURATION }} --output ./publish/manage --no-build
       
-    - name: 移除配置文件
+    - name: 清理 Client BuildHost 文件夹
+      if: needs.detect-changes.outputs.client-changed == 'true' || needs.detect-changes.outputs.common-changed == 'true'
+      run: |
+        Write-Host "Cleaning Client BuildHost folders..."
+        Remove-Item -Path "./publish/client/BuildHost-*" -Recurse -Force -ErrorAction SilentlyContinue
+        Write-Host "Client BuildHost folders cleaned"
+
+    - name: 清理 Manage BuildHost 文件夹
+      if: needs.detect-changes.outputs.manage-changed == 'true' || needs.detect-changes.outputs.common-changed == 'true'
+      run: |
+        Write-Host "Cleaning Manage BuildHost folders..."
+        Remove-Item -Path "./publish/manage/BuildHost-*" -Recurse -Force -ErrorAction SilentlyContinue
+        Write-Host "Manage BuildHost folders cleaned"
+      
+    - name: 移除 Client 配置文件
+      if: needs.detect-changes.outputs.client-changed == 'true' || needs.detect-changes.outputs.common-changed == 'true'
       run: |
         Remove-Item -Path "./publish/client/appsettings.json" -Force -ErrorAction SilentlyContinue
         Remove-Item -Path "./publish/client/appsettings.Development.json" -Force -ErrorAction SilentlyContinue
+        Write-Host "✅ 已移除 Client appsettings.json 文件"
+
+    - name: 移除 Manage 配置文件
+      if: needs.detect-changes.outputs.manage-changed == 'true' || needs.detect-changes.outputs.common-changed == 'true'
+      run: |
         Remove-Item -Path "./publish/manage/appsettings.json" -Force -ErrorAction SilentlyContinue
         Remove-Item -Path "./publish/manage/appsettings.Development.json" -Force -ErrorAction SilentlyContinue
-        Write-Host "✅ 已移除 appsettings.json 文件,请在服务器上手动配置"
+        Write-Host "✅ 已移除 Manage appsettings.json 文件"
     
     # 上传构建产物供部署 job 使用
     - name: 上传 Client 构建产物
+      if: needs.detect-changes.outputs.client-changed == 'true' || needs.detect-changes.outputs.common-changed == 'true'
       uses: actions/upload-artifact@v4
       with:
         name: client-build
@@ -57,6 +117,7 @@ jobs:
         retention-days: 1  # 只保留1天,节省存储空间
         
     - name: 上传 Manage 构建产物
+      if: needs.detect-changes.outputs.manage-changed == 'true' || needs.detect-changes.outputs.common-changed == 'true'
       uses: actions/upload-artifact@v4
       with:
         name: manage-build
@@ -73,11 +134,10 @@ jobs:
     steps:
     # 临时停止 SQL Server 释放内存（可选）
     - name: 停止 SQL Server（释放内存）
-      shell: powershell
+      shell: pwsh
       continue-on-error: true  # 即使失败也继续执行
       run: |
-        [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
-        Write-Host "Stopping SQL Server to free memory..."
+        Write-Host "正在停止 SQL Server 以释放内存..."
         
         # 增加超时时间到 60 秒
         $service = Get-Service -Name "MSSQLSERVER" -ErrorAction SilentlyContinue
@@ -92,146 +152,160 @@ jobs:
           $agentService.WaitForStatus('Stopped', '00:00:30')  # 等待最多 30 秒
         }
         
-        Write-Host "SQL Server stopped successfully"
+        Write-Host "SQL Server 已停止"
     
     # 下载构建产物(比完整代码库小很多)
     - name: 下载 Client 构建产物
+      if: needs.detect-changes.outputs.client-changed == 'true' || needs.detect-changes.outputs.common-changed == 'true'
       uses: actions/download-artifact@v4
       with:
         name: client-build
         path: ./publish/client
         
     - name: 下载 Manage 构建产物
+      if: needs.detect-changes.outputs.manage-changed == 'true' || needs.detect-changes.outputs.common-changed == 'true'
       uses: actions/download-artifact@v4
       with:
         name: manage-build
         path: ./publish/manage
       
     - name: 部署到本机 IIS
-      shell: powershell
+      shell: pwsh
       env:
         CLIENT_DEPLOY_PATH: ${{ secrets.CLIENT_DEPLOY_PATH }}
         MANAGE_DEPLOY_PATH: ${{ secrets.MANAGE_DEPLOY_PATH }}
         CLIENT_SITE_NAME: ${{ secrets.CLIENT_SITE_NAME }}
         MANAGE_SITE_NAME: ${{ secrets.MANAGE_SITE_NAME }}
       run: |
-        [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
         Import-Module WebAdministration
         
-        Write-Host "Starting deployment to local IIS..."
+        Write-Host "开始部署到本机 IIS..."
         
-        # ========== Deploy Client ==========
-        Write-Host "`nDeploying Client site..."
+        $deployClient = "${{ needs.detect-changes.outputs.client-changed }}" -eq "true" -or "${{ needs.detect-changes.outputs.common-changed }}" -eq "true"
+        $deployManage = "${{ needs.detect-changes.outputs.manage-changed }}" -eq "true" -or "${{ needs.detect-changes.outputs.common-changed }}" -eq "true"
         
-        # Stop site
-        Write-Host "Stopping site: $env:CLIENT_SITE_NAME"
+        Write-Host "部署计划:"
+        Write-Host "- Client: $(if ($deployClient) { '✅ 需要部署' } else { '⏭️ 跳过' })"
+        Write-Host "- Manage: $(if ($deployManage) { '✅ 需要部署' } else { '⏭️ 跳过' })"
+        
+        # ========== 部署 Client ==========
+        if ($deployClient) {
+        Write-Host "`n正在部署 Client 站点..."
+        
+        # 停止站点
+        Write-Host "停止站点: $env:CLIENT_SITE_NAME"
         Stop-WebSite -Name $env:CLIENT_SITE_NAME -ErrorAction SilentlyContinue
         Stop-WebAppPool -Name $env:CLIENT_SITE_NAME -ErrorAction SilentlyContinue
         Start-Sleep -Seconds 3
         
-        # Backup old files
+        # 备份旧文件
         $clientBackupPath = "$env:CLIENT_DEPLOY_PATH-backup-$(Get-Date -Format 'yyyyMMddHHmmss')"
         if (Test-Path $env:CLIENT_DEPLOY_PATH) {
-          Write-Host "Backing up to: $clientBackupPath"
+          Write-Host "备份到: $clientBackupPath"
           Copy-Item -Path $env:CLIENT_DEPLOY_PATH -Destination $clientBackupPath -Recurse -Force
         }
         
-        # Ensure directory exists
+        # 确保目录存在
         if (-not (Test-Path $env:CLIENT_DEPLOY_PATH)) {
           New-Item -Path $env:CLIENT_DEPLOY_PATH -ItemType Directory -Force
         }
         
-        # Clean old files (keep appsettings.json)
-        Write-Host "Cleaning old files..."
+        # 清理旧文件（保留 appsettings.json）
+        Write-Host "清理旧文件..."
         Get-ChildItem -Path $env:CLIENT_DEPLOY_PATH -Exclude "appsettings*.json" | Remove-Item -Recurse -Force -ErrorAction SilentlyContinue
         
-        # Copy new files
-        Write-Host "Copying new files to: $env:CLIENT_DEPLOY_PATH"
-        Copy-Item -Path "./publish/client/*" -Destination $env:CLIENT_DEPLOY_PATH -Recurse -Force
+        # 复制新文件（排除 BuildHost 文件夹）
+        Write-Host "复制新文件到: $env:CLIENT_DEPLOY_PATH"
+        Get-ChildItem -Path "./publish/client" -Exclude "BuildHost-*" | Copy-Item -Destination $env:CLIENT_DEPLOY_PATH -Recurse -Force
         
-        # Start site
-        Write-Host "Starting site: $env:CLIENT_SITE_NAME"
+        # 启动站点
+        Write-Host "启动站点: $env:CLIENT_SITE_NAME"
         Start-WebAppPool -Name $env:CLIENT_SITE_NAME -ErrorAction SilentlyContinue
         Start-WebSite -Name $env:CLIENT_SITE_NAME -ErrorAction SilentlyContinue
         
-        Write-Host "Client deployment completed!"
+        Write-Host "Client 部署完成！"
+        } else {
+        Write-Host "`n⏭️ 跳过 Client 部署（无相关变更）"
+        }
         
-        # ========== Deploy Manage ==========
-        Write-Host "`nDeploying Manage site..."
+        # ========== 部署 Manage ==========
+        if ($deployManage) {
+        Write-Host "`n正在部署 Manage 站点..."
         
-        # Stop site
-        Write-Host "Stopping site: $env:MANAGE_SITE_NAME"
+        # 停止站点
+        Write-Host "停止站点: $env:MANAGE_SITE_NAME"
         Stop-WebSite -Name $env:MANAGE_SITE_NAME -ErrorAction SilentlyContinue
         Stop-WebAppPool -Name $env:MANAGE_SITE_NAME -ErrorAction SilentlyContinue
         Start-Sleep -Seconds 3
         
-        # Backup old files
+        # 备份旧文件
         $manageBackupPath = "$env:MANAGE_DEPLOY_PATH-backup-$(Get-Date -Format 'yyyyMMddHHmmss')"
         if (Test-Path $env:MANAGE_DEPLOY_PATH) {
-          Write-Host "Backing up to: $manageBackupPath"
+          Write-Host "备份到: $manageBackupPath"
           Copy-Item -Path $env:MANAGE_DEPLOY_PATH -Destination $manageBackupPath -Recurse -Force
         }
         
-        # Ensure directory exists
+        # 确保目录存在
         if (-not (Test-Path $env:MANAGE_DEPLOY_PATH)) {
           New-Item -Path $env:MANAGE_DEPLOY_PATH -ItemType Directory -Force
         }
         
-        # Clean old files (keep appsettings.json)
-        Write-Host "Cleaning old files..."
+        # 清理旧文件（保留 appsettings.json）
+        Write-Host "清理旧文件..."
         Get-ChildItem -Path $env:MANAGE_DEPLOY_PATH -Exclude "appsettings*.json" | Remove-Item -Recurse -Force -ErrorAction SilentlyContinue
         
-        # Copy new files
-        Write-Host "Copying new files to: $env:MANAGE_DEPLOY_PATH"
-        Copy-Item -Path "./publish/manage/*" -Destination $env:MANAGE_DEPLOY_PATH -Recurse -Force
+        # 复制新文件（排除 BuildHost 文件夹）
+        Write-Host "复制新文件到: $env:MANAGE_DEPLOY_PATH"
+        Get-ChildItem -Path "./publish/manage" -Exclude "BuildHost-*" | Copy-Item -Destination $env:MANAGE_DEPLOY_PATH -Recurse -Force
         
-        # Start site
-        Write-Host "Starting site: $env:MANAGE_SITE_NAME"
+        # 启动站点
+        Write-Host "启动站点: $env:MANAGE_SITE_NAME"
         Start-WebAppPool -Name $env:MANAGE_SITE_NAME -ErrorAction SilentlyContinue
         Start-WebSite -Name $env:MANAGE_SITE_NAME -ErrorAction SilentlyContinue
         
-        Write-Host "Manage deployment completed!"
+        Write-Host "Manage 部署完成！"
+        } else {
+        Write-Host "`n⏭️ 跳过 Manage 部署（无相关变更）"
+        }
         
-        # ========== Clean old backups ==========
-        Write-Host "`nCleaning old backups (keeping last 5)..."
+        # ========== 清理旧备份 ==========
+        Write-Host "`n清理旧备份（保留最近5个）..."
         
-        # Clean Client old backups
+        # 清理 Client 旧备份
         Get-ChildItem -Path (Split-Path $env:CLIENT_DEPLOY_PATH) -Filter "*Client-backup-*" -Directory | 
           Sort-Object Name -Descending | 
           Select-Object -Skip 5 | 
           ForEach-Object {
-            Write-Host "Deleting old backup: $($_.FullName)"
+            Write-Host "删除旧备份: $($_.FullName)"
             Remove-Item -Path $_.FullName -Recurse -Force
           }
         
-        # Clean Manage old backups
+        # 清理 Manage 旧备份
         Get-ChildItem -Path (Split-Path $env:MANAGE_DEPLOY_PATH) -Filter "*Manage-backup-*" -Directory | 
           Sort-Object Name -Descending | 
           Select-Object -Skip 5 | 
           ForEach-Object {
-            Write-Host "Deleting old backup: $($_.FullName)"
+            Write-Host "删除旧备份: $($_.FullName)"
             Remove-Item -Path $_.FullName -Recurse -Force
           }
         
-        Write-Host "`nDeployment completed successfully!"
+        Write-Host "`n部署全部完成！"
         
     # 重启 SQL Server
     - name: 重启 SQL Server
       if: always()  # 无论部署成功或失败都要重启
-      shell: powershell
+      shell: pwsh
       run: |
-        [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
-        Write-Host "Restarting SQL Server..."
+        Write-Host "正在重启 SQL Server..."
         Start-Service -Name "MSSQLSERVER" -ErrorAction SilentlyContinue
         Start-Service -Name "SQLSERVERAGENT" -ErrorAction SilentlyContinue
-        Write-Host "SQL Server restarted successfully"
+        Write-Host "SQL Server 已重启"
         
     - name: 验证部署
       if: success()
-      shell: powershell
+      shell: pwsh
       run: |
-        [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
-        Write-Host "`nDeployment completed successfully!"
-        Write-Host "Client site: ${{ secrets.CLIENT_SITE_NAME }}"
-        Write-Host "Manage site: ${{ secrets.MANAGE_SITE_NAME }}"
-        Write-Host "`nPlease verify appsettings.json configuration"
+        Write-Host "`n✅ 部署成功完成！"
+        Write-Host "Client 站点: ${{ secrets.CLIENT_SITE_NAME }}"
+        Write-Host "Manage 站点: ${{ secrets.MANAGE_SITE_NAME }}"
+        Write-Host "`n⚠️  请检查 appsettings.json 配置是否正确"
