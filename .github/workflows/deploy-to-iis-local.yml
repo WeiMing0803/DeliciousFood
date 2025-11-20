@@ -96,111 +96,112 @@ jobs:
         path: ./publish/manage
       
     - name: 部署到本机 IIS
-      shell: pwsh
+      shell: powershell
       env:
         CLIENT_DEPLOY_PATH: ${{ secrets.CLIENT_DEPLOY_PATH }}
         MANAGE_DEPLOY_PATH: ${{ secrets.MANAGE_DEPLOY_PATH }}
         CLIENT_SITE_NAME: ${{ secrets.CLIENT_SITE_NAME }}
         MANAGE_SITE_NAME: ${{ secrets.MANAGE_SITE_NAME }}
       run: |
+        [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
         Import-Module WebAdministration
         
-        Write-Host "开始部署到本机 IIS..."
+        Write-Host "Starting deployment to local IIS..."
         
-        # ========== 部署 Client ==========
-        Write-Host "`n📦 部署 Client 站点..."
+        # ========== Deploy Client ==========
+        Write-Host "`nDeploying Client site..."
         
-        # 停止站点
-        Write-Host "停止站点: $env:CLIENT_SITE_NAME"
+        # Stop site
+        Write-Host "Stopping site: $env:CLIENT_SITE_NAME"
         Stop-WebSite -Name $env:CLIENT_SITE_NAME -ErrorAction SilentlyContinue
         Stop-WebAppPool -Name $env:CLIENT_SITE_NAME -ErrorAction SilentlyContinue
         Start-Sleep -Seconds 3
         
-        # 备份旧文件
+        # Backup old files
         $clientBackupPath = "$env:CLIENT_DEPLOY_PATH-backup-$(Get-Date -Format 'yyyyMMddHHmmss')"
         if (Test-Path $env:CLIENT_DEPLOY_PATH) {
-          Write-Host "备份到: $clientBackupPath"
+          Write-Host "Backing up to: $clientBackupPath"
           Copy-Item -Path $env:CLIENT_DEPLOY_PATH -Destination $clientBackupPath -Recurse -Force
         }
         
-        # 确保目录存在
+        # Ensure directory exists
         if (-not (Test-Path $env:CLIENT_DEPLOY_PATH)) {
           New-Item -Path $env:CLIENT_DEPLOY_PATH -ItemType Directory -Force
         }
         
-        # 清理旧文件(保留 appsettings.json)
-        Write-Host "清理旧文件..."
+        # Clean old files (keep appsettings.json)
+        Write-Host "Cleaning old files..."
         Get-ChildItem -Path $env:CLIENT_DEPLOY_PATH -Exclude "appsettings*.json" | Remove-Item -Recurse -Force -ErrorAction SilentlyContinue
         
-        # 复制新文件
-        Write-Host "复制新文件到: $env:CLIENT_DEPLOY_PATH"
+        # Copy new files
+        Write-Host "Copying new files to: $env:CLIENT_DEPLOY_PATH"
         Copy-Item -Path "./publish/client/*" -Destination $env:CLIENT_DEPLOY_PATH -Recurse -Force
         
-        # 启动站点
-        Write-Host "启动站点: $env:CLIENT_SITE_NAME"
+        # Start site
+        Write-Host "Starting site: $env:CLIENT_SITE_NAME"
         Start-WebAppPool -Name $env:CLIENT_SITE_NAME -ErrorAction SilentlyContinue
         Start-WebSite -Name $env:CLIENT_SITE_NAME -ErrorAction SilentlyContinue
         
-        Write-Host "✅ Client 部署完成!"
+        Write-Host "Client deployment completed!"
         
-        # ========== 部署 Manage ==========
-        Write-Host "`n📦 部署 Manage 站点..."
+        # ========== Deploy Manage ==========
+        Write-Host "`nDeploying Manage site..."
         
-        # 停止站点
-        Write-Host "停止站点: $env:MANAGE_SITE_NAME"
+        # Stop site
+        Write-Host "Stopping site: $env:MANAGE_SITE_NAME"
         Stop-WebSite -Name $env:MANAGE_SITE_NAME -ErrorAction SilentlyContinue
         Stop-WebAppPool -Name $env:MANAGE_SITE_NAME -ErrorAction SilentlyContinue
         Start-Sleep -Seconds 3
         
-        # 备份旧文件
+        # Backup old files
         $manageBackupPath = "$env:MANAGE_DEPLOY_PATH-backup-$(Get-Date -Format 'yyyyMMddHHmmss')"
         if (Test-Path $env:MANAGE_DEPLOY_PATH) {
-          Write-Host "备份到: $manageBackupPath"
+          Write-Host "Backing up to: $manageBackupPath"
           Copy-Item -Path $env:MANAGE_DEPLOY_PATH -Destination $manageBackupPath -Recurse -Force
         }
         
-        # 确保目录存在
+        # Ensure directory exists
         if (-not (Test-Path $env:MANAGE_DEPLOY_PATH)) {
           New-Item -Path $env:MANAGE_DEPLOY_PATH -ItemType Directory -Force
         }
         
-        # 清理旧文件(保留 appsettings.json)
-        Write-Host "清理旧文件..."
+        # Clean old files (keep appsettings.json)
+        Write-Host "Cleaning old files..."
         Get-ChildItem -Path $env:MANAGE_DEPLOY_PATH -Exclude "appsettings*.json" | Remove-Item -Recurse -Force -ErrorAction SilentlyContinue
         
-        # 复制新文件
-        Write-Host "复制新文件到: $env:MANAGE_DEPLOY_PATH"
+        # Copy new files
+        Write-Host "Copying new files to: $env:MANAGE_DEPLOY_PATH"
         Copy-Item -Path "./publish/manage/*" -Destination $env:MANAGE_DEPLOY_PATH -Recurse -Force
         
-        # 启动站点
-        Write-Host "启动站点: $env:MANAGE_SITE_NAME"
+        # Start site
+        Write-Host "Starting site: $env:MANAGE_SITE_NAME"
         Start-WebAppPool -Name $env:MANAGE_SITE_NAME -ErrorAction SilentlyContinue
         Start-WebSite -Name $env:MANAGE_SITE_NAME -ErrorAction SilentlyContinue
         
-        Write-Host "✅ Manage 部署完成!"
+        Write-Host "Manage deployment completed!"
         
-        # ========== 清理旧备份 ==========
-        Write-Host "`n🧹 清理旧备份(保留最近5个)..."
+        # ========== Clean old backups ==========
+        Write-Host "`nCleaning old backups (keeping last 5)..."
         
-        # 清理 Client 旧备份
+        # Clean Client old backups
         Get-ChildItem -Path (Split-Path $env:CLIENT_DEPLOY_PATH) -Filter "*Client-backup-*" -Directory | 
           Sort-Object Name -Descending | 
           Select-Object -Skip 5 | 
           ForEach-Object {
-            Write-Host "删除旧备份: $($_.FullName)"
+            Write-Host "Deleting old backup: $($_.FullName)"
             Remove-Item -Path $_.FullName -Recurse -Force
           }
         
-        # 清理 Manage 旧备份
+        # Clean Manage old backups
         Get-ChildItem -Path (Split-Path $env:MANAGE_DEPLOY_PATH) -Filter "*Manage-backup-*" -Directory | 
           Sort-Object Name -Descending | 
           Select-Object -Skip 5 | 
           ForEach-Object {
-            Write-Host "删除旧备份: $($_.FullName)"
+            Write-Host "Deleting old backup: $($_.FullName)"
             Remove-Item -Path $_.FullName -Recurse -Force
           }
         
-        Write-Host "`n🎉 部署全部完成!"
+        Write-Host "`nDeployment completed successfully!"
         
     # 重启 SQL Server
     - name: 重启 SQL Server
@@ -215,8 +216,10 @@ jobs:
         
     - name: 验证部署
       if: success()
+      shell: powershell
       run: |
-        Write-Host "`n✅ 部署成功完成！"
-        Write-Host "Client 站点: ${{ secrets.CLIENT_SITE_NAME }}"
-        Write-Host "Manage 站点: ${{ secrets.MANAGE_SITE_NAME }}"
-        Write-Host "`n⚠️  请检查 appsettings.json 配置是否正确"
+        [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+        Write-Host "`nDeployment completed successfully!"
+        Write-Host "Client site: ${{ secrets.CLIENT_SITE_NAME }}"
+        Write-Host "Manage site: ${{ secrets.MANAGE_SITE_NAME }}"
+        Write-Host "`nPlease verify appsettings.json configuration"
