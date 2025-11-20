@@ -73,13 +73,12 @@ jobs:
     steps:
     # 临时停止 SQL Server 释放内存
     - name: 停止 SQL Server（释放内存）
-      shell: pwsh
+      shell: powershell
       run: |
+        [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
         Write-Host "Stopping SQL Server to free memory..."
         Stop-Service -Name "MSSQLSERVER" -Force -ErrorAction SilentlyContinue
         Stop-Service -Name "SQLSERVERAGENT" -Force -ErrorAction SilentlyContinue
-        # 如果是 SQL Express，使用这个：
-        # Stop-Service -Name "MSSQL`$SQLEXPRESS" -Force -ErrorAction SilentlyContinue
         Start-Sleep -Seconds 5
         Write-Host "SQL Server stopped successfully"
     
@@ -206,13 +205,12 @@ jobs:
     # 重启 SQL Server
     - name: 重启 SQL Server
       if: always()  # 无论部署成功或失败都要重启
-      shell: pwsh
+      shell: powershell
       run: |
+        [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
         Write-Host "Restarting SQL Server..."
         Start-Service -Name "MSSQLSERVER" -ErrorAction SilentlyContinue
         Start-Service -Name "SQLSERVERAGENT" -ErrorAction SilentlyContinue
-        # 如果是 SQL Express，使用这个：
-        # Start-Service -Name "MSSQL`$SQLEXPRESS" -ErrorAction SilentlyContinue
         Write-Host "SQL Server restarted successfully"
         
     - name: 验证部署
