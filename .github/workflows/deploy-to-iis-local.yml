@@ -10,15 +10,19 @@ env:
   BUILD_CONFIGURATION: 'Release'
 
 jobs:
-  build-and-deploy:
-    runs-on: self-hosted  # 在 IIS 服务器本机运行
+  # ========== Job 1: 在 GitHub 云端构建 ==========
+  build:
+    runs-on: windows-latest  # 使用 GitHub 提供的快速云端 Runner
     
     steps:
     - name: 检出代码
       uses: actions/checkout@v4
       
-    # Self-hosted Runner 上已安装 .NET SDK,无需再次设置
-    
+    - name: 设置 .NET SDK
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+        
     - name: 验证 .NET 版本
       run: |
         Write-Host "当前 .NET 版本:"
@@ -43,6 +47,40 @@ jobs:
         Remove-Item -Path "./publish/manage/appsettings.json" -Force -ErrorAction SilentlyContinue
         Remove-Item -Path "./publish/manage/appsettings.Development.json" -Force -ErrorAction SilentlyContinue
         Write-Host "✅ 已移除 appsettings.json 文件,请在服务器上手动配置"
+    
+    # 上传构建产物供部署 job 使用
+    - name: 上传 Client 构建产物
+      uses: actions/upload-artifact@v4
+      with:
+        name: client-build
+        path: ./publish/client
+        retention-days: 1  # 只保留1天,节省存储空间
+        
+    - name: 上传 Manage 构建产物
+      uses: actions/upload-artifact@v4
+      with:
+        name: manage-build
+        path: ./publish/manage
+        retention-days: 1
+
+  # ========== Job 2: 在你的服务器上部署 ==========
+  deploy:
+    needs: build  # 等待构建 job 完成
+    runs-on: self-hosted  # 在你的 IIS 服务器本机运行
+    
+    steps:
+    # 下载构建产物(比完整代码库小很多)
+    - name: 下载 Client 构建产物
+      uses: actions/download-artifact@v4
+      with:
+        name: client-build
+        path: ./publish/client
+        
+    - name: 下载 Manage 构建产物
+      uses: actions/download-artifact@v4
+      with:
+        name: manage-build
+        path: ./publish/manage
       
     - name: 部署到本机 IIS
       shell: pwsh
