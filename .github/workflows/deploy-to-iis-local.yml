@@ -228,13 +228,13 @@ jobs:
           New-Item -Path $env:CLIENT_DEPLOY_PATH -ItemType Directory -Force
         }
         
-        # 清理旧文件（保留 appsettings.json）
+        # 清理旧文件（保留 appsettings.json 和 Images 文件夹）
         Write-Host "清理旧文件..."
-        Get-ChildItem -Path $env:CLIENT_DEPLOY_PATH -Exclude "appsettings*.json" | Remove-Item -Recurse -Force -ErrorAction SilentlyContinue
+        Get-ChildItem -Path $env:CLIENT_DEPLOY_PATH -Exclude "appsettings*.json","Images" | Remove-Item -Recurse -Force -ErrorAction SilentlyContinue
         
-        # 复制新文件（排除 BuildHost 文件夹）
+        # 复制新文件（排除 BuildHost 文件夹和 Images 文件夹）
         Write-Host "复制新文件到: $env:CLIENT_DEPLOY_PATH"
-        Get-ChildItem -Path "./publish/client" -Exclude "BuildHost-*" | Copy-Item -Destination $env:CLIENT_DEPLOY_PATH -Recurse -Force
+        Get-ChildItem -Path "./publish/client" -Exclude "BuildHost-*","Images" | Copy-Item -Destination $env:CLIENT_DEPLOY_PATH -Recurse -Force
         
         # 启动站点
         Write-Host "启动站点: $env:CLIENT_SITE_NAME"
