@@ -4,6 +4,7 @@ using AI.DeliciousFood.Core.Model;
 using AI.DeliciousFood.Core.Server;
 using AI.DeliciousFood.Web.Client;
 using AI.DeliciousFood.Web.Client.Helper;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
@@ -65,6 +66,12 @@ builder.Services.AddSingleton(resolver => resolver.GetRequiredService<IOptions<A
 builder.Services.Configure<EmailConfigHelper>(builder.Configuration.GetSection("SmtpSettings"));
 builder.Services.AddSingleton(resolver => resolver.GetRequiredService<IOptions<EmailConfigHelper>>().Value);
 
+// 配置转发头支持（用于 Nginx 反向代理）
+builder.Services.Configure<ForwardedHeadersOptions>(options =>
+{
+    options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+});
+
 builder.Host.UseSerilog((ctx, lc) => lc
     .WriteTo.Console()
     .ReadFrom.Configuration(ctx.Configuration));
@@ -88,6 +95,9 @@ if (!app.Environment.IsDevelopment())
 
 app.UseMiddleware<ErrorHandlingMiddleware>();
 app.UseSerilogRequestLogging();
+
+// 使用转发头中间件（必须在其他中间件之前）
+app.UseForwardedHeaders();
 
 app.UseStaticFiles();
 

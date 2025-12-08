@@ -2,6 +2,7 @@ using AI.DeliciousFood.Core.Data;
 using AI.DeliciousFood.Core.ManageServer;
 using AI.DeliciousFood.Core.Model;
 using AI.DeliciousFood.Web.Manage;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -55,6 +56,12 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.LoginPath = "/AccountLogon/Logon"; // 设置未登录时跳转的路径
 });
 
+// 配置转发头支持（用于 Nginx 反向代理）
+builder.Services.Configure<ForwardedHeadersOptions>(options =>
+{
+    options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+});
+
 //应用启动或运行时检查依赖注册是否正确
 builder.Host.UseDefaultServiceProvider(options =>
 {
@@ -69,6 +76,10 @@ if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
 }
+
+// 使用转发头中间件（必须在其他中间件之前）
+app.UseForwardedHeaders();
+
 app.UseStaticFiles();
 
 app.UseRouting();
