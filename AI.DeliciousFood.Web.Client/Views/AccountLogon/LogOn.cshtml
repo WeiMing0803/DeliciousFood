@@ -56,13 +56,13 @@
                 <section>
                     <label>
                         <p>邮箱</p>
-                        <input asp-for="@loginModel.Email" type="email" placeholder=" " />
+                        <input asp-for="@loginModel.Email" type="email" placeholder=" " value="youke@@qq.com" />
                         <div class="border"></div>
                         <span asp-validation-for="@loginModel.Email" class="text-danger"></span>
                     </label>
                     <label>
                         <p>密码</p>
-                        <input asp-for="@loginModel.Password" type="password" placeholder=" " />
+                        <input asp-for="@loginModel.Password" type="password" placeholder=" " value="123456" />
                         <div class="border"></div>
                         <span asp-validation-for="@loginModel.Password" class="text-danger"></span>
                     </label>

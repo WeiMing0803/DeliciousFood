@@ -39,11 +39,11 @@ cd C:\nginx
 New-Item -ItemType Directory -Path "C:\nginx\ssl" -Force
 ```
 
-将证书文件复制到此目录：
-- `C:\nginx\ssl\app.abc.cloud.crt`
-- `C:\nginx\ssl\app.abc.cloud.key`
-- `C:\nginx\ssl\manage.abc.cloud.crt`
-- `C:\nginx\ssl\manage.abc.cloud.key`
+将证书文件复制到此目录（证书文件可以是 .pem 或 .crt 格式）：
+- `C:\nginx\ssl\app.abc.cloud.pem` 或 `.crt`（证书文件）
+- `C:\nginx\ssl\app.abc.cloud.key`（私钥文件）
+- `C:\nginx\ssl\manage.abc.cloud.pem` 或 `.crt`（证书文件）
+- `C:\nginx\ssl\manage.abc.cloud.key`（私钥文件）
 
 ## 三、Nginx 配置
 
@@ -89,9 +89,9 @@ http {
         listen       443 ssl;
         server_name  app.abc.cloud;
         
-        # SSL 证书配置
-        ssl_certificate      ssl/app.abc.cloud.crt;
-        ssl_certificate_key  ssl/app.abc.cloud.key;
+        # SSL 证书配置（注意：Windows 路径使用正斜杠）
+        ssl_certificate      C:/nginx/ssl/app.abc.cloud.pem;
+        ssl_certificate_key  C:/nginx/ssl/app.abc.cloud.key;
         
         # SSL 安全配置
         ssl_protocols TLSv1.2 TLSv1.3;
@@ -147,9 +147,9 @@ http {
         listen       443 ssl;
         server_name  manage.abc.cloud;
         
-        # SSL 证书配置
-        ssl_certificate      ssl/manage.abc.cloud.crt;
-        ssl_certificate_key  ssl/manage.abc.cloud.key;
+        # SSL 证书配置（注意：Windows 路径使用正斜杠）
+        ssl_certificate      C:/nginx/ssl/manage.abc.cloud.pem;
+        ssl_certificate_key  C:/nginx/ssl/manage.abc.cloud.key;
         
         # SSL 安全配置
         ssl_protocols TLSv1.2 TLSv1.3;
@@ -225,36 +225,51 @@ cd C:\nginx
 
 ## 五、将 Nginx 安装为 Windows 服务
 
-为了让 Nginx 开机自动启动，建议将其安装为 Windows 服务。
+为了让 Nginx 开机自动启动,建议将其安装为 Windows 服务。
 
-### 5.1 使用 NSSM（推荐）
+### 5.1 使用 WinSW(推荐)
 
-1. **下载 NSSM**
-   - 访问 [https://nssm.cc/download](https://nssm.cc/download)
-   - 下载并解压 NSSM
+1. **下载 WinSW**
+   - 访问 [https://github.com/winsw/winsw/releases](https://github.com/winsw/winsw/releases)
+   - 下载最新的 `WinSW-x64.exe` 文件
+   - 将文件重命名为 `NginxService.exe` 并放到 `C:\nginx` 目录
 
-2. **安装 Nginx 服务**
-   ```powershell
-   # 假设 NSSM 解压到 C:\nssm
-   cd C:\nssm\win64
-   .\nssm.exe install NginxService "C:\nginx\nginx.exe"
+2. **创建配置文件**
+   
+   在 `C:\nginx` 目录下创建 `NginxService.xml` 文件:
+   ```xml
+   <service>
+     <id>NginxService</id>
+     <name>Nginx Reverse Proxy</name>
+     <description>Nginx reverse proxy for DeliciousFood applications</description>
+     <executable>C:\nginx\nginx.exe</executable>
+     <startmode>Automatic</startmode>
+     <logpath>C:\nginx\logs</logpath>
+     <log mode="roll-by-size">
+       <sizeThreshold>10240</sizeThreshold>
+       <keepFiles>8</keepFiles>
+     </log>
+     <onfailure action="restart" delay="10 sec"/>
+     <onfailure action="restart" delay="20 sec"/>
+     <resetfailure>1 hour</resetfailure>
+     <stopexecutable>C:\nginx\nginx.exe</stopexecutable>
+     <stopargument>-s</stopargument>
+     <stopargument>quit</stopargument>
+   </service>
    ```
 
-3. **配置服务**
+3. **安装服务**
    ```powershell
-   .\nssm.exe set NginxService AppDirectory "C:\nginx"
-   .\nssm.exe set NginxService DisplayName "Nginx Reverse Proxy"
-   .\nssm.exe set NginxService Description "Nginx reverse proxy for DeliciousFood applications"
-   .\nssm.exe set NginxService Start SERVICE_AUTO_START
+   cd C:\nginx
+   .\NginxService.exe install
    ```
 
-4. **启动服务**
+4. **启动服务并验证**
    ```powershell
+   # 启动服务
    Start-Service NginxService
-   ```
-
-5. **查看服务状态**
-   ```powershell
+   
+   # 查看服务状态
    Get-Service NginxService
    ```
 
@@ -263,7 +278,7 @@ cd C:\nginx
 - **启动服务**: `Start-Service NginxService`
 - **停止服务**: `Stop-Service NginxService`
 - **重启服务**: `Restart-Service NginxService`
-- **卸载服务**: `C:\nssm\win64\nssm.exe remove NginxService confirm`
+- **卸载服务**: `C:\nginx\NginxService.exe uninstall`
 
 ## 六、IIS 和 ASP.NET Core 应用配置
 
