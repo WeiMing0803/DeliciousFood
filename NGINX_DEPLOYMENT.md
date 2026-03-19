@@ -353,12 +353,73 @@ New-NetFirewallRule -DisplayName "Nginx HTTPS" -Direction Inbound -LocalPort 443
 - 检查证书是否过期
 - 验证证书和域名是否匹配
 
-### 10.3 连接超时
+### 10.3 证书替换后仍提示过期（重点）
+
+在 Windows 环境下，手动替换证书后建议严格按以下顺序执行：
+
+1. **仅保留一套 Nginx 实例（避免多实例冲突）**
+```powershell
+taskkill /F /IM nginx.exe
+```
+
+2. **清理旧 PID 文件（避免 reload 指向旧进程）**
+```powershell
+Remove-Item C:\nginx\logs\nginx.pid -Force -ErrorAction SilentlyContinue
+```
+
+3. **在 `nginx.conf` 主级别显式配置 pid**
+将以下配置放在 `worker_processes` 同级（不在 `http {}` 内）：
+```nginx
+pid C:/nginx/logs/nginx.pid;
+```
+
+4. **检查配置语法**
+```powershell
+cd C:\nginx
+.\nginx.exe -t
+```
+
+5. **按固定 prefix 启动 Nginx（保证 PID 路径一致）**
+```powershell
+Start-Process -FilePath C:\nginx\nginx.exe -ArgumentList "-p C:\nginx -c conf\nginx.conf"
+```
+
+6. **确认进程 PID 与 pid 文件一致**
+```powershell
+Get-Process nginx
+Get-Content C:\nginx\logs\nginx.pid
+```
+
+7. **再执行 reload**
+```powershell
+.\nginx.exe -s reload
+```
+
+如果出现 `OpenEvent("Global\ngx_reload_xxx") failed`，通常是 `nginx.pid` 与实际运行进程不一致，重复上述 1~7 步即可恢复。
+
+8. **确认线上返回的是新证书**
+```powershell
+# PowerShell 方式（无需 < NUL 重定向）
+$tcp = New-Object Net.Sockets.TcpClient("app.abc.cloud",443)
+$ssl = New-Object Net.Security.SslStream($tcp.GetStream(),$false,({$true}))
+$ssl.AuthenticateAsClient("app.abc.cloud")
+$cert = New-Object System.Security.Cryptography.X509Certificates.X509Certificate2($ssl.RemoteCertificate)
+$cert | Select-Object Subject,Issuer,NotBefore,NotAfter,Thumbprint
+$ssl.Dispose(); $tcp.Close()
+```
+
+9. **如浏览器仍报旧证书，继续排查**
+- 清理本机 DNS 缓存：`ipconfig /flushdns`
+- 使用无痕窗口测试
+- 检查域名解析是否命中当前服务器
+- 若使用 CDN（如 Cloudflare），确认边缘证书也已更新
+
+### 10.4 连接超时
 - 检查防火墙设置
 - 验证后端应用是否响应
 - 增加 Nginx 超时设置
 
-### 10.4 查看日志
+### 10.5 查看日志
 ```powershell
 # 访问日志
 Get-Content C:\nginx\logs\access.log -Tail 50
@@ -403,6 +464,6 @@ worker_processes  auto;
 
 ---
 
-**文档版本**: 1.0  
-**最后更新**: 2025年12月2日  
+**文档版本**: 1.1  
+**最后更新**: 2026年3月19日  
 **适用版本**: AI.DeliciousFood Project
