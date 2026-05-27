@@ -2,36 +2,38 @@
 using AI.DeliciousFood.Web.Client.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace AI.DeliciousFood.Web.Client.Controllers
+namespace AI.DeliciousFood.Web.Client.Controllers;
+
+public class MenuController(GlobalConfig globalConfig, IMenuRepository menuRepository) : CommonControllerBase
 {
-    public class MenuController(GlobalConfig globalConfig, IMenuRepository menuRepository) : CommonControllerBase
+    public IActionResult Index()
     {
-        public IActionResult Index()
-        {
-            ViewBag.CookingTechniques = globalConfig.CookingTechniquesList;
-            ViewBag.FlavorsList = globalConfig.FlavorsList;
-            ViewBag.KitchenToolsList = globalConfig.KitchenToolsList;
-            return View();
-        }
 
-        [HttpPost]
-        public async Task<IActionResult> SaveMenu([FromBody] MenuDataModel menuData)
-        {
-            //await menuRepository.SaveRecipeAsync(menuData, UserInfo);
-            return Ok(new
-            {
-                success = true,
-                redirectUrl = Url.Action("Index", "Home")
-            });
-        }
+        ViewBag.CookingTechniques = menuRepository.GetBaseCategory("口味");
+        ViewBag.FlavorsList = menuRepository.GetBaseCategory("烹饪工艺");
+        ViewBag.KitchenToolsList = globalConfig.KitchenToolsList;
+        ViewBag.RecipeCategories = menuRepository.GetRecipeCategories();
 
-        public async Task<IActionResult> UploadImage()
+        return View();
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> SaveMenu([FromBody] MenuDataModel menuData)
+    {
+        await menuRepository.SaveRecipeAsync(menuData, UserInfo);
+        return Ok(new
         {
-            IFormFile imgFile = HttpContext.Request.Form.Files[0];
-            using MemoryStream memoryStream = new();
-            await imgFile.CopyToAsync(memoryStream);
-            byte[] fileBytes = memoryStream.ToArray();
-            return Ok(new { FileName = imgFile.FileName, FileBytes = fileBytes });
-        }
+            success = true,
+            redirectUrl = Url.Action("GetUserInfo", "Account")
+        });
+    }
+
+    public async Task<IActionResult> UploadImage()
+    {
+        IFormFile imgFile = HttpContext.Request.Form.Files[0];
+        using MemoryStream memoryStream = new();
+        await imgFile.CopyToAsync(memoryStream);
+        byte[] fileBytes = memoryStream.ToArray();
+        return Ok(new { FileName = imgFile.FileName, FileBytes = fileBytes });
     }
 }

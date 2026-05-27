@@ -1,0 +1,29 @@
+﻿<style>
+    #offcanvasRight {
+        width: 600px !important; /* 你想要的宽度，比如 600px */
+    }
+
+    .offcanvas-body {
+        overflow: hidden;
+        padding: 0;
+        height: calc(100vh - 56px); /* 56px 是 header 高度，按你的设计调整 */
+    }
+
+        .offcanvas-body iframe {
+            display: block;
+            height: 100%;
+            width: 100%;
+            border: none;
+        }
+</style>
+
+<!-- 显示菜谱详情画布 -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel" style="z-index: 1060 !important">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasRightLabel">右侧 Offcanvas（独立页面）</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="关闭"></button>
+    </div>
+    <div class="offcanvas-body p-0" style="height:100%;">
+        <p>这里会被点击时动态替换成 iframe 或内容。</p>
+    </div>
+</div>

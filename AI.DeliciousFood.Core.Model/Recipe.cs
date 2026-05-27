@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AI.DeliciousFood.Core.Common.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -29,6 +30,11 @@ namespace AI.DeliciousFood.Core.Model
         public string FileNames { get; set; }
 
         /// <summary>
+        /// 图片地址
+        /// </summary>
+        public string ImageUrl { get; set; }
+
+        /// <summary>
         /// 菜谱描述
         /// </summary>
         public string RecipeDescription { get; set; }
@@ -46,12 +52,17 @@ namespace AI.DeliciousFood.Core.Model
         /// <summary>
         /// 口味
         /// </summary>
-        public string Flavors { get; set; }
+        public Guid? Flavors { get; set; }
 
         /// <summary>
         /// 烹饪工艺
         /// </summary>
-        public string CookingCraft { get; set; }
+        public Guid? CookingCraft { get; set; }
+
+        /// <summary>
+        /// 菜谱分类
+        /// </summary>
+        public Guid? Categories { get; set; }
 
         /// <summary>
         /// 使用厨具
@@ -94,5 +105,6 @@ namespace AI.DeliciousFood.Core.Model
         public bool IsApproval { get; set; }
 
         public FoodUser User { get; set; }
+        public RecipeStatus RecipeStatus { get; set; }
     }
 }

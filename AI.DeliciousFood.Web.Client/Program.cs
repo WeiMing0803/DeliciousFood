@@ -1,11 +1,13 @@
+using AI.DeliciousFood.Core.Common.ClientHelper;
 using AI.DeliciousFood.Core.Data;
 using AI.DeliciousFood.Core.Model;
 using AI.DeliciousFood.Core.Server;
 using AI.DeliciousFood.Web.Client;
 using AI.DeliciousFood.Web.Client.Helper;
-using Aop.Api;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Options;
 using Serilog;
 
@@ -19,16 +21,16 @@ builder.Services.AddDbContext<FoodDbContext>(opt =>
 });
 builder.Services.AddIdentityCore<FoodUser>(options =>
 {
-    //options.Lockout.MaxFailedAccessAttempts = 10; //ÃÜÂë´íÎóÊ§°Ü´ÎÊı
-    //options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromSeconds(10);    //ÃÜÂë´íÎóËø¶¨Ê±¼ä
-    options.User.AllowedUserNameCharacters = null; //Ìø¹ı¶ÔÓÃ»§ÃûµÄÑéÖ¤
-    options.Password.RequireDigit = false; //Êı×Ö
-    options.Password.RequiredLength = 6; //³¤¶È
-    options.Password.RequireLowercase = false; //Ğ¡Ğ´
-    options.Password.RequireNonAlphanumeric = false; //ÌØÊâ×Ö·û
-    options.Password.RequireUppercase = false; //´óĞ´
-    options.Tokens.PasswordResetTokenProvider = TokenOptions.DefaultEmailProvider;  //ÓÃÓÚÉú³ÉÃÜÂëÖØÖÃµç×ÓÓÊ¼şÖĞÊ¹ÓÃµÄÁîÅÆ£¨ÏÖÔÚÊÇÉú³ÉÊı×Ö£©£»Èç¹ûÊÇ°ÑÖØÖÃÁ´½Ó·¢µ½ÓÃ»§£¬ÄÇÃ´¾Í²»ÓÃÅäÖÃ
-    options.Tokens.EmailConfirmationTokenProvider = TokenOptions.DefaultEmailProvider;  //»ñÈ¡»òÉèÖÃÁîÅÆÌá¹©³ÌĞò£¬ÓÃÓÚÉú³ÉÔÚÕÊ»§È·ÈÏµç×ÓÓÊ¼şÖĞÊ¹ÓÃµÄÁîÅÆ£»ÉÏÃæÉú³ÉµÄÑéÖ¤ÂëÌ«³¤¡¢Ì«¸´ÔÓ¡£Èç¹ûÊÇÓÃ»§ÊäÈëµÄÑéÖ¤Âë£¬ÔòÒªÅäÖÃ
+    //options.Lockout.MaxFailedAccessAttempts = 10; //å¯†ç é”™è¯¯å¤±è´¥æ¬¡æ•°
+    //options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromSeconds(10);    //å¯†ç é”™è¯¯é”å®šæ—¶é—´
+    options.User.AllowedUserNameCharacters = null; //è·³è¿‡å¯¹ç”¨æˆ·åçš„éªŒè¯
+    options.Password.RequireDigit = false; //æ•°å­—
+    options.Password.RequiredLength = 6; //é•¿åº¦
+    options.Password.RequireLowercase = false; //å°å†™
+    options.Password.RequireNonAlphanumeric = false; //ç‰¹æ®Šå­—ç¬¦
+    options.Password.RequireUppercase = false; //å¤§å†™
+    options.Tokens.PasswordResetTokenProvider = TokenOptions.DefaultEmailProvider;  //ç”¨äºç”Ÿæˆå¯†ç é‡ç½®ç”µå­é‚®ä»¶ä¸­ä½¿ç”¨çš„ä»¤ç‰Œï¼ˆç°åœ¨æ˜¯ç”Ÿæˆæ•°å­—ï¼‰ï¼›å¦‚æœæ˜¯æŠŠé‡ç½®é“¾æ¥å‘åˆ°ç”¨æˆ·ï¼Œé‚£ä¹ˆå°±ä¸ç”¨é…ç½®
+    options.Tokens.EmailConfirmationTokenProvider = TokenOptions.DefaultEmailProvider;  //è·å–æˆ–è®¾ç½®ä»¤ç‰Œæä¾›ç¨‹åºï¼Œç”¨äºç”Ÿæˆåœ¨å¸æˆ·ç¡®è®¤ç”µå­é‚®ä»¶ä¸­ä½¿ç”¨çš„ä»¤ç‰Œï¼›ä¸Šé¢ç”Ÿæˆçš„éªŒè¯ç å¤ªé•¿ã€å¤ªå¤æ‚ã€‚å¦‚æœæ˜¯ç”¨æˆ·è¾“å…¥çš„éªŒè¯ç ï¼Œåˆ™è¦é…ç½®
 });
 IdentityBuilder identityBuilder = new IdentityBuilder(typeof(FoodUser), typeof(FoodRole), builder.Services);
 identityBuilder.AddEntityFrameworkStores<FoodDbContext>()
@@ -37,7 +39,7 @@ identityBuilder.AddEntityFrameworkStores<FoodDbContext>()
     .AddRoleManager<RoleManager<FoodRole>>()
     .AddSignInManager<SignInManager<FoodUser>>();
 
-//Ìí¼ÓcookieÈÏÖ¤signInManager.PasswordSignInAsync·½·¨ĞèÒªÊ¹ÓÃµ½
+//æ·»åŠ cookieè®¤è¯signInManager.PasswordSignInAsyncæ–¹æ³•éœ€è¦ä½¿ç”¨åˆ°
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = IdentityConstants.ApplicationScheme;
@@ -53,13 +55,35 @@ builder.Services.AddSingleton<WebSocketManagerHelper>();
 builder.Services.AddScoped(typeof(GenericRepository<>));
 builder.Services.AddScoped<IMenuRepository, MenuRepository>();
 builder.Services.AddScoped<IAlipayRepository, AlipayRepository>();
+builder.Services.AddScoped<IAccountRepository, AccountRepository>();
+builder.Services.AddScoped<IEmailRepository, EmailRepository>();
+builder.Services.AddScoped<IRecipeCategoriesRepository, RecipeCategoriesRepository>();
+builder.Services.AddScoped<ISearchRepository, SearchRepository>();
+builder.Services.AddScoped<IHomeRepository, HomeRepository>();
 
 builder.Services.Configure<AlipayConfigHelper>(builder.Configuration.GetSection("AlipayConfig"));
 builder.Services.AddSingleton(resolver => resolver.GetRequiredService<IOptions<AlipayConfigHelper>>().Value);
+builder.Services.Configure<EmailConfigHelper>(builder.Configuration.GetSection("SmtpSettings"));
+builder.Services.AddSingleton(resolver => resolver.GetRequiredService<IOptions<EmailConfigHelper>>().Value);
+
+// é…ç½®è½¬å‘å¤´æ”¯æŒï¼ˆç”¨äº Nginx åå‘ä»£ç†ï¼‰
+builder.Services.Configure<ForwardedHeadersOptions>(options =>
+{
+    options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+});
 
 builder.Host.UseSerilog((ctx, lc) => lc
     .WriteTo.Console()
     .ReadFrom.Configuration(ctx.Configuration));
+
+builder.Services.AddMemoryCache();
+
+//åº”ç”¨å¯åŠ¨æˆ–è¿è¡Œæ—¶æ£€æŸ¥ä¾èµ–æ³¨å†Œæ˜¯å¦æ­£ç¡®
+builder.Host.UseDefaultServiceProvider(options =>
+{
+    options.ValidateScopes = true; // åœ¨å¼€å‘ç¯å¢ƒä¸‹é»˜è®¤å¼€å¯
+    options.ValidateOnBuild = true; // å¯åŠ¨æ—¶ç«‹å³éªŒè¯
+});
 
 var app = builder.Build();
 
@@ -68,15 +92,29 @@ if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
 }
+
+app.UseMiddleware<ErrorHandlingMiddleware>();
 app.UseSerilogRequestLogging();
 
+// ä½¿ç”¨è½¬å‘å¤´ä¸­é—´ä»¶ï¼ˆå¿…é¡»åœ¨å…¶ä»–ä¸­é—´ä»¶ä¹‹å‰ï¼‰
+app.UseForwardedHeaders();
+
 app.UseStaticFiles();
+
+//é…ç½®æ ¹ç›®å½•ä¸‹çš„ Images æ–‡ä»¶å¤¹ä¸ºé™æ€èµ„æºï¼Œæä¾›ç»™Manageé¡¹ç›®ä½¿ç”¨
+string imagesPath = Path.Combine(app.Environment.ContentRootPath, "Images");
+Directory.CreateDirectory(imagesPath);
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(imagesPath),
+    RequestPath = "/Images"
+});
 
 app.UseWebSockets();
 
 app.UseRouting();
 
-app.UseAuthentication();    //²»Ê¹ÓÃÕâ¸öµÄ»°HttpContext¾ÍÊ¹ÓÃ²»ÁË
+app.UseAuthentication();    //ä¸ä½¿ç”¨è¿™ä¸ªçš„è¯HttpContextå°±ä½¿ç”¨ä¸äº†
 app.UseAuthorization();
 
 app.MapControllerRoute(

@@ -6,6 +6,8 @@ AI.DeliciousFood.Core.Model/bin
 AI.DeliciousFood.Core.Model/obj
 AI.DeliciousFood.Core.Server/bin
 AI.DeliciousFood.Core.Server/obj
+AI.DeliciousFood.Core.ManageServer/bin
+AI.DeliciousFood.Core.ManageServer/obj
 AI.DeliciousFood.Web.Client/bin
 AI.DeliciousFood.Web.Client/obj
 AI.DeliciousFood.Web.Client/Logs/*
@@ -15,3 +17,4 @@ AI.DeliciousFood.Web.Client/Images/.gitkeep
 AI.DeliciousFood.Web.Manage/bin
 AI.DeliciousFood.Web.Manage/obj
 .vs
+.idea

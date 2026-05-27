@@ -1,0 +1,29 @@
+@{
+    ViewData["Title"] = "页面未找到";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/Home/NotFoundHtml.css" asp-append-version="true" />
+}
+
+<div class="notfound-container">
+    <div class="notfound-icon">
+        <i class="bi bi-exclamation-triangle"></i>
+    </div>
+    
+    <h1 class="notfound-title">404</h1>
+    
+    <p class="notfound-message">
+        抱歉，您访问的页面不存在或已被删除。<br />
+        请检查 URL 是否正确，或返回首页继续浏览。
+    </p>
+    
+    <div class="notfound-buttons">
+        <a asp-controller="Home" asp-action="Index" class="btn btn-primary">
+            <i class="bi bi-house-door"></i> 返回首页
+        </a>
+        <button onclick="history.back()" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> 返回上一页
+        </button>
+    </div>
+</div>

@@ -1,0 +1,59 @@
+<!-- 编辑用户信息-->
+<div class="modal fade" id="editUserModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title" id="editUserModalLabel"></h6>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="editUser-container">
+                    <!-- 编辑用户信息将通过JavaScript加载至此处 -->
+                    <form>
+                        <input type="hidden" id="userId" />
+                        <!-- 存储初始值 -->
+                        <input type="hidden" id="originalRole" />
+                        <input type="hidden" id="originalExpireAt" />
+
+                        <div class="mb-3">
+                            <label for="emailInput">电子邮件</label>
+                            <input type="email" class="form-control" id="emailInput" value="test@example.com" disabled>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="phoneInput">电话号码</label>
+                            <input type="text" class="form-control" id="phoneInput" value="test@example.com" disabled>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="role">角色</label>
+                            <select class="form-control selectpicker" name="role" id="role">
+                                <option value="1">管理员</option>
+                                <option value="2">普通用户</option>
+                                <option value="3">VIP用户</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="membershipExpireAt">会员到期时间</label>
+                            <div class="input-group">
+                                <input type="text" id="datepicker" class="form-control" data-provide="datepicker" data-today-highlight="true"
+                                       data-autoclose="false" />
+                                <span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="createDateTime">创建时间</label>
+                            <input type="text" class="form-control" id="createDateTime" value="test@example.com" disabled>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" id="saveButton">保存</button>
+            </div>
+        </div>
+    </div>
+</div>

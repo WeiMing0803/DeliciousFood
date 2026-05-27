@@ -1,0 +1,124 @@
+﻿@using AI.DeliciousFood.Core.Common.ManageModel.UserManager
+@using AI.DeliciousFood.Core.Common.Model
+@{
+    List<EnumOptionModel> recipeStatus = ViewBag.RecipeStatus;
+    string selectedValue = "Approved";
+}
+
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta name="keywords" content="LightYear,LightYearAdmin,光年,后台模板,后台管理系统,光年HTML模板">
+    <meta name="description" content="Light Year Admin V5是一个基于Bootstrap v5.1.3的后台管理系统的HTML模板。">
+    <title>文档列表 - 光年(Light Year Admin V5)后台管理系统模板</title>
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <link rel="stylesheet" type="text/css" href="~/css/materialdesignicons.min.css" asp-append-version="true">
+    <link rel="stylesheet" type="text/css" href="~/css/bootstrap.min.css" asp-append-version="true">
+    <!--表格插件css-->
+    <link rel="stylesheet" href="~/js/bootstrap-table/bootstrap-table.min.css" asp-append-version="true">
+    <!--引入下拉插件css-->
+    @* <link rel="stylesheet" type="text/css" href="~/js/bootstrap-select/bootstrap-select.min.css" asp-append-version="true"> *@
+    <!--引入项目框架css-->
+    <link rel="stylesheet" type="text/css" href="~/css/style.min.css" asp-append-version="true">
+    <!--日期选择器css-->
+    @* <link rel="stylesheet" type="text/css" href="~/js/bootstrap-datepicker/bootstrap-datepicker3.min.css" asp-append-version="true"> *@
+</head>
+
+<body>
+    <div class="container-fluid">
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <header class="card-header">
+                        <div class="card-title">菜谱列表</div>
+                    </header>
+                    <div class="card-body">
+
+                        <div class="card-search mb-2-5">
+                            <form class="search-form" method="get" action="#!" role="form">
+                                <div class="row g-3">
+                                    <div class="col-md-3">
+                                        <div class="row align-items-center">
+                                            <label class="col-sm-4 col-form-label text-end">
+                                                菜谱名称
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <input type="text" class="form-control" name="recipeName" value="" placeholder="请输入菜谱名称" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="row align-items-center">
+                                            <label class="col-sm-4 col-form-label text-end">
+                                                作者
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <input type="text" class="form-control" name="username" value="" placeholder="请输入作者名称" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="row align-items-center">
+                                            <label class="col-sm-4 col-form-label text-end">
+                                                菜谱状态
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <select name="recipeStatus" class="form-select">
+                                                    <option value="">请选择</option>
+                                                    @if (recipeStatus != null)
+                                                    {
+                                                        foreach (var role in recipeStatus)
+                                                        {
+                                                            <option value="@role.Value" selected="@(role.Value == selectedValue ? "selected" : null)">@role.Text</option>
+                                                        }
+                                                    }
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 d-flex align-items-center">
+                                        <button type="submit" class="btn btn-primary" id="search-btn">搜索</button>
+                                    </div>
+                                </div>
+                            </form>
+
+                            <table id="table"></table>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <script type="text/javascript" src="~/js/jquery.min.js" asp-append-version="true"></script>
+    <script type="text/javascript" src="~/js/popper.min.js" asp-append-version="true"></script>
+    <script type="text/javascript" src="~/js/bootstrap.min.js" asp-append-version="true"></script>
+    <script type="text/javascript" src="~/js/main.min.js" asp-append-version="true"></script>
+    <!--表格插件js-->
+    <script src="~/js/bootstrap-table/bootstrap-table.js" asp-append-version="true"></script>
+    <script src="~/js/bootstrap-table/locale/bootstrap-table-zh-CN.min.js" asp-append-version="true"></script>
+    <!--分页相关的配置-->
+    <script src="~/viewjs/recipemanagement/pagination.js" asp-append-version="true"></script>
+    <!--引入下拉插件js-->
+@*     <script type="text/javascript" src="~/js/bootstrap-select/bootstrap-select.min.js"></script>
+    <script type="text/javascript" src="~/js/bootstrap-select/i18n/defaults-zh_CN.min.js"></script> *@
+    <!--日期选择器js-->
+@*     <script type="text/javascript" src="~/js/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+    <script type="text/javascript" src="~/js/bootstrap-datepicker/locales/bootstrap-datepicker.zh-CN.min.js"></script> *@
+
+    <script src="~/viewjs/recipemanagement/recipelist.js"></script>
+</body>
+
+</html>

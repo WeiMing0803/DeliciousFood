@@ -10,3 +10,35 @@
 #editor-container {
     height: 500px;
 }
+
+
+/* 设置下拉框高度 */
+.bootstrap-select .dropdown-menu.inner {
+    max-height: 300px !important; /* 设置最大高度 */
+    overflow-y: auto !important; /* 允许垂直滚动 */
+}
+
+
+/* 单选按钮 */
+.radio-group {
+    display: flex;
+    gap: 10px;
+}
+
+    .radio-group label {
+        padding: 8px 15px;
+        border: 2px solid #ccc;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+    .radio-group input[type="radio"] {
+        display: none;
+    }
+
+        .radio-group input[type="radio"]:checked + label {
+            background-color: #007bff;
+            color: white;
+            border-color: #007bff;
+        }

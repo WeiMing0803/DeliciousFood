@@ -1,3 +1,19 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.site-wrapper {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.site-main {
+    flex: 1 1 auto;
+}
+
 /*弹出框*/
 .toast-container {
     position: fixed;
@@ -38,10 +54,10 @@
     font-size: 12px;
 }
 
-.ai-nav-bar ol li {
-    display: inline;
-    margin-right: 8px;
-}
+    .ai-nav-bar ol li {
+        display: inline;
+        margin-right: 8px;
+    }
 
 .ai-nav-bar a {
     text-decoration: none;
@@ -50,4 +66,169 @@
 
 .ai-model-width {
     max-width: 1000px !important;
+}
+
+
+
+/* 用于返回顶部按钮样式 */
+.back-to-top {
+    position: fixed;
+    bottom: 50px;
+    right: 30px;
+    width: 50px;
+    height: 50px;
+    background: rgba(52, 152, 219, 0.8); /* 蓝色半透明背景 */
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: opacity 0.3s, transform 0.3s;
+    opacity: 0;
+    visibility: hidden;
+    z-index: 1000;
+}
+
+    .back-to-top i {
+        font-size: 24px;
+    }
+
+    .back-to-top:hover {
+        background: rgba(41, 128, 185, 0.9);
+    }
+
+    .back-to-top.show {
+        opacity: 1;
+        visibility: visible;
+    }
+
+
+/* 卡片放大添加纵向下拉条 */
+.card-fullscreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden; /* 重要！防止外部滚动 */
+    background: white;
+    z-index: 9999;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+    .card-fullscreen .card-body {
+        flex: 1; /* 让 body 填充剩余空间 */
+        overflow-y: auto; /* 仅允许内部滚动 */
+    }
+
+
+.card.card-fullscreen .row {
+    flex-wrap: wrap !important; /* 允许换行 */
+    overflow-x: visible !important; /* 取消横向滚动 */
+}
+
+
+/* 页脚 */
+.footer-main {
+    background-color: #f8f8f8;
+    font-family: 'Microsoft Yahei', Tahoma, Geneva, Arial, sans-serif;
+    color: #333;
+}
+
+.footer-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 40px 0 20px 0;
+    border-bottom: 1px solid #ededed;
+    background-color: #f8f8f8;
+}
+
+.footer-left {
+    flex: 1 1 0;
+    min-width: 320px;
+    text-align: left;
+}
+
+.footer-logo-img img {
+    vertical-align: middle;
+    margin-bottom: 10px;
+}
+
+.footer-text-color {
+    font-size: 24px;
+    font-family: Georgia,"Times New Roman",Times,serif;
+    color: #84b92c;
+    margin-right: 2px;
+}
+
+/* 右侧二维码及文字全部居中 */
+.footer-right {
+    flex: 0 0 220px;
+    text-align: center;
+}
+
+.footer-qun-img {
+    margin: 0 0 10px 0;
+    font-size: 14px;
+    color: #333;
+}
+
+.footer-qun-img1 {
+    display: block;
+    margin: 0 auto 8px auto;
+}
+
+.footer-qun-img2 {
+    font-size: 14px;
+    color: #888;
+    margin-top: 3px;
+}
+
+/* 底部版权、备案等 */
+.footer-bottom {
+    background-color: #f8f8f8;
+    text-align: center;
+    padding: 20px 0 10px 0;
+}
+
+.fonter-weibu-text {
+    font-size: 12px;
+    color: #6b553f;
+    line-height: 28px;
+    margin: 0 0 5px 0;
+}
+
+.fonter-weibu-text2 {
+    font-size: 12px;
+    color: #333;
+    line-height: 22px;
+    margin: 0;
+}
+
+.footer-copyright {
+    font-size: 12px;
+    color: #999;
+    margin-top: 8px;
+}
+
+@media (max-width: 700px) {
+    .footer-top {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 30px 10px 10px 10px;
+    }
+
+    .footer-right {
+        width: 100%;
+        text-align: center;
+        margin-top: 18px;
+    }
 }

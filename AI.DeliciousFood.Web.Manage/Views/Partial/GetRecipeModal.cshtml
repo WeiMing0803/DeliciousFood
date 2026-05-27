@@ -1,0 +1,22 @@
+<!-- 菜谱审核驳回模态框 -->
+<div class="modal fade" id="recipeReviewRejectModal" tabindex="-1" aria-labelledby="recipeReviewRejectModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <!-- 模态框头部 -->
+            <div class="modal-header">
+                <h5 class="modal-title" id="recipeReviewRejectModalLabel"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <!-- 模态框主体 -->
+            <div class="modal-body">
+                <textarea id="textarea" class="form-control" maxlength="500" rows="5" placeholder="驳回消息限制为500个字符。"></textarea>
+                <p id="recipeReviewApproval">审核通过!✅</p>
+            </div>
+            <!-- 模态框底部 -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" id="submitButton">提交</button>
+            </div>
+        </div>
+    </div>
+</div>

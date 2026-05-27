@@ -1,0 +1,168 @@
+﻿@model AI.DeliciousFood.Core.Common.ManageModel.UserManager.RecipeModel
+
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta name="keywords" content="LightYear,LightYearAdmin,光年,后台模板,后台管理系统,光年HTML模板">
+    <meta name="description" content="Light Year Admin V5是一个基于Bootstrap v5.1.3的后台管理系统的HTML模板。">
+    <title>徽章 - 光年(Light Year Admin V5)后台管理系统模板</title>
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <link rel="stylesheet" type="text/css" href="~/css/materialdesignicons.min.css">
+    <link rel="stylesheet" type="text/css" href="~/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="~/css/style.min.css">
+    <link rel="stylesheet" href="~/viewcss/recipemanagement/getrecipe.css" asp-append-version="true" />
+
+    <!--灯箱效果插件css-->
+    <link type="text/css" rel="stylesheet" href="~/js/magnific-popup/magnific-popup.min.css">
+    <link rel="stylesheet" type="text/css" href="~/css/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="~/css/style.min.css">
+</head>
+
+<body>
+    <div class="container-fluid">
+
+        <div class="row">
+
+            @await Html.PartialAsync("~/Views/Partial/GetRecipeModal.cshtml")
+
+            <div class="col-lg-12">
+                <div class="card">
+                    <header class="card-header d-flex align-items-center">
+                        <div class="card-title">审核菜谱</div>
+                        @if (Model.RecipeStatus == "审核中")
+                        {
+                            <div class="ms-auto">
+                                <button class="btn btn-outline-primary">
+                                    <i class="mdi mdi-checkbox-marked-circle-outline"></i> 审核通过
+                                </button>
+                                <button class="btn btn-outline-danger">
+                                    <i class="mdi mdi-close"></i> 驳回
+                                </button>
+                            </div>
+                        }
+                    </header>
+                    <div class="card-body">
+                        <input hidden value="@Model.RecipeGuid" id="recipeGuid" />
+
+                        <figure class="text-center">
+                            <blockquote class="blockquote">
+                                <p id="recipeName"><strong>@Model.RecipeName</strong></p>
+                            </blockquote>
+                            <blockquote class="blockquote">
+                                <p>@Model.RecipeDescription</p>
+                            </blockquote>
+                            <figcaption class="blockquote-footer">
+                                @Model.UserName | @Model.CreateTime | @Model.Categories
+                            </figcaption>
+                        </figure>
+
+                        <section class="recipe-details">
+                            <div class="detail-row">
+                                <div class="detail-item">
+                                    <i class="fas fa-tachometer-alt"></i>
+                                    <strong>制作难度：</strong><span>@Model.RoductionDifficulty</span>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="fas fa-clock"></i>
+                                    <strong>烹饪时间：</strong><span>@Model.TasksTime</span>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="fas fa-pepper-hot"></i>
+                                    <strong>口味：</strong><span>@Model.Flavors</span>
+                                </div>
+                            </div>
+                            <div class="detail-row">
+                                <div class="detail-item">
+                                    <i class="fas fa-utensils"></i>
+                                    <strong>烹饪工艺：</strong><span>@Model.CookingCraft</span>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="fas fa-blender"></i>
+                                    <strong>厨具：</strong><span>@Model.UseKitchenUtensils</span>
+                                </div>
+                            </div>
+                        </section>
+
+                        <div class="lyear-divider">食材</div>
+                        <div class="ingredient-container">
+                            @foreach (var item in Model.Ingredients)
+                            {
+                                <div class="ingredient-item">
+                                    <i class="fas fa-carrot"></i>
+                                    <strong>@item.Name：</strong>
+                                    <span>@item.Quantity</span>
+                                </div>
+                            }
+                        </div>
+
+
+
+                        <div class="lyear-divider">做法</div>
+                        @Html.Raw(Model.Practice)
+
+                        <div class="lyear-divider">小贴士</div>
+                        <p>
+                            @Model.Tips
+                        </p>
+
+                        <div class="lyear-divider">菜品展示</div>
+                        <div class="mb-3 col-md-12 position-relative">
+                            <div class="js-upload-images">
+                                <ul id="file_list_more_pics" class="list-inline row lyear-uploads-pic mb-0">
+                                    @foreach (var item in Model.FileNames.Split(","))
+                                    {
+                                        <li class="col-6 col-sm-3 col-md-2 list-images-item">
+                                            <figure>
+                                                <img src="@($"{Model.ImageUrl}/{item}")" />
+                                                <figcaption>
+                                                    <a class="btn btn-round btn-primary btn-link-pic" href="@($"{Model.ImageUrl}/{item}")">
+                                                        <i class="mdi mdi-eye"></i>
+                                                    </a>
+                                                </figcaption>
+                                            </figure>
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="lyear-divider">状态</div>
+                        <figure class="text-center">
+                            <blockquote class="blockquote">
+                                <p>菜谱状态：<span class="badge bg-success">@Model.RecipeStatus</span></p>
+                            </blockquote>
+                            <blockquote class="blockquote">
+                                <p>最后更新时间：@Model.UpdateTime</p>
+                            </blockquote>
+                        </figure>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <script type="text/javascript" src="~/js/jquery.min.js"></script>
+    <script type="text/javascript" src="~/js/popper.min.js"></script>
+    <script type="text/javascript" src="~/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="~/js/main.min.js"></script>
+
+    <!--上传插件-->
+    <script type="text/javascript" src="~/js/webuploader/webuploader.js"></script>
+    <!--灯箱效果插件-->
+    <script type="text/javascript" src="~/js/magnific-popup/magnific-popup.min.js"></script>
+    <!--引入长度验证插件js-->
+    <script type="text/javascript" src="~/js/bootstrap-maxlength/bootstrap-maxlength.min.js"></script>
+
+    <script type="text/javascript" src="~/viewjs/recipemanagement/getrecipe.js"></script>
+</body>
+
+</html>

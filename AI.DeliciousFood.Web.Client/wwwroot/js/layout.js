@@ -199,3 +199,25 @@ $(document).ready(function () {
 
 });
 
+
+/* 点击返回顶部 */
+document.addEventListener("DOMContentLoaded", function () {
+    const backToTop = document.getElementById("backToTop");
+
+    // 监听滚动事件
+    window.addEventListener("scroll", function () {
+        if (window.scrollY > 300) { // 300px后显示
+            backToTop.classList.add("show");
+        } else {
+            backToTop.classList.remove("show");
+        }
+    });
+
+    // 点击返回顶部
+    backToTop.addEventListener("click", function () {
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+    });
+});

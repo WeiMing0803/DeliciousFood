@@ -1,5 +1,293 @@
-.f-container {
-    margin-top: calc(50vh - 310px);
-    padding: 2% 0% 2% 0%;
-    box-shadow: 0px 0px 5px #888888;
+* {
+    outline-width: 0;
+    font-family: "Nunito", Arial, "Microsoft YaHei", sans-serif !important;
+}
+
+body {
+    height: 100vh;
+    width: 100vw;
+    /*background: url("https://images.unsplash.com/photo-1623721949492-88c84f98175e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2670&q=80") center/cover fixed;*/
+    background-image: url('../../images/LogonBg.jpg');
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#formContainer {
+    display: flex;
+    transition: 0.2s ease;
+    height: 375px; /* 略大于原版，但更紧凑 */
+    min-height: 340px;
+    transition-delay: 0.3s;
+}
+
+    #formContainer.toggle {
+        height: 530px; /* 注册页略高 */
+        min-height: 440px;
+        transition-delay: 0s;
+    }
+
+.formLeft {
+    background: #fff;
+    border-radius: 6px 0 0 6px;
+    padding: 0 26px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+}
+
+    .formLeft img {
+        width: 65px;
+        border-radius: 50%;
+        box-shadow: 0 5px 10px rgba(0,0,0,0.13);
+        display: block;
+    }
+
+.formRight {
+    position: relative;
+    overflow: hidden;
+    border-radius: 0 6px 6px 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 375px;
+    background: none;
+}
+
+    .formRight:before {
+        content: "";
+        position: absolute;
+        top: -8px;
+        left: -8px;
+        width: calc(100% + 16px);
+        height: calc(100% + 16px);
+        box-shadow: inset 0 0 0 1000px rgba(0,0,0,0.53);
+        filter: blur(4px);
+        z-index: 0;
+    }
+
+    .formRight form {
+        position: relative;
+        z-index: 1;
+        width: 400px;
+        padding: 22px 23px 27px 23px;
+        box-sizing: border-box;
+        background: transparent;
+        border-radius: 0 6px 6px 0;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+
+        .formRight form header {
+            color: #fff;
+            text-align: center;
+            margin-bottom: 12px;
+        }
+
+            .formRight form header h1 {
+                margin: 0;
+                font-weight: 400;
+                font-size: 23px;
+                letter-spacing: 0.8px;
+                user-select: none;
+            }
+
+            .formRight form header p {
+                margin: 6px 0 0;
+                opacity: 0.56;
+                font-size: 13px;
+                user-select: none;
+            }
+
+        /* 表单每个输入区域 */
+        .formRight form section label {
+            display: block;
+            margin-bottom: 13px;
+            position: relative;
+            min-height: 48px; /* 输入框+错误信息 */
+        }
+
+            /* 输入框 */
+            .formRight form section label input {
+                width: 100%;
+                display: block;
+                border: none;
+                background: transparent;
+                color: #fff;
+                border-bottom: 1.5px solid rgba(255,255,255,0.13);
+                font-weight: 500;
+                font-size: 15px;
+                height: 28px;
+                line-height: 28px;
+                padding: 0 0 8px 1px;
+                box-sizing: border-box;
+                transition: border-color 0.15s;
+            }
+
+                .formRight form section label input:focus {
+                    border-bottom: 1.5px solid #1ec9bb;
+                }
+
+            /* label文本 */
+            .formRight form section label p {
+                color: #fff;
+                margin: 0 0 7px 0;
+                font-weight: 600;
+                font-size: 12px;
+                opacity: 0.52;
+                user-select: none;
+                letter-spacing: 0.2px;
+            }
+
+            .formRight form section label .border {
+                position: absolute;
+                bottom: 7px;
+                left: 0;
+                width: 100%;
+                height: 2px;
+                background: #fff;
+                transform: scale(0, 1);
+                transition: 0.2s;
+            }
+
+/*            .formRight form section label input:focus ~ .border,
+            .formRight form section label input:not(:placeholder-shown) ~ .border {
+                transform: scale(1, 1);
+                background: #1ec9bb;
+                transition: 0.15s;
+            }*/
+
+.text-danger {
+    color: #ff4040;
+    font-size: 12px;
+    display: block;
+    min-height: 16px;
+    margin-top: 2px;
+    margin-bottom: 0;
+    line-height: 16px;
+    word-break: break-all;
+}
+
+.formRight form section button {
+    background: linear-gradient(90deg,#10aea0 0%,#00897B 100%);
+    border: none;
+    width: 100%;
+    padding: 9px 0 9px 0;
+    font-weight: 600;
+    font-size: 15px;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 4px;
+    margin-top: 10px;
+    transition: background 0.11s,transform 0.10s;
+}
+
+    .formRight form section button:hover {
+        background: linear-gradient(90deg,#16e3ce 0%,#007f72 100%);
+        transform: translateY(-2px) scale(1.04);
+    }
+
+.formRight form footer {
+    margin-top: 13px;
+    display: flex;
+    justify-content: space-between;
+}
+
+    .formRight form footer button {
+        background: transparent;
+        border: none;
+        color: #fff;
+        cursor: pointer;
+        font-size: 12px;
+        font-weight: bold;
+        flex: 1;
+        opacity: 0.57;
+        transition: opacity 0.12s;
+        padding: 0;
+        text-align: center;
+    }
+
+        .formRight form footer button:hover {
+            opacity: 1;
+        }
+
+/* 注册/忘记密码弹层表单 */
+.formRight form.otherForm {
+    top: 0;
+    left: 0;
+    position: absolute;
+    background: #fff;
+    height: 100%;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 0;
+    padding: 22px 0;
+    transition: 0.2s ease;
+    transition-delay: 0.17s;
+    border-left: 1px solid rgba(0,0,0,0.11);
+    box-shadow: none;
+    border-radius: 0 6px 6px 0;
+}
+
+    .formRight form.otherForm header {
+        color: #000;
+        opacity: 0;
+        transition: 0.2s;
+    }
+
+    .formRight form.otherForm p {
+        color: #000;
+    }
+
+    .formRight form.otherForm section {
+        opacity: 0;
+        transition: 0.2s;
+    }
+
+    .formRight form.otherForm footer {
+        border-top-color: rgba(0,0,0,0.09);
+        opacity: 0;
+    }
+
+        .formRight form.otherForm footer button {
+            color: #000;
+        }
+
+    .formRight form.otherForm input {
+        border-color: rgba(0,0,0,0.11);
+        color: #000;
+    }
+
+    .formRight form.otherForm .border {
+        background: #000;
+    }
+
+    .formRight form.otherForm.toggle {
+        width: 100%;
+        padding: 22px 23px 27px 23px;
+        transition-delay: 0s;
+    }
+
+        .formRight form.otherForm.toggle header,
+        .formRight form.otherForm.toggle section,
+        .formRight form.otherForm.toggle footer {
+            opacity: 1;
+            transition-delay: 0.26s;
+        }
+
+@media (max-width: 800px) {
+    #formContainer,
+    .formRight,
+    .formRight form {
+        width: 100vw !important;
+        min-width: 0 !important;
+        border-radius: 0 !important;
+        padding: 0 !important;
+    }
+
+    .formLeft {
+        display: none;
+    }
 }

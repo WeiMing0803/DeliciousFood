@@ -1,0 +1,69 @@
+﻿@using AI.DeliciousFood.Core.Common.Model.Account
+@model RecipeModel
+@{
+    ViewBag.Title = "菜谱详情";
+    string[] photo = @Model.FileNames.Split(',', StringSplitOptions.RemoveEmptyEntries);
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/RecipeCategories/recipe-detail.css" asp-append-version="false" />
+}
+
+<div class="detail-page-main">
+    <div class="recipe-main-photo">
+        <img src="../@Model.ImageUrl/@photo[0]" alt="主图"
+             class="detail-main-photo" id="mainDishPhoto" data-index="0" />
+    </div>
+    @if (photo.Length > 0)
+    {
+        <div class="recipe-photo-gallery">
+            @for (int i = 0; i < photo.Length; i++) // 注意: i = 0开始
+            {
+                <img src="../@Model.ImageUrl/@photo[i]" alt="配图 @i"
+                     class="detail-thumb-photo" data-index="@i" />
+            }
+        </div>
+    }
+    <div class="detail-title">@Model.RecipeName</div>
+
+    <div class="detail-section-title">描述</div>
+    <div class="detail-description">@Model.RecipeDescription</div>
+
+    <div class="detail-info-list">
+        <span>难度：@Model.RoductionDifficulty</span>
+        <span>用时：@Model.TasksTime</span>
+        <span>口味：@Model.Flavors</span>
+        <span>工艺：@Model.CookingCraft</span>
+        <span>厨具：@Model.UseKitchenUtensils</span>
+    </div>
+
+    <div class="detail-section-title">“@Model.RecipeName”的用料</div>
+    <div class="material-table">
+        <div class="material-table-header">
+            <span>食材</span>
+            <span>用量</span>
+        </div>
+        @foreach (var items in Model.Ingredients ?? Enumerable.Empty<Ingredients>())
+        {
+            <div class="material-table-row">
+                <div class="material-table-cell">@items.Name</div>
+                <div class="material-table-cell">@items.Quantity</div>
+            </div>
+        }
+    </div>
+
+    <div class="detail-section-title steps">“@Model.RecipeName”的做法</div>
+    <div class="detail-step-box">@Html.Raw(Model.Practice)</div>
+
+    @if (!string.IsNullOrWhiteSpace(Model.Tips))
+    {
+        <div class="detail-section-title tips">小贴士</div>
+        <div class="detail-tips-box">@Model.Tips</div>
+    }
+
+    <div class="detail-upload-time">上传时间: @Model.UpdateTime</div>
+</div>
+
+@section Scripts {
+    <script src="~/js/RecipeCategories/recipe-detail.js" asp-append-version="false"></script>
+}

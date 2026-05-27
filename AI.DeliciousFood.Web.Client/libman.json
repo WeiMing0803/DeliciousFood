@@ -4,15 +4,6 @@
   "libraries": [
     {
       "provider": "unpkg",
-      "library": "multiple-select@1.6.0",
-      "destination": "wwwroot/lib/multiple-select/",
-      "files": [
-        "dist/multiple-select.min.js",
-        "dist/multiple-select.min.css"
-      ]
-    },
-    {
-      "provider": "unpkg",
       "library": "@wangeditor/editor@latest",
       "destination": "wwwroot/lib/wangeditor/editor/",
       "files": [

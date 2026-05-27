@@ -12,23 +12,25 @@ namespace AI.DeliciousFood.Core.Model.TableConfiguration
             builder.Property(b => b.Guid).HasColumnType("uniqueidentifier").HasDefaultValueSql("NEWID()");
             builder.Property(b => b.UserId).HasColumnType("bigint");
             builder.Property(b => b.RecipeName).HasColumnType("nvarchar(50)").IsRequired();
-            builder.Property(b => b.FileNames).HasColumnType("nvarchar(max)").IsRequired();
-            builder.Property(b => b.RecipeDescription).HasColumnType("nvarchar(500)").IsRequired();
-            builder.Property(b => b.RoductionDifficulty).HasColumnType("nvarchar(50)").IsRequired();
-            builder.Property(b => b.TasksTime).HasColumnType("nvarchar(50)").IsRequired();
-            builder.Property(b => b.Flavors).HasColumnType("nvarchar(50)").IsRequired();
-            builder.Property(b => b.CookingCraft).HasColumnType("nvarchar(50)").IsRequired();
-            builder.Property(b => b.UseKitchenUtensils).HasColumnType("nvarchar(50)").IsRequired();
-            builder.Property(b => b.Ingredients).HasColumnType("nvarchar(max)").IsRequired();
-            builder.Property(b => b.Practice).HasColumnType("nvarchar(max)").IsRequired();
-            builder.Property(b => b.Tips).HasColumnType("nvarchar(500)").IsRequired();
+            builder.Property(b => b.FileNames).HasColumnType("nvarchar(max)").IsRequired(false);
+            builder.Property(b => b.ImageUrl).HasColumnType("nvarchar(255)").IsRequired(false);
+            builder.Property(b => b.RecipeDescription).HasColumnType("nvarchar(500)").IsRequired(false);
+            builder.Property(b => b.RoductionDifficulty).HasColumnType("nvarchar(50)").IsRequired(false);
+            builder.Property(b => b.TasksTime).HasColumnType("nvarchar(50)").IsRequired(false);
+            builder.Property(b => b.Flavors).HasColumnType("uniqueidentifier").IsRequired(false);
+            builder.Property(b => b.CookingCraft).HasColumnType("uniqueidentifier").IsRequired(false);
+            builder.Property(b => b.Categories).HasColumnType("uniqueidentifier").IsRequired(false);
+            builder.Property(b => b.UseKitchenUtensils).HasColumnType("nvarchar(50)").IsRequired(false);
+            builder.Property(b => b.Ingredients).HasColumnType("nvarchar(max)").IsRequired(false);
+            builder.Property(b => b.Practice).HasColumnType("nvarchar(max)").IsRequired(false);
+            builder.Property(b => b.Tips).HasColumnType("nvarchar(500)").IsRequired(false);
             builder.Property(b => b.CreateTime).HasColumnType("datetime").IsRequired().HasDefaultValueSql("GETDATE()");
             builder.Property(b => b.UpdateTime).HasColumnType("datetime").IsRequired().HasDefaultValueSql("GETDATE()");
             builder.Property(b => b.IsDelete).HasColumnType("bit").IsRequired();
             builder.Property(b => b.IsApproval).HasColumnType("bit").IsRequired();
-
+            
             builder.HasOne(b => b.User)
-                .WithMany()
+                .WithMany(u => u.Recipes)
                 .HasForeignKey(b => b.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
         }

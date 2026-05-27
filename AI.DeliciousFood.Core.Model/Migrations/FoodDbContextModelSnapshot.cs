@@ -17,10 +17,56 @@ namespace AI.DeliciousFood.Core.Model.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.1")
+                .HasAnnotation("ProductVersion", "9.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("AI.DeliciousFood.Core.Model.BaseCategory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(20)");
+
+                    b.HasKey("Id");
+
+                    SqlServerKeyBuilderExtensions.IsClustered(b.HasKey("Id"));
+
+                    b.ToTable("T_BaseCategory", (string)null);
+                });
+
+            modelBuilder.Entity("AI.DeliciousFood.Core.Model.BaseCategoryItem", b =>
+                {
+                    b.Property<Guid>("Guid")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasDefaultValueSql("NEWID()");
+
+                    b.Property<int>("BaseCategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Guid");
+
+                    SqlServerKeyBuilderExtensions.IsClustered(b.HasKey("Guid"), false);
+
+                    b.HasIndex("BaseCategoryId");
+
+                    b.ToTable("T_BaseCategoryItem", (string)null);
+                });
 
             modelBuilder.Entity("AI.DeliciousFood.Core.Model.FoodRole", b =>
                 {
@@ -67,6 +113,11 @@ namespace AI.DeliciousFood.Core.Model.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("CreateDateTime")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("GETDATE()");
+
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -80,7 +131,7 @@ namespace AI.DeliciousFood.Core.Model.Migrations
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<DateTime>("MembershipExpireAt")
+                    b.Property<DateOnly>("MembershipExpireAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("date")
                         .HasDefaultValueSql("CAST(GETDATE() AS DATE)");
@@ -155,9 +206,11 @@ namespace AI.DeliciousFood.Core.Model.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasDefaultValueSql("NEWID()");
 
-                    b.Property<string>("CookingCraft")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(50)");
+                    b.Property<Guid?>("Categories")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CookingCraft")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreateTime")
                         .ValueGeneratedOnAdd()
@@ -165,15 +218,15 @@ namespace AI.DeliciousFood.Core.Model.Migrations
                         .HasDefaultValueSql("GETDATE()");
 
                     b.Property<string>("FileNames")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Flavors")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(50)");
+                    b.Property<Guid?>("Flavors")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(255)");
 
                     b.Property<string>("Ingredients")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsApproval")
@@ -183,11 +236,9 @@ namespace AI.DeliciousFood.Core.Model.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Practice")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("RecipeDescription")
-                        .IsRequired()
                         .HasColumnType("nvarchar(500)");
 
                     b.Property<string>("RecipeName")
@@ -195,15 +246,12 @@ namespace AI.DeliciousFood.Core.Model.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("RoductionDifficulty")
-                        .IsRequired()
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("TasksTime")
-                        .IsRequired()
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Tips")
-                        .IsRequired()
                         .HasColumnType("nvarchar(500)");
 
                     b.Property<DateTime>("UpdateTime")
@@ -212,7 +260,6 @@ namespace AI.DeliciousFood.Core.Model.Migrations
                         .HasDefaultValueSql("GETDATE()");
 
                     b.Property<string>("UseKitchenUtensils")
-                        .IsRequired()
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<long>("UserId")
@@ -225,6 +272,106 @@ namespace AI.DeliciousFood.Core.Model.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("T_Recipe", (string)null);
+                });
+
+            modelBuilder.Entity("AI.DeliciousFood.Core.Model.RecipeCategories", b =>
+                {
+                    b.Property<Guid>("Guid")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasDefaultValueSql("NEWID()");
+
+                    b.Property<string>("Category")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(20)");
+
+                    b.HasKey("Guid");
+
+                    SqlServerKeyBuilderExtensions.IsClustered(b.HasKey("Guid"), false);
+
+                    b.ToTable("T_RecipeCategories", (string)null);
+                });
+
+            modelBuilder.Entity("AI.DeliciousFood.Core.Model.RecipeStatus", b =>
+                {
+                    b.Property<Guid>("Guid")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasDefaultValueSql("NEWID()");
+
+                    b.Property<long?>("Approver")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Comment")
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<DateTime>("CreateTime")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.Property<Guid>("RecipeGuid")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<DateTime>("UpdateTime")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.HasKey("Guid");
+
+                    SqlServerKeyBuilderExtensions.IsClustered(b.HasKey("Guid"), false);
+
+                    b.HasIndex("Approver");
+
+                    b.HasIndex("RecipeGuid")
+                        .IsUnique();
+
+                    b.ToTable("T_RecipeStatus", (string)null);
+                });
+
+            modelBuilder.Entity("AI.DeliciousFood.Core.Model.Recommend", b =>
+                {
+                    b.Property<Guid>("Guid")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasDefaultValueSql("NEWID()");
+
+                    b.Property<DateTime?>("EndTime")
+                        .HasColumnType("datetime");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("RecipeGuid")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("StartTime")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("varchar(20)");
+
+                    b.HasKey("Guid");
+
+                    SqlServerKeyBuilderExtensions.IsClustered(b.HasKey("Guid"), false);
+
+                    b.HasIndex("RecipeGuid")
+                        .IsUnique();
+
+                    b.ToTable("T_Recommend", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<long>", b =>
@@ -330,15 +477,55 @@ namespace AI.DeliciousFood.Core.Model.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("AI.DeliciousFood.Core.Model.BaseCategoryItem", b =>
+                {
+                    b.HasOne("AI.DeliciousFood.Core.Model.BaseCategory", "BaseCategory")
+                        .WithMany("BaseCategoryItems")
+                        .HasForeignKey("BaseCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("BaseCategory");
+                });
+
             modelBuilder.Entity("AI.DeliciousFood.Core.Model.Recipe", b =>
                 {
                     b.HasOne("AI.DeliciousFood.Core.Model.FoodUser", "User")
-                        .WithMany()
+                        .WithMany("Recipes")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("AI.DeliciousFood.Core.Model.RecipeStatus", b =>
+                {
+                    b.HasOne("AI.DeliciousFood.Core.Model.FoodUser", "ApproverUser")
+                        .WithMany("ApprovedRecipeStatuses")
+                        .HasForeignKey("Approver")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.HasOne("AI.DeliciousFood.Core.Model.Recipe", "Recipe")
+                        .WithOne("RecipeStatus")
+                        .HasForeignKey("AI.DeliciousFood.Core.Model.RecipeStatus", "RecipeGuid")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("ApproverUser");
+
+                    b.Navigation("Recipe");
+                });
+
+            modelBuilder.Entity("AI.DeliciousFood.Core.Model.Recommend", b =>
+                {
+                    b.HasOne("AI.DeliciousFood.Core.Model.Recipe", "Recipe")
+                        .WithOne()
+                        .HasForeignKey("AI.DeliciousFood.Core.Model.Recommend", "RecipeGuid")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Recipe");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<long>", b =>
@@ -389,6 +576,24 @@ namespace AI.DeliciousFood.Core.Model.Migrations
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AI.DeliciousFood.Core.Model.BaseCategory", b =>
+                {
+                    b.Navigation("BaseCategoryItems");
+                });
+
+            modelBuilder.Entity("AI.DeliciousFood.Core.Model.FoodUser", b =>
+                {
+                    b.Navigation("ApprovedRecipeStatuses");
+
+                    b.Navigation("Recipes");
+                });
+
+            modelBuilder.Entity("AI.DeliciousFood.Core.Model.Recipe", b =>
+                {
+                    b.Navigation("RecipeStatus")
                         .IsRequired();
                 });
 #pragma warning restore 612, 618

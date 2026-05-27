@@ -1,56 +1,57 @@
-﻿using AI.DeliciousFood.Core.Model;
+﻿using AI.DeliciousFood.Core.Common.Model;
 using AI.DeliciousFood.Core.Server;
 using AI.DeliciousFood.Web.Client.Helper;
 using AI.DeliciousFood.Web.Client.Models;
-using Aop.Api.Domain;
-using Aop.Api.Util;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using Serilog;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
-using System.Security.Claims;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
+using AI.DeliciousFood.Core.Common.Model.Home;
 
-namespace AI.DeliciousFood.Web.Client.Controllers
+namespace AI.DeliciousFood.Web.Client.Controllers;
+
+public class HomeController(GlobalConfig globalConfig, WebSocketManagerHelper webSocketManager, IHomeRepository homeRepository) : CommonControllerBase
 {
-    public class HomeController(IAlipayRepository accountRepository,
-        GlobalConfig globalConfig, 
-        WebSocketManagerHelper webSocketManager,
-        AlipayConfigHelper alipayConfigHelper
-        ) : CommonControllerBase
+
+    public async Task<IActionResult> Index()
+    {
+        List<RecommendViewModel> monthly = await homeRepository.GetRecommend(RecommendType.Monthly);
+        List<RecommendViewModel> hotList = await homeRepository.GetRecommend(RecommendType.HotList);
+        RecommendCollectionViewModel viewModel = new()
+        {
+            Monthly = monthly,
+            HotList = hotList
+        };
+        return View(viewModel);
+    }
+
+    public IActionResult AboutUs()
+    {
+        return View();
+    }
+
+
+    [HttpGet("/ws")]
+    public async Task Get()
+    {
+        await webSocketManager.HandleConnectionAsync(HttpContext, UserInfo.UserId.ToString());
+    }
+
+
+    public async Task<IActionResult> Privacy()
     {
 
-        public async Task<IActionResult> Index()
-        {
-            //Log.Error("Hello World");
-            //await webSocketManager.BroadcastMessage("支付成功");
-
-            return View();
-        }
-        
-        [HttpGet("/ws")]
-        public async Task Get()
-        {
-            await webSocketManager.HandleConnectionAsync(HttpContext, UserInfo.UserId.ToString());
-        }
+        await webSocketManager.SendPrivateMessage("支付成功", UserInfo.UserId.ToString());
+        return View();
+    }
 
 
-        public async Task<IActionResult> Privacy()
-        {
+    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+    public IActionResult Error()
+    {
+        return View(new ErrorViewModel { RequestId = System.Diagnostics.Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+    }
 
-            await webSocketManager.SendPrivateMessage("支付成功", UserInfo.UserId.ToString());
-            return View();
-        }
-
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = System.Diagnostics.Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
+    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+    public IActionResult NotFoundHtml()
+    {
+        return View();
     }
 }

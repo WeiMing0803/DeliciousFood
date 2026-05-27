@@ -1,0 +1,209 @@
+﻿@using AI.DeliciousFood.Core.Common.Model.Account
+@model EditRecipeViewModel
+@{
+    ViewData["Title"] = "编辑菜谱";
+    List<SelectListItem> cookingTechniques = ViewBag.CookingTechniques;
+    List<SelectListItem> flavorsList = ViewBag.FlavorsList;
+    string[] kitchenToolsList = ViewBag.KitchenToolsList;
+    List<SelectListItem> recipeCategories = ViewBag.RecipeCategories;
+}
+
+@section Styles {
+    <!-- 图片上传-->
+    <link href="~/lib/bootstrap-fileinput/css/fileinput.min.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap-fileinput/themes/explorer-fa6/theme.min.css" rel="stylesheet" />
+
+    <!--引入下拉插件css-->
+    <link href="~/lib/bootstrap-select/bootstrap-select.min.css" rel="stylesheet" />
+    <link href="~/lib/wangeditor/editor/dist/css/style.css" rel="stylesheet" />
+
+    <link href="~/css/menu/index.css" rel="stylesheet" asp-append-version="true" />
+}
+
+<nav class="ai-nav-bar">
+    <ol>
+        <li>
+            <span><a asp-controller="Home" asp-action="Index">首页</a></span>
+        </li>
+        <li>
+            <span> > </span>
+        </li>
+        <li>
+            <span><a asp-controller="account" asp-action="GetUserInfo">个人信息</a></span>
+        </li>
+        <li>
+            <span> > </span>
+        </li>
+        <li>
+            <span>编辑菜谱</span>
+        </li>
+    </ol>
+</nav>
+
+
+<hr />
+
+<div class="container-fluid">
+
+    <div class="row">
+
+        <div class="col-lg-12">
+            <div class="card">
+                <header class="card-header d-flex justify-content-between">
+                    <div class="card-title">发布菜谱</div>
+                    <ul class="card-actions">
+                        <li><a href="#!" class="card-btn-slide"><i class="mdi mdi-chevron-up"></i></a></li>
+                        <li><a href="#!" class="card-btn-fullscreen"><i class="mdi mdi-fullscreen"></i></a></li>
+                    </ul>
+                </header>
+
+                <div class="card-body">
+                    <form class="row g-3">
+                        <input id="recipeGuid" value="@Model.RecipeGuid" hidden/>
+                        <div class="mb-3">
+                            <label for="recipeName" class="form-label"></label>
+                            <input type="text" class="form-control" id="recipeName" value="@Model.RecipeName"  placeholder="菜谱名称">
+                        </div>
+                        <div class="mb-3">
+                            <label for="picture" class="mb-2 ai-textbold">图片上传</label>
+
+                            <div id="image-preview"
+                                 data-preview="@string.Join(",", Model.FileNames.Split(",", StringSplitOptions.RemoveEmptyEntries).Select(f => $"../{Model.ImageUrl}/{f}"))"
+                                 data-preview-config='@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(
+                                    Model.FileNames.Split(",", StringSplitOptions.RemoveEmptyEntries)
+                                       .Select(f => new { caption = f, key = f, url = "/Account/FakeDelete" })
+                                ))'>
+                            </div>
+                            <div class="file-loading">
+                                <input id="input-ke-2" name="file" type="file" multiple>
+                            </div>
+                        </div>
+                        <div>
+                            <label for="description" class="form-label ai-textbold">菜品描述</label>
+                            <textarea class="form-control" rows="3" id="description">@Model.RecipeDescription</textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="productionDifficulty" class="form-label ai-textbold">制作难度</label>
+                            <div class="radio-group">
+                                <input type="radio" id="simple" name="productionDifficulty" value="简单" @(Model.RoductionDifficulty == "简单" ? "checked" : "")>
+                                <label for="simple">简单</label>
+
+                                <input type="radio" id="beginner" name="productionDifficulty" value="初级" @(Model.RoductionDifficulty == "初级" ? "checked" : "")>
+                                <label for="beginner">初级</label>
+
+                                <input type="radio" id="intermediate" name="productionDifficulty" value="中级" @(Model.RoductionDifficulty == "中级" ? "checked" : "")>
+                                <label for="intermediate">中级</label>
+
+                                <input type="radio" id="advanced" name="productionDifficulty" value="高级" @(Model.RoductionDifficulty == "高级" ? "checked" : "")>
+                                <label for="advanced">高级</label>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="needsTimeRange" class="form-label ai-textbold">需要时间（分钟）</label>
+                            <input id="needsTimeRange" type="range" min="0" max="1440" step="5" value=@Model.TasksTime class="form-range" oninput="timeOutput.value=this.value">
+                            <output id="timeOutput">@Model.TasksTime</output> 分钟
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="form-group">
+                                <label for="taste" class="form-label ai-textbold">菜谱类别</label>
+                            </div>
+                            <div class="form-group">
+                                @Html.DropDownList("RecipeCategories", new SelectList(recipeCategories, "Value", "Text", Model.Categories, "Group.Name"), "没有选中任何项", new { id = "recipeCategories", @class = "form-control selectpicker" })
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="taste" class="form-label ai-textbold">口味</label>
+                            </div>
+                            <div class="form-group">
+                                @Html.DropDownList("CookingTechniques", new SelectList(cookingTechniques, "Value", "Text", Model.Flavors, "Group.Name"), "没有选中任何项", new { id = "taste", @class = "form-control selectpicker" })
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="cookingCraft" class="form-label ai-textbold">烹饪工艺</label>
+                            </div>
+                            <div class="form-group">
+                                @Html.DropDownList("cookingCraft", new SelectList(flavorsList, "Value", "Text", Model.CookingCraft, "Group.Name"), "没有选中任何项", new { id = "cookingCraft", @class = "form-control selectpicker" })
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="kitchenUtensils" class="form-label ai-textbold">使用厨具</label>
+                            </div>
+                            <div class="form-group">
+                                @Html.ListBox("kitchenUtensils", new MultiSelectList(kitchenToolsList, Model.UseKitchenUtensils.Split(',')), new { multiple = "multiple", id = "kitchenUtensils", @class = "form-control selectpicker", data_actions_box = "true" })
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="ingredientsDetails" class="mb-2 ai-textbold">食材明细</label>
+                            @for (int i = 0; i < Model.Ingredients.Count(); i++)
+                            {
+                                <div class="row mb-1 ai-ingredientsDetails" id="box_@(i+1)">
+                                    <div class="col-md-6">
+                                        <input type="text" class="form-control" placeholder="食材名称" value=@Model.Ingredients[i].Name>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <input type="text" class="form-control" placeholder="用量" value=@Model.Ingredients[i].Quantity>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="row">
+                                            <div class="col-md-2">
+                                                <svg t="1697177914495" class="icon" id="ai-undiminished" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="15671" width="32" height="32"><path d="M960.031235 159.921913v703.656418c0 52.974134-42.979014 95.953148-95.953148 95.953148h-703.656418c-52.974134 0-95.953148-42.979014-95.953148-95.953148v-703.656418c0-52.974134 42.979014-95.953148 95.953148-95.953148h703.656418c52.974134 0 95.953148 42.979014 95.953148 95.953148z m-831.593949-159.921913C57.771791 0 0.499756 57.272035 0.499756 127.937531v767.625183c0 70.665495 57.272035 127.937531 127.93753 127.93753h767.625183c70.665495 0 127.937531-57.272035 127.937531-127.93753v-767.625183c0-70.665495-57.272035-127.937531-127.937531-127.937531h-767.625183z" p-id="15672" fill="#cccccc"></path><path d="M799.609566 544.234261H223.890678c-17.691362 0-31.984383-14.293021-31.984382-31.984383s14.293021-31.984383 31.984382-31.984383h575.718888c17.691362 0 31.984383 14.293021 31.984382 31.984383s-14.293021 31.984383-31.984382 31.984383z" p-id="15673" fill="#CCCCCC"></path></svg>
+                                                @* <svg t="1697177914495" class="icon" id="ai-reduce" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="15671" width="32" height="32"><path d="M960.031235 159.921913v703.656418c0 52.974134-42.979014 95.953148-95.953148 95.953148h-703.656418c-52.974134 0-95.953148-42.979014-95.953148-95.953148v-703.656418c0-52.974134 42.979014-95.953148 95.953148-95.953148h703.656418c52.974134 0 95.953148 42.979014 95.953148 95.953148z m-831.593949-159.921913C57.771791 0 0.499756 57.272035 0.499756 127.937531v767.625183c0 70.665495 57.272035 127.937531 127.93753 127.93753h767.625183c70.665495 0 127.937531-57.272035 127.937531-127.93753v-767.625183c0-70.665495-57.272035-127.937531-127.937531-127.937531h-767.625183z" p-id="15672" fill="#d81e06"></path><path d="M799.609566 544.234261H223.890678c-17.691362 0-31.984383-14.293021-31.984382-31.984383s14.293021-31.984383 31.984382-31.984383h575.718888c17.691362 0 31.984383 14.293021 31.984382 31.984383s-14.293021 31.984383-31.984382 31.984383z" p-id="15673" fill="#d81e06"></path></svg> *@
+                                            </div>
+                                            <div class="col-md-2">
+                                                <svg t="1697178067934" class="icon" id="ai-add" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="18351" width="32" height="32"><path d="M960.031235 159.921913v703.656418c0 52.974134-42.979014 95.953148-95.953148 95.953148h-703.656418c-52.974134 0-95.953148-42.979014-95.953148-95.953148v-703.656418c0-52.974134 42.979014-95.953148 95.953148-95.953148h703.656418c52.974134 0 95.953148 42.979014 95.953148 95.953148z m-831.593949-159.921913C57.771791 0 0.499756 57.272035 0.499756 127.937531v767.625183c0 70.665495 57.272035 127.937531 127.93753 127.93753h767.625183c70.665495 0 127.937531-57.272035 127.937531-127.93753v-767.625183c0-70.665495-57.272035-127.937531-127.937531-127.937531h-767.625183z" p-id="18352" fill="#3b7bff"></path><path d="M831.593948 513.149439c-0.499756 17.391508-15.192582 31.084822-32.684041 31.084822H559.726696c-8.795705 0-15.992191 7.196486-15.992191 15.992191v239.183211c0 17.391508-13.693314 32.184285-31.084822 32.684041-18.091166 0.499756-32.883943-13.993167-32.883944-31.984382V560.226452c0-8.795705-7.196486-15.992191-15.992191-15.992191H224.590337c-17.391508 0-32.184285-13.693314-32.684041-31.084822-0.499756-18.091166 13.993167-32.883943 31.984382-32.883944h239.88287c8.795705 0 15.992191-7.196486 15.992191-15.992191V225.090093c0-17.391508 13.693314-32.184285 31.084822-32.684041 18.091166-0.499756 32.883943 13.993167 32.883944 31.984382v239.88287c0 8.795705 7.196486 15.992191 15.992191 15.992191h239.88287c17.991215 0 32.484139 14.792777 31.984382 32.883944z" p-id="18353" fill="#3b7bff"></path></svg>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        <div class="mb-3">
+                            <label for="steps" class="mb-2 ai-textbold">做法步骤</label>
+                            <div id="editor-wrapper">
+                                <div id="toolbar-container"><!-- 工具栏 --></div>
+                                <div id="editor-container" data-practice="@Html.Raw(Model.Practice)"><!-- 编辑器 --></div>
+                            </div>
+                        </div>
+                        <div>
+                            <label for="tips" class="form-label ai-textbold">小窍门</label>
+                            <textarea class="form-control" rows="3" id="tips">@Model.Tips</textarea>
+                        </div>
+                        <div class="d-flex justify-content-center">
+                            <button type="button" class="btn btn-warning ai-textbold" id="saveDraft">保存草稿</button>
+                            <div class="mx-2"><!-- This div acts as a spacer --></div>
+                            <button type="button" class="btn btn-primary ai-textbold" id="submitReview">提交审核</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+    <!-- 卡片收缩 -->
+    <script src="~/js/lightyear/main.modify.min.js"></script>
+    <!-- 图片上传 -->
+    <script src="~/lib/bootstrap-fileinput/js/plugins/sortable.min.js"></script>
+    <script src="~/lib/bootstrap-fileinput/js/fileinput.min.js"></script>
+    <script src="~/lib/bootstrap-fileinput/js/locales/zh.min.js"></script>
+    <script src="~/lib/bootstrap-fileinput/themes/explorer-fa6/theme.min.js"></script>
+    <script src="~/lib/bootstrap-fileinput/themes/fa6/theme.min.js"></script>
+
+    <!--引入下拉插件js-->
+    <script src="~/lib/bootstrap-select/bootstrap-select.min.js"></script>
+    <script src="~/lib/bootstrap-select/i18n/defaults-zh_cn.min.js"></script>
+
+    <script src="~/lib/wangeditor/editor/dist/index.js"></script>
+    <script src="~/js/account/editmenu.js"></script>
+
+}

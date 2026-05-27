@@ -1,11 +1,13 @@
 ﻿using AI.DeliciousFood.Core.Model;
-using AI.DeliciousFood.Core.Model.ViewModels;
+using AI.DeliciousFood.Core.Common.Model;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using AI.DeliciousFood.Core.Common.Model.Logon;
+using AI.DeliciousFood.Core.Server;
 
 namespace AI.DeliciousFood.Web.Client.Controllers
 {
-    public class AccountLogonController(UserManager<FoodUser> _userManager, SignInManager<FoodUser> _signInManager) : CommonControllerBase
+    public class AccountLogonController(UserManager<FoodUser> _userManager, SignInManager<FoodUser> _signInManager, IAccountRepository accountRepository) : CommonControllerBase
     {
 
         #region 登录和注册
@@ -13,43 +15,76 @@ namespace AI.DeliciousFood.Web.Client.Controllers
         [HttpGet]
         public IActionResult LogOn(string returnUrl)
         {
-            return View();
+            LogOnPageViewModel model = new LogOnPageViewModel
+            {
+                LoginModel = new LoginViewModel(),
+                RegisterModel = new RegisterViewModel(),
+                ForgotModel = new ForgotPasswordViewModel()
+            };
+            ViewBag.ActiveForm = "login";
+            return View(model);
         }
 
 
         [HttpPost]
-        public async Task<IActionResult> LogOn(LogOnViewModel model, string returnUrl)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> LogOn([Bind(Prefix = "LoginModel")] LoginViewModel model, string returnUrl)
         {
-            bool returnLogon = false;
-            if (string.IsNullOrWhiteSpace(model.Email) || string.IsNullOrWhiteSpace(model.Password))
+            if (ModelState.IsValid)
             {
-                ModelState.AddModelError(string.Empty, "邮箱或密码不能为空");
-                returnLogon = true;
+                bool returnLogon = false;
+                FoodUser user = await _userManager.FindByEmailAsync(model.Email);
+                if (user == null)
+                {
+                    ModelState.AddModelError(string.Empty, "邮箱或者密码错误");
+                    returnLogon = true;
+                }
+
+                if (!returnLogon)
+                {
+                    var result = await _signInManager.PasswordSignInAsync(user.UserName, model.Password, false, lockoutOnFailure: false);
+                    if (result.Succeeded)
+                    {
+                        return RedirectToAction("Index", "Home");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, "邮箱或者密码错误");
+                    }
+                }
             }
-            var user = await _userManager.FindByEmailAsync(model.Email);
+            ViewBag.ActiveForm = "login";
+            return View("LogOn", new LogOnPageViewModel { LoginModel = model });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                Dictionary<string, string> errors = ModelState.ToDictionary(
+                    kvp => kvp.Key.ToLower(),
+                    kvp => kvp.Value.Errors.FirstOrDefault()?.ErrorMessage
+                );
+                return Json(new { success = false, errors });
+            }
+
+            FoodUser user = await _userManager.FindByEmailAsync(model.Email);
             if (user == null)
             {
-                ModelState.AddModelError("Email", "邮箱或者密码错误");
-                returnLogon = true;
+                return Json(new { success = false, errors = new { email = "该邮箱不存在" } });
             }
 
-            if (!returnLogon)
-            {
-                var result = await _signInManager.PasswordSignInAsync(user.UserName, model.Password, model.RememberMe, lockoutOnFailure: false);
-                if (result.Succeeded)
-                {
-                    return RedirectToAction("Index", "Home");
-                }
-                else
-                {
-                    ModelState.AddModelError(string.Empty, result.ToString());
-                }
-            }
-            return View("LogOn", model);
+            string newPassword = accountRepository.SendResetPasswordEmail(user);
+            string resetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
+            await _userManager.ResetPasswordAsync(user, resetToken, newPassword);
+
+            return Json(new { success = true });
         }
 
         [HttpPost]
-        public async Task<IActionResult> Register(LogOnViewModel model)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Register([Bind(Prefix = "RegisterModel")] RegisterViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -61,12 +96,12 @@ namespace AI.DeliciousFood.Web.Client.Controllers
                     {
                         Email = model.Email,
                         UserName = model.UserName,
-                        PhoneNumber = model.PhoneNumber
                     };
 
                     IdentityResult result = await _userManager.CreateAsync(user, model.Password);
                     if (result.Succeeded)
                     {
+                        IdentityResult roleAssignmentResult = await _userManager.AddToRoleAsync(user, Roles.USER.ToString());
                         await _signInManager.SignInAsync(user, isPersistent: false);
                         return RedirectToAction("Index", "Home");
                     }
@@ -91,7 +126,8 @@ namespace AI.DeliciousFood.Web.Client.Controllers
                     }
                 }
             }
-            return View("LogOn", model);
+            ViewBag.ActiveForm = "register";
+            return View("LogOn", new LogOnPageViewModel { RegisterModel = model });
         }
 
         public async Task<IActionResult> LogOut()
